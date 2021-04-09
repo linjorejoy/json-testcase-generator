@@ -2,7 +2,8 @@ from typing import List, Any
 
 
 class EntryCell:
-    def __init__(self, key, value):
+    def __init__(self, key, value, variable_name=None):
+        self.variable_name:str
         self.key:Any = key
         self.value: Any = value
 
