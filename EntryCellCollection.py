@@ -12,4 +12,3 @@ class EntryCellCollection:
 
     def add_column(self):
         self.entry_cells_collection.append(EntryCellColumn())
-        pass
