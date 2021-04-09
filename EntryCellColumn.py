@@ -5,7 +5,8 @@ from typing import List
 
 class EntryCellColumn:
 
-    def __init__(self, entry_cell:EntryCell = None):
+    def __init__(self, entry_cell:EntryCell = None, variable_name:str=None):
+        self.variable_name = variable_name
         self.entry_cell_column:List[EntryCell] = []
 
         if entry_cell:

@@ -6,32 +6,33 @@ import GetAllCombinations
 import json
 
 
-cell11 = EntryCell("One", "A")
-cell12 = EntryCell("One", "B")
-cell13 = EntryCell("One", "C")
+cell11 = EntryCell(value="A")
+cell12 = EntryCell(value="B")
+cell13 = EntryCell(value="C")
 
-cell21 = EntryCell("Two", 1)
-cell22 = EntryCell("Two", 2)
-cell23 = EntryCell("Two", 3)
+cell21 = EntryCell(value=1)
+cell22 = EntryCell(value=2)
+cell23 = EntryCell(value=3)
 
-cell31 = EntryCell("Three", "a")
-cell32 = EntryCell("Three", "b")
-cell33 = EntryCell("Three", "c")
+cell31 = EntryCell(value="a")
+cell32 = EntryCell(value="b")
+cell33 = EntryCell(value="c")
 
 
-entry_column1 = EntryCellColumn()
+entry_column1 = EntryCellColumn(variable_name="One")
 entry_column1.add_cell(entry_cell=cell11)
 entry_column1.add_cell(entry_cell=cell12)
 entry_column1.add_cell(entry_cell=cell13)
 
-entry_column2 = EntryCellColumn()
+entry_column2 = EntryCellColumn(variable_name="Two")
 entry_column2.add_cell(entry_cell=cell21)
 entry_column2.add_cell(entry_cell=cell22)
 entry_column2.add_cell(entry_cell=cell23)
 
-entry_column3 = EntryCellColumn()
+entry_column3 = EntryCellColumn(variable_name="Three")
 entry_column3.add_cell(entry_cell=cell31)
 entry_column3.add_cell(entry_cell=cell32)
+entry_column3.add_cell(entry_cell=cell33)
 entry_column3.add_cell(entry_cell=cell33)
 
 entry_collection = EntryCellCollection()
@@ -54,4 +55,5 @@ if __name__ == '__main__':
     # print(to_dict(entry_collection))
     collections = GetAllCombinations.get_all_dictionaries2(d,entry_collection)
     [print(dictionary, type(dictionary)) for dictionary in collections]
+    print(len(collections))
 

@@ -21,13 +21,13 @@ def get_all_dictionaries2(template:Dict, entry_cell_collections: EntryCellCollec
             for cell in column.entry_cell_column:
                 combined_dict_copy = deepcopy(combined_dict)
                 # combined_dict_copy = combined_dict.copy()
-                combined_dict_copy[cell.key] = cell.value
+                combined_dict_copy[column.variable_name] = cell.value
                 combinations.append(combined_dict_copy)
 
         for cell in column.entry_cell_column:
             combined_dict_copy = deepcopy(combined_dict)
             # combined_dict_copy = combined_dict.copy()
-            combined_dict_copy[cell.key] = cell.value
+            combined_dict_copy[column.variable_name] = cell.value
             entry_collections_copy = deepcopy(entry_collections)
             # entry_collections_copy = entry_collections.copy()
             del entry_collections_copy.entry_cells_collection[0]
