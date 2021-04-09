@@ -1,6 +1,8 @@
 from EntryCellCollection import EntryCellCollection
 from EntryCellColumn import EntryCellColumn
 from EntryCell import EntryCell
+from OutputFiles import OutputFiles
+from OutputJsonFile import OutputJsonFile
 import GetAllCombinations
 
 import json
@@ -35,25 +37,39 @@ entry_column3.add_cell(entry_cell=cell32)
 entry_column3.add_cell(entry_cell=cell33)
 entry_column3.add_cell(entry_cell=cell33)
 
+
+
+entry_column4 = EntryCellColumn(variable_name="Four")
+entry_column4.add_cell(entry_cell=cell21)
+entry_column4.add_cell(entry_cell=cell22)
+entry_column4.add_cell(entry_cell=cell23)
+
 entry_collection = EntryCellCollection()
 entry_collection.add_column(entry_column1)
 entry_collection.add_column(entry_column2)
 entry_collection.add_column(entry_column3)
+entry_collection.add_column(entry_column4)
+
+
 
 
 
 def to_dict(obj):
     return json.dumps(obj, default=lambda o: o.__dict__, indent=2)
 
-d = {
-    "One": "oneee",
-    "Two": "Twooo",
-    "Three": "Threeee"
-}
 
 if __name__ == '__main__':
-    # print(to_dict(entry_collection))
-    collections = GetAllCombinations.get_all_dictionaries2(d,entry_collection)
-    [print(dictionary, type(dictionary)) for dictionary in collections]
-    print(len(collections))
+
+    collections = GetAllCombinations.get_all_dictionaries2(entry_collection)
+    all_files = OutputFiles()
+
+    [(
+        all_files.output_json_file_array.append(OutputJsonFile(variable_dictionary=dictionary))
+    ) for dictionary in collections]
+
+    for fl in all_files.output_json_file_array:
+        if fl.should_be_generated:
+            print(fl, fl.variable_dictionary)
+
+    
 

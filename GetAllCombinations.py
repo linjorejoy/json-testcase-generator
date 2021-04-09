@@ -1,4 +1,3 @@
-
 from EntryCellCollection import EntryCellCollection
 from EntryCellColumn import EntryCellColumn
 from EntryCell import EntryCell 
@@ -9,8 +8,9 @@ from copy import deepcopy
 
 
 
-def get_all_dictionaries2(template:Dict, entry_cell_collections: EntryCellCollection):
+def get_all_dictionaries2(entry_cell_collections: EntryCellCollection):
     combinations = []
+    template = {}
 
     def combine(entry_collections, combined_dict):
         if len(entry_collections.entry_cells_collection) == 0:
@@ -20,16 +20,13 @@ def get_all_dictionaries2(template:Dict, entry_cell_collections: EntryCellCollec
             
             for cell in column.entry_cell_column:
                 combined_dict_copy = deepcopy(combined_dict)
-                # combined_dict_copy = combined_dict.copy()
                 combined_dict_copy[column.variable_name] = cell.value
                 combinations.append(combined_dict_copy)
 
         for cell in column.entry_cell_column:
             combined_dict_copy = deepcopy(combined_dict)
-            # combined_dict_copy = combined_dict.copy()
             combined_dict_copy[column.variable_name] = cell.value
             entry_collections_copy = deepcopy(entry_collections)
-            # entry_collections_copy = entry_collections.copy()
             del entry_collections_copy.entry_cells_collection[0]
             combine(entry_collections_copy, combined_dict_copy)
             
