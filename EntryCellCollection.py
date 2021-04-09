@@ -4,11 +4,14 @@ from typing import List
 
 class EntryCellCollection:
 
-    def __init__(self):
+    def __init__(self, entry_cell_column:EntryCellColumn = None):
         self.entry_cells_collection:List[EntryCellColumn] = []
 
-        entry_cell_column = EntryCellColumn()
+        if entry_cell_column:
+            self.entry_cells_collection.append(entry_cell_column)
+
+    def add_column(self, entry_cell_column:EntryCellColumn = None):
         self.entry_cells_collection.append(entry_cell_column)
 
-    def add_column(self):
-        self.entry_cells_collection.append(EntryCellColumn())
+    def __hash__(self):
+        return hash(self)
