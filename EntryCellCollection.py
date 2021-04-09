@@ -9,3 +9,7 @@ class EntryCellCollection:
 
         entry_cell_column = EntryCellColumn()
         self.entry_cells_collection.append(entry_cell_column)
+
+    def add_column(self):
+        self.entry_cells_collection.append(EntryCellColumn())
+        pass
