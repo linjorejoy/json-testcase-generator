@@ -1,6 +1,8 @@
-from tkinter import Tk, Frame, filedialog, LabelFrame, Scrollbar
+from tkinter import Tk, Frame, filedialog, LabelFrame, Scrollbar, OptionMenu, Checkbutton
 from tkinter import Text, Button, Label, Entry
+from tkinter import IntVar, StringVar
 from tkinter import ttk
+from tkinter.ttk import Combobox
 from tkinter import RIGHT, LEFT, END, TOP, SE
 from tkinter import X, Y, N, WORD
 import json
@@ -27,6 +29,7 @@ JSON_STR_TO_PRINT = ""
 VARIABLES_PRESENT = []
 entry_cell_collection = None
 output_files = OutputFiles()
+reference_arr_for_name_gen = []
 
 WINDOW_HEIGHT = 650
 WINDOW_WIDTH = 800
@@ -39,6 +42,71 @@ def to_dict(obj):
     return json.dumps(obj, default=lambda o: o.__dict__, indent=2)
 
 def main():
+    global VARIABLES_PRESENT
+
+    def preview_all_files():
+        global reference_arr_for_name_gen
+        my_notebook.select(3)
+        FileNameGenerator.generate_file_name(output_files, reference_arr_for_name_gen)
+        # Headers
+
+
+        # Content
+        for index, json_file_obj in enumerate(output_files.output_json_file_array):
+            
+            json_file_obj.should_be_generated = IntVar(value=1)
+            this_checkbox = Checkbutton(
+                preview_wrapper_body, 
+                text="", 
+                variable=json_file_obj.should_be_generated, 
+                onvalue=1,
+                offvalue=0,
+                height=1,
+                width=5
+            )
+            this_checkbox.grid(row=index+1, column=0)
+            preview_wrapper_body.grid_columnconfigure(0, weight = 1)
+
+            filename = Label(preview_wrapper_body, height="1", width="12", text=json_file_obj.file_name,font=("bold", 10))
+            filename.grid(row=index+1, column=1)
+            preview_wrapper_body.grid_columnconfigure(1, weight = 1)
+
+            counter = 2
+            for var_name in json_file_obj.variable_dictionary.keys():
+                label = Label(preview_wrapper_body, height="1", width="12", text=json_file_obj.variable_dictionary[var_name],font=("bold", 10))
+                label.grid(row=index+1, column=counter)
+                counter += 1
+            
+                preview_wrapper_body.grid_columnconfigure(counter, weight = 1)
+        
+
+    def set_name_page():
+        global reference_arr_for_name_gen
+        global VARIABLES_PRESENT
+        veriables_for_dropdown = VARIABLES_PRESENT.copy()
+        veriables_for_dropdown.append("Counter")
+        # filename_generator_frame
+        entry_0 = Entry(filename_generator_wrapper_body, width=10)
+        entry_0.grid(row=0, column=0)
+        reference_arr_for_name_gen.append(entry_0)
+
+        for index in range(len(veriables_for_dropdown)):
+
+            if not veriables_for_dropdown:
+                veriables_for_dropdown = [""]
+
+            this_dropdown_var = StringVar()
+            this_dropdown_var.set(None)
+            this_dropdown = OptionMenu(filename_generator_wrapper_body, this_dropdown_var, *veriables_for_dropdown)
+            this_dropdown.grid(row=0, column=(2*index + 1))
+            reference_arr_for_name_gen.append(this_dropdown_var)
+
+            entry_n = Entry(filename_generator_wrapper_body, width=10)
+            entry_n.grid(row=0, column=(2*index + 2))
+            reference_arr_for_name_gen.append(entry_n)
+            
+        goto_preview_button = Button(filename_generator_wrapper_footer,text="Preview All Files", command=preview_all_files)
+        goto_preview_button.place(rely=1.0, relx=1.0, x=-5, y=-5, anchor=SE)
 
     def generate_output_file_obj():
         global entry_cell_collection
@@ -55,6 +123,9 @@ def main():
         [(
             output_files.add_output_json_file(OutputJsonFile(variable_dictionary=combination))
         ) for combination in all_combinations]
+
+        my_notebook.select(2)
+        set_name_page()
 
         
 
@@ -202,9 +273,9 @@ def main():
 
     processdata_wrapper_footer = LabelFrame(process_data_frame, text="Options", height="50")
 
-    goto_preview_button = Button(processdata_wrapper_footer, text="Show Generated Outputs", command=generate_output_file_obj)
+    goto_filename_button = Button(processdata_wrapper_footer, text="Set Names", command=generate_output_file_obj)
 
-    goto_preview_button.place(rely=1.0, relx=1.0, x=-5, y=-5, anchor=SE)
+    goto_filename_button.place(rely=1.0, relx=1.0, x=-5, y=-5, anchor=SE)
 
     processdata_wrapper_footer.pack(fill="both", expand=N)
 
@@ -217,10 +288,16 @@ def main():
 
 
     filename_generator_frame = Frame(my_notebook, width=1000, height=650)
+    filename_generator_wrapper_body = LabelFrame(filename_generator_frame, text="Body", height="560")
 
 
+    filename_generator_wrapper_body.pack(fill="both", expand=Y)
 
+    filename_generator_wrapper_footer = LabelFrame(filename_generator_frame, text="Options", height="50")
 
+    filename_generator_wrapper_footer.pack(fill="both", expand=N)
+
+    
 
     # Preview Outputs Frame
 
@@ -228,11 +305,14 @@ def main():
     preview_data_frame = Frame(my_notebook, width=1000, height=650)
 
 
+    preview_wrapper_head = LabelFrame(preview_data_frame, text="Head", height="50")
+
+    preview_wrapper_head.pack(fill="both", expand=N)
+
+    preview_wrapper_body = LabelFrame(preview_data_frame, text="Body", height="560")
 
 
-
-
-
+    preview_wrapper_body.pack(fill="both", expand=Y)
 
 
 
