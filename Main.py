@@ -4,6 +4,7 @@ from EntryCell import EntryCell
 from OutputFiles import OutputFiles
 from OutputJsonFile import OutputJsonFile
 import GetAllCombinations
+import FileNameGenerator
 
 import json
 
@@ -61,7 +62,7 @@ def to_dict(obj):
 if __name__ == '__main__':
 
     collections = GetAllCombinations.get_all_dictionaries(entry_collection)
-    print(to_dict(entry_collection))
+    # print(to_dict(entry_collection))
     all_files = OutputFiles()
 
     [(
@@ -72,5 +73,13 @@ if __name__ == '__main__':
         if fl.should_be_generated:
             print(fl.__dict__)
 
+    ref_arr = [1, "-", 3, "_",-1, "AA",0, "_", 2, "", 4]
+    variable_arr = ["One", "Two", "Three", "Four"]
+
+    FileNameGenerator.generate_file_name(all_files, ref_arr, variable_arr)
+    print("\n\nGenereated Names\n\n")
     
+    for fl in all_files.output_json_file_array:
+        if fl.should_be_generated:
+            print(fl.__dict__)
 

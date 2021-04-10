@@ -14,6 +14,7 @@ from OutputJsonFile import OutputJsonFile
 
 import ProcessData
 import GetAllCombinations
+import FileNameGenerator
 
 """
 
@@ -54,6 +55,7 @@ def main():
         [(
             output_files.add_output_json_file(OutputJsonFile(variable_dictionary=combination))
         ) for combination in all_combinations]
+
         
 
 
@@ -211,6 +213,13 @@ def main():
 
 
 
+    # File Name specifier Frame
+
+
+    filename_generator_frame = Frame(my_notebook, width=1000, height=650)
+
+
+
 
 
     # Preview Outputs Frame
@@ -237,6 +246,7 @@ def main():
     # Pack Frames
     get_data_frame.pack(fill="both", expand=1)
     process_data_frame.pack(fill="both", expand=1)
+    filename_generator_frame.pack(fill="both", expand=1)
     preview_data_frame.pack(fill="both", expand=1)
     generate_data_frame.pack(fill="both", expand=1)
 
@@ -244,6 +254,7 @@ def main():
 
     my_notebook.add(get_data_frame, text="Get Data")
     my_notebook.add(process_data_frame, text="Process Data")
+    my_notebook.add(filename_generator_frame, text="File Name")
     my_notebook.add(preview_data_frame, text="Preview Data")
     my_notebook.add(generate_data_frame, text="Generate Data")
 

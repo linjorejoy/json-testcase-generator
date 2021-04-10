@@ -8,6 +8,7 @@ def get_all_variables(string: str = None):
         return None
 
     variables = list(set(re.findall(PATTERN, string)))
+    variables.sort()
 
     return variables
     
