@@ -1,5 +1,10 @@
-from tkinter import Tk, ttk, Frame, filedialog, Button, Label, LabelFrame, LEFT
+from tkinter import Tk, Frame, filedialog, LabelFrame, Scrollbar
+from tkinter import Text, Button, Label
+from tkinter import ttk
+from tkinter import RIGHT, LEFT, END, TOP
+from tkinter import X, Y, N, WORD
 import json
+
 
 """
 
@@ -8,6 +13,7 @@ my_notebook.select(get_data_frame)
 
 TEMPLATE_JSON_FILE = ""
 JSON_STR = ""
+JSON_STR_TO_PRINT = ""
 WINDOW_HEIGHT = 650
 WINDOW_WIDTH = 800
 
@@ -20,7 +26,7 @@ def main():
     def select_file():
         global TEMPLATE_JSON_FILE
         global JSON_STR
-        filename = filedialog.askopenfilename(initialdir = "E:/my_works/programming/Document_Word_Counter",
+        filename = filedialog.askopenfilename(initialdir = "E:/my_works/programming/python/JSON_Test_Case_Generator",
                                             title = "Select a File",
                                                 filetypes = (
                                                     ("JSON files","*.json*"),    
@@ -31,9 +37,12 @@ def main():
         TEMPLATE_JSON_FILE = filename
         with open(TEMPLATE_JSON_FILE, mode="r") as json_file:
             json_data = json.load(json_file)
-            JSON_STR = json.dumps(json_data, indent=4)
+            JSON_STR_TO_PRINT = json.dumps(json_data, indent=2)
+            JSON_STR = json.dumps(json_data)
 
-        json_string_label.configure(text=JSON_STR)
+        json_string_label.delete("1.0",END)
+        json_string_label.insert(END, JSON_STR_TO_PRINT)
+        json_string_label.config(state="disabled")
         file_name_label.configure(text=TEMPLATE_JSON_FILE)
 
 
@@ -72,14 +81,18 @@ def main():
 
     wrapper_body = LabelFrame(get_data_frame, text="File", height="580")
 
+    vertical_scroll = Scrollbar(wrapper_body, orient="vertical")
+
+    vertical_scroll.pack(side=RIGHT, fill=Y)
+
     json_str = "Please Select a JSON File"
 
-    json_string_label = Label(wrapper_body, width=20, text=json_str, font=("bold", 10), justify=LEFT)
-    json_string_label.place(x=200)
-
+    json_string_label = Text(wrapper_body, width=200, height=200, wrap=WORD, yscrollcommand=vertical_scroll.set)
+    json_string_label.insert(END, json_str)
+    json_string_label.pack(side=TOP, fill=X)
+    
+    vertical_scroll.config(command=json_string_label.yview)
     wrapper_body.pack(fill="both", expand="yes")
-
-
 
 
 
@@ -90,7 +103,7 @@ def main():
 
     process_data_frame = Frame(my_notebook, width=1000, height=650)
 
-
+    
 
 
 
