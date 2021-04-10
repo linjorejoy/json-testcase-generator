@@ -13,6 +13,7 @@ from OutputFiles import OutputFiles
 from OutputJsonFile import OutputJsonFile
 
 import ProcessData
+import GetAllCombinations
 
 """
 
@@ -24,6 +25,7 @@ JSON_STR = ""
 JSON_STR_TO_PRINT = ""
 VARIABLES_PRESENT = []
 entry_cell_collection = None
+output_files = OutputFiles()
 
 WINDOW_HEIGHT = 650
 WINDOW_WIDTH = 800
@@ -36,6 +38,24 @@ def to_dict(obj):
     return json.dumps(obj, default=lambda o: o.__dict__, indent=2)
 
 def main():
+
+    def generate_output_file_obj():
+        global entry_cell_collection
+        global output_files
+
+        for column in entry_cell_collection.entry_cells_collection:
+            print("column : ", column.variable_name)
+            for cell in column.entry_cell_column:
+                cell.value = cell.entry.get()
+                cell.entry = None
+                print(cell.value, type(cell.value))
+        all_combinations = GetAllCombinations.get_all_dictionaries(entry_cell_collection)
+
+        [(
+            output_files.add_output_json_file(OutputJsonFile(variable_dictionary=combination))
+        ) for combination in all_combinations]
+        
+
 
     def add_cell(entry_col: EntryCellColumn, index:int):
         
@@ -180,7 +200,7 @@ def main():
 
     processdata_wrapper_footer = LabelFrame(process_data_frame, text="Options", height="50")
 
-    goto_preview_button = Button(processdata_wrapper_footer, text="Show Generated Outputs")
+    goto_preview_button = Button(processdata_wrapper_footer, text="Show Generated Outputs", command=generate_output_file_obj)
 
     goto_preview_button.place(rely=1.0, relx=1.0, x=-5, y=-5, anchor=SE)
 

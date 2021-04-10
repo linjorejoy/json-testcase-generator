@@ -8,7 +8,7 @@ from copy import deepcopy
 
 
 
-def get_all_dictionaries2(entry_cell_collections: EntryCellCollection):
+def get_all_dictionaries(entry_cell_collections: EntryCellCollection):
     combinations = []
     template = {}
 

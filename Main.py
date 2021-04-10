@@ -60,17 +60,17 @@ def to_dict(obj):
 
 if __name__ == '__main__':
 
-    collections = GetAllCombinations.get_all_dictionaries2(entry_collection)
+    collections = GetAllCombinations.get_all_dictionaries(entry_collection)
     print(to_dict(entry_collection))
-    # all_files = OutputFiles()
+    all_files = OutputFiles()
 
-    # [(
-    #     all_files.output_json_file_array.append(OutputJsonFile(variable_dictionary=dictionary))
-    # ) for dictionary in collections]
+    [(
+        all_files.add_output_json_file(OutputJsonFile(variable_dictionary=dictionary))
+    ) for dictionary in collections]
 
-    # for fl in all_files.output_json_file_array:
-    #     if fl.should_be_generated:
-    #         print(fl, fl.variable_dictionary)
+    for fl in all_files.output_json_file_array:
+        if fl.should_be_generated:
+            print(fl.__dict__)
 
     
 
