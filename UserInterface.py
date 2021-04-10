@@ -1,7 +1,7 @@
 from tkinter import Tk, Frame, filedialog, LabelFrame, Scrollbar
 from tkinter import Text, Button, Label, Entry
 from tkinter import ttk
-from tkinter import RIGHT, LEFT, END, TOP
+from tkinter import RIGHT, LEFT, END, TOP, SE
 from tkinter import X, Y, N, WORD
 import json
 from functools import partial
@@ -23,7 +23,7 @@ TEMPLATE_JSON_FILE = ""
 JSON_STR = ""
 JSON_STR_TO_PRINT = ""
 VARIABLES_PRESENT = []
-
+entry_cell_collection = None
 
 WINDOW_HEIGHT = 650
 WINDOW_WIDTH = 800
@@ -32,10 +32,13 @@ WINDOW_WIDTH = 800
 
     
 
+def to_dict(obj):
+    return json.dumps(obj, default=lambda o: o.__dict__, indent=2)
+
 def main():
 
     def add_cell(entry_col: EntryCellColumn, index:int):
-        # print("Index : ",index)
+        
         this_cell = EntryCell()
         yindex = entry_col.add_cell(this_cell)
         this_entry = Entry(processdata_wrapper_body, width=10)
@@ -47,6 +50,7 @@ def main():
         global TEMPLATE_JSON_FILE
         global JSON_STR
         global VARIABLES_PRESENT
+        global entry_cell_collection
         filename = filedialog.askopenfilename(initialdir = "E:/my_works/programming/python/JSON_Test_Case_Generator/For testing",
                                             title = "Select a File",
                                                 filetypes = (
@@ -77,7 +81,6 @@ def main():
             this_var_entry_col = EntryCellColumn(variable_name=variable)
             this_var_entry_col_cell = EntryCell()
             this_var_entry_col.add_cell(entry_cell = this_var_entry_col_cell)
-            this_var_entry_col.add_cell(entry_cell = this_var_entry_col_cell)
             entry_cell_collection.add_column(this_var_entry_col)
 
             processdata_wrapper_body.config(height=580)
@@ -93,6 +96,10 @@ def main():
                 this_entry = Entry(processdata_wrapper_body, width=10)
                 this_entry.grid(row=(yindex+table_start_row+1), column=(index+1), pady=1, padx=8)
                 cell.entry = this_entry
+        # [(
+        #     [print("\t",cell," : ", cell.value, " : ", cell.entry.get()) for cell in cell_column.entry_cell_column]
+        # ) for cell_column in entry_cell_collection.entry_cells_collection]
+        # print(to_dict(entry_cell_collection))
 
         processdata_wrapper_col1_label = Label(processdata_wrapper_body, text="Fill the variations here", font=("bold", 12))
         processdata_wrapper_col1_label.grid(row=1, column=0, pady=2, padx=8)
@@ -173,6 +180,9 @@ def main():
 
     processdata_wrapper_footer = LabelFrame(process_data_frame, text="Options", height="50")
 
+    goto_preview_button = Button(processdata_wrapper_footer, text="Show Generated Outputs")
+
+    goto_preview_button.place(rely=1.0, relx=1.0, x=-5, y=-5, anchor=SE)
 
     processdata_wrapper_footer.pack(fill="both", expand=N)
 
