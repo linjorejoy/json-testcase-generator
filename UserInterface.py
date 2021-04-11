@@ -119,13 +119,39 @@ def main():
 
 
     def set_name_page():
+
         global reference_arr_for_name_gen
         global VARIABLES_PRESENT
-        # veriables_for_dropdown = VARIABLES_PRESENT.copy()
+
+        filename_generator_canvas = Canvas(filename_generator_wrapper_body)
+        filename_generator_canvas.pack(side=LEFT, fill=BOTH, expand=1)
+
+        filename_generator_canvas_scroll_y = Scrollbar(
+            filename_generator_wrapper_body,
+            orient = VERTICAL,
+            command = filename_generator_canvas.yview
+        )
+        filename_generator_canvas_scroll_y.pack(side = RIGHT, fill = Y)
+
+        filename_generator_canvas.configure(yscrollcommand=filename_generator_canvas_scroll_y.set)
+        filename_generator_canvas.bind(
+            '<Configure>',
+            lambda e : filename_generator_canvas.configure(
+                scrollregion = filename_generator_canvas.bbox('all')
+            )
+        )
+
+        filename_generator_canvas_subframe = Frame(filename_generator_canvas)
+
+        filename_generator_canvas.create_window(
+            (0, 0),
+            window = filename_generator_canvas_subframe,
+            anchor = 'nw'
+        )
+        
         veriables_for_dropdown = ["None", "Counter", *VARIABLES_PRESENT]
-        # veriables_for_dropdown.append("Counter")
-        # filename_generator_frame
-        entry_0 = Entry(filename_generator_wrapper_body, width=10)
+        
+        entry_0 = Entry(filename_generator_canvas_subframe, width=10)
         entry_0.grid(row=0, column=0, ipadx=1, ipady=3)
         reference_arr_for_name_gen.append(entry_0)
 
@@ -133,16 +159,25 @@ def main():
 
             if not veriables_for_dropdown:
                 veriables_for_dropdown = [""]
+            
+            
+            plus_label_0 = Label(filename_generator_canvas_subframe, text="+", font=("bold",14))
+            plus_label_0.grid(row=index, column=1, ipadx=1, ipady=3)
 
             this_dropdown_var = StringVar()
             this_dropdown_var.set(None)
-            this_dropdown = OptionMenu(filename_generator_wrapper_body, this_dropdown_var, *veriables_for_dropdown)
-            this_dropdown.grid(row=0, column=(2*index + 1))
+            this_dropdown = OptionMenu(filename_generator_canvas_subframe, this_dropdown_var, *veriables_for_dropdown)
+            this_dropdown.grid(row=index, column=2, ipadx=1, ipady=3)
             reference_arr_for_name_gen.append(this_dropdown_var)
 
-            entry_n = Entry(filename_generator_wrapper_body, width=10)
-            entry_n.grid(row=0, column=(2*index + 2), ipadx=1, ipady=3)
+            plus_label_1 = Label(filename_generator_canvas_subframe, text="+", font=("bold",14))
+            plus_label_1.grid(row=index, column=3, ipadx=1, ipady=3)
+
+            entry_n = Entry(filename_generator_canvas_subframe, width=10)
+            entry_n.grid(row=index, column=4, ipadx=1, ipady=3)
             reference_arr_for_name_gen.append(entry_n)
+
+        
             
         goto_preview_button = Button(filename_generator_wrapper_footer,text="Preview All Files", command=preview_all_files)
         goto_preview_button.place(rely=1.0, relx=1.0, x=-5, y=-5, anchor=SE)
