@@ -242,7 +242,7 @@ def main():
 
             for yindex, cell in enumerate(this_var_entry_col.entry_cell_column):
                 this_entry = Entry(processdata_wrapper_body, width=10)
-                this_entry.grid(row=(yindex+table_start_row+1), column=(index+1), pady=1, padx=8, ipadx=1, ipady=3)
+                this_entry.grid(row=(yindex+table_start_row+1), column=(index+1), pady=1, padx=8)
                 cell.entry = this_entry
         # [(
         #     [print("\t",cell," : ", cell.value, " : ", cell.entry.get()) for cell in cell_column.entry_cell_column]
