@@ -6,6 +6,7 @@ from tkinter.ttk import Combobox, Treeview, Progressbar
 from tkinter import RIGHT, LEFT, END, TOP, SE, W, BOTTOM
 from tkinter import X, Y, N, WORD
 import json
+import os
 from functools import partial
 
 from EntryCellCollection import EntryCellCollection
@@ -181,7 +182,8 @@ def main():
         global VARIABLES_PRESENT
         global entry_cell_collection
         global json_data
-        filename = filedialog.askopenfilename(initialdir = "E:/my_works/programming/python/JSON_Test_Case_Generator/For testing",
+        current_dir = os.curdir
+        filename = filedialog.askopenfilename(initialdir = current_dir,
                                             title = "Select a File",
                                                 filetypes = (
                                                     ("JSON files","*.json*"),    
