@@ -173,7 +173,7 @@ def main():
         this_cell = EntryCell()
         yindex = entry_col.add_cell(this_cell)
         this_entry = Entry(processdata_wrapper_body, width=10)
-        this_entry.grid(row=(yindex+2), column=(index + 1), pady=1, padx=8, ipadx=1, ipady=3)
+        this_entry.grid(row=(yindex+2), column=(index + 1), pady=1, padx=8)
         this_cell.entry = this_entry
 
         # processdata_wrapper_body_canvas.config(scrollregion=processdata_subframe.bbox())
