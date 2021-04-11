@@ -121,8 +121,9 @@ def main():
     def set_name_page():
         global reference_arr_for_name_gen
         global VARIABLES_PRESENT
-        veriables_for_dropdown = VARIABLES_PRESENT.copy()
-        veriables_for_dropdown.append("Counter")
+        # veriables_for_dropdown = VARIABLES_PRESENT.copy()
+        veriables_for_dropdown = ["None", "Counter", *VARIABLES_PRESENT]
+        # veriables_for_dropdown.append("Counter")
         # filename_generator_frame
         entry_0 = Entry(filename_generator_wrapper_body, width=10)
         entry_0.grid(row=0, column=0, ipadx=1, ipady=3)
@@ -172,7 +173,7 @@ def main():
         
         this_cell = EntryCell()
         yindex = entry_col.add_cell(this_cell)
-        this_entry = Entry(processdata_wrapper_body, width=10)
+        this_entry = Entry(processdata_subframe, width=10)
         this_entry.grid(row=(yindex+2), column=(index + 1), pady=1, padx=8)
         this_cell.entry = this_entry
         
@@ -241,7 +242,7 @@ def main():
             this_processdata_variable_header.grid(row=table_start_row, column=(index+1), pady=2, padx=3)
 
             for yindex, cell in enumerate(this_var_entry_col.entry_cell_column):
-                this_entry = Entry(processdata_wrapper_body, width=10)
+                this_entry = Entry(processdata_subframe, width=10)
                 this_entry.grid(row=(yindex+table_start_row+1), column=(index+1), pady=1, padx=8)
                 cell.entry = this_entry
         # [(
