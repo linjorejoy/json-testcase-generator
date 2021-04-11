@@ -2,8 +2,8 @@ from tkinter import Tk, Frame, filedialog, LabelFrame, Scrollbar, OptionMenu, Ch
 from tkinter import Text, Button, Label, Entry
 from tkinter import IntVar, StringVar
 from tkinter import ttk
-from tkinter.ttk import Combobox
-from tkinter import RIGHT, LEFT, END, TOP, SE
+from tkinter.ttk import Combobox, Treeview, Progressbar
+from tkinter import RIGHT, LEFT, END, TOP, SE, W, BOTTOM
 from tkinter import X, Y, N, WORD
 import json
 from functools import partial
@@ -17,6 +17,7 @@ from OutputJsonFile import OutputJsonFile
 import ProcessData
 import GetAllCombinations
 import FileNameGenerator
+import GenerateFile
 
 """
 
@@ -24,6 +25,7 @@ my_notebook.select(get_data_frame)
 """
 
 TEMPLATE_JSON_FILE = ""
+json_data = {}
 JSON_STR = ""
 JSON_STR_TO_PRINT = ""
 VARIABLES_PRESENT = []
@@ -44,41 +46,76 @@ def to_dict(obj):
 def main():
     global VARIABLES_PRESENT
 
+    def generate_files():
+        my_notebook.select(4)
+        global json_data
+        output_location = "E:/my_works/programming/python/JSON_Test_Case_Generator/For testing/Output"
+        total_length = 300
+        progress_bar = Progressbar(generate_file_wrapper_progress, orient="horizontal", length=total_length)
+        progress_bar.pack(pady=10)
+
+        num_files = output_files.count
+        progress_jump = int(total_length // num_files)
+
+        for json_file_obj in output_files.get_output_json_file_array():
+            generated_files_text.config(state="normal")
+            generated_files_text.insert(END, f"\n{json_file_obj.file_name:>50}............Creating")
+            generated_files_text.config(state="disabled")
+            GenerateFile.generate_one_file(json_file_obj, json_data, output_location)
+            progress_bar['value'] += progress_jump
+            generated_files_text.config(state="normal")
+            generated_files_text.insert(END, f"\n{json_file_obj.file_name:>50}............Done")
+            generated_files_text.config(state="disabled")
+
+        
     def preview_all_files():
         global reference_arr_for_name_gen
         my_notebook.select(3)
         FileNameGenerator.generate_file_name(output_files, reference_arr_for_name_gen)
-        # Headers
-
-
-        # Content
-        for index, json_file_obj in enumerate(output_files.output_json_file_array):
-            
-            json_file_obj.should_be_generated = IntVar(value=1)
-            this_checkbox = Checkbutton(
-                preview_wrapper_body, 
-                text="", 
-                variable=json_file_obj.should_be_generated, 
-                onvalue=1,
-                offvalue=0,
-                height=1,
-                width=5
-            )
-            this_checkbox.grid(row=index+1, column=0)
-            preview_wrapper_body.grid_columnconfigure(0, weight = 1)
-
-            filename = Label(preview_wrapper_body, height="1", width="12", text=json_file_obj.file_name,font=("bold", 10))
-            filename.grid(row=index+1, column=1)
-            preview_wrapper_body.grid_columnconfigure(1, weight = 1)
-
-            counter = 2
-            for var_name in json_file_obj.variable_dictionary.keys():
-                label = Label(preview_wrapper_body, height="1", width="12", text=json_file_obj.variable_dictionary[var_name],font=("bold", 10))
-                label.grid(row=index+1, column=counter)
-                counter += 1
-            
-                preview_wrapper_body.grid_columnconfigure(counter, weight = 1)
+        for widget in preview_wrapper_body.winfo_children():
+            widget.destroy()
         
+        preview_tree_scroll_frame = Frame(preview_wrapper_body)
+        preview_tree_scroll_frame.pack(pady=20)
+
+        preview_tree_scrollbar_y = Scrollbar(preview_tree_scroll_frame, orient='vertical')
+        preview_tree_scrollbar_y.pack(side=RIGHT, fill=Y)
+
+        preview_tree_scrollbar_x = Scrollbar(preview_tree_scroll_frame, orient='horizontal')
+        preview_tree_scrollbar_x.pack(side=BOTTOM, fill="x")
+
+        preview_tree = Treeview(preview_tree_scroll_frame,yscrollcommand=preview_tree_scrollbar_y.set, xscrollcommand=preview_tree_scrollbar_x)
+
+        preview_tree_scrollbar_y.config(command=preview_tree.yview)
+        preview_tree_scrollbar_x.config(command=preview_tree.xview)
+
+        preview_tree_variables = ["File Name", *VARIABLES_PRESENT]
+
+        # Columns
+        preview_tree['columns'] = tuple(preview_tree_variables)
+
+        # Format Column
+
+        preview_tree.column("#0", width=60, minwidth=45)
+        for var in preview_tree_variables:
+            preview_tree.column(var, width=200, anchor=W, minwidth=45)
+
+        # Headings
+        preview_tree.heading("#0", text="Count", anchor=W)
+        for var in preview_tree_variables:
+            preview_tree.heading(var, text=var.title(), anchor=W)
+
+        for index, json_file_obj in enumerate(output_files.get_output_json_file_array()):
+            vales_to_add_list = [json_file_obj.file_name, *json_file_obj.variable_dictionary.values()]
+            vales_to_add_tuple = tuple(vales_to_add_list)
+            preview_tree.insert(parent='', index="end", iid=index, text=index+1, values=vales_to_add_tuple)
+            
+        preview_tree.pack()
+
+        # preview_wrapper_footer
+        generate_json_files_button = Button(preview_wrapper_footer, text="Generate All Files", command=generate_files)
+        generate_json_files_button.place(rely=1.0, relx=1.0, x=-5, y=-5, anchor=SE)
+
 
     def set_name_page():
         global reference_arr_for_name_gen
@@ -108,16 +145,17 @@ def main():
         goto_preview_button = Button(filename_generator_wrapper_footer,text="Preview All Files", command=preview_all_files)
         goto_preview_button.place(rely=1.0, relx=1.0, x=-5, y=-5, anchor=SE)
 
+
     def generate_output_file_obj():
         global entry_cell_collection
         global output_files
 
         for column in entry_cell_collection.entry_cells_collection:
-            print("column : ", column.variable_name)
+            # print("column : ", column.variable_name)
             for cell in column.entry_cell_column:
                 cell.value = cell.entry.get()
                 cell.entry = None
-                print(cell.value, type(cell.value))
+                # print(cell.value, type(cell.value))
         all_combinations = GetAllCombinations.get_all_dictionaries(entry_cell_collection)
 
         [(
@@ -126,8 +164,6 @@ def main():
 
         my_notebook.select(2)
         set_name_page()
-
-        
 
 
     def add_cell(entry_col: EntryCellColumn, index:int):
@@ -144,6 +180,7 @@ def main():
         global JSON_STR
         global VARIABLES_PRESENT
         global entry_cell_collection
+        global json_data
         filename = filedialog.askopenfilename(initialdir = "E:/my_works/programming/python/JSON_Test_Case_Generator/For testing",
                                             title = "Select a File",
                                                 filetypes = (
@@ -205,11 +242,6 @@ def main():
     # Notebook
     my_notebook = ttk.Notebook(master=root)
     my_notebook.pack(pady="6")
-
-
-
-
-
 
 
     # Get Data Frame
@@ -314,12 +346,37 @@ def main():
 
     preview_wrapper_body.pack(fill="both", expand=Y)
 
+    preview_wrapper_footer = LabelFrame(preview_data_frame, text="Options", height="50")
+
+    preview_wrapper_footer.pack(fill="both", expand=N)
+
+
+
 
 
     # Generate Status Frame
 
-    generate_data_frame = Frame(my_notebook, width=1000, height=650)
+    generate_file_frame = Frame(my_notebook, width=1000, height=650)
 
+    generate_file_wrapper_progress = LabelFrame(generate_file_frame, text="Progree", height="75")
+
+    generate_file_wrapper_progress.pack(fill="both", expand=N)
+
+    
+    
+    generate_file_wrapper_status = LabelFrame(generate_file_frame, text="Status", height="500")
+
+    generated_files_text_scroll_y = Scrollbar(generate_file_wrapper_status, orient="vertical")
+    generated_files_text_scroll_y.pack(side=RIGHT, fill=Y)
+
+    generated_files_text = Text(generate_file_wrapper_status, width=200, height=200, wrap=WORD, yscrollcommand=generated_files_text_scroll_y.set)
+
+    generated_files_text.insert(END, "Generating JSON Files....")
+    generated_files_text.pack(side=TOP, fill=X)
+    
+
+    generated_files_text_scroll_y.config(command=generated_files_text.yview)
+    generate_file_wrapper_status.pack(fill="both", expand=Y)
 
 
 
@@ -328,7 +385,7 @@ def main():
     process_data_frame.pack(fill="both", expand=1)
     filename_generator_frame.pack(fill="both", expand=1)
     preview_data_frame.pack(fill="both", expand=1)
-    generate_data_frame.pack(fill="both", expand=1)
+    generate_file_frame.pack(fill="both", expand=1)
 
     # adding tabs
 
@@ -336,7 +393,7 @@ def main():
     my_notebook.add(process_data_frame, text="Process Data")
     my_notebook.add(filename_generator_frame, text="File Name")
     my_notebook.add(preview_data_frame, text="Preview Data")
-    my_notebook.add(generate_data_frame, text="Generate Data")
+    my_notebook.add(generate_file_frame, text="Generate Data")
 
     root.mainloop()
 

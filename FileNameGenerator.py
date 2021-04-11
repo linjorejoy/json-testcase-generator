@@ -66,7 +66,7 @@ def get_name(output_json_file:OutputJsonFile, ref_arr):
             if ref.get() == None or ref.get() == "None":
                 pass
             elif ref.get() == "Counter":# Counter
-                print("Counter.....")
+                # print("Counter.....")
                 counter_present = True
                 counter_position = len(name)
             else:
@@ -77,10 +77,10 @@ def get_name(output_json_file:OutputJsonFile, ref_arr):
         name = name[:counter_position] + str(counter) + name[counter_position:]
         
         while True:
-
+            
             if name in GENERATE_NAMES:
                 counter += 1
-                name = name[:counter_position] + str(counter) + name[(counter_position+1):]
+                name = name[:counter_position] + str(counter) + name[(counter_position+len(str(counter))):]
             else:
                 break
 
