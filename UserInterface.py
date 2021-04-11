@@ -125,7 +125,7 @@ def main():
         veriables_for_dropdown.append("Counter")
         # filename_generator_frame
         entry_0 = Entry(filename_generator_wrapper_body, width=10)
-        entry_0.grid(row=0, column=0)
+        entry_0.grid(row=0, column=0, ipadx=1, ipady=3)
         reference_arr_for_name_gen.append(entry_0)
 
         for index in range(len(veriables_for_dropdown)):
@@ -140,7 +140,7 @@ def main():
             reference_arr_for_name_gen.append(this_dropdown_var)
 
             entry_n = Entry(filename_generator_wrapper_body, width=10)
-            entry_n.grid(row=0, column=(2*index + 2))
+            entry_n.grid(row=0, column=(2*index + 2), ipadx=1, ipady=3)
             reference_arr_for_name_gen.append(entry_n)
             
         goto_preview_button = Button(filename_generator_wrapper_footer,text="Preview All Files", command=preview_all_files)
@@ -172,7 +172,7 @@ def main():
         this_cell = EntryCell()
         yindex = entry_col.add_cell(this_cell)
         this_entry = Entry(processdata_wrapper_body, width=10)
-        this_entry.grid(row=(yindex+2), column=(index + 1), pady=1, padx=8)
+        this_entry.grid(row=(yindex+2), column=(index + 1), pady=1, padx=8, ipadx=1, ipady=3)
         this_cell.entry = this_entry
         
 
@@ -226,7 +226,7 @@ def main():
 
             for yindex, cell in enumerate(this_var_entry_col.entry_cell_column):
                 this_entry = Entry(processdata_wrapper_body, width=10)
-                this_entry.grid(row=(yindex+table_start_row+1), column=(index+1), pady=1, padx=8)
+                this_entry.grid(row=(yindex+table_start_row+1), column=(index+1), pady=1, padx=8, ipadx=1, ipady=3)
                 cell.entry = this_entry
         # [(
         #     [print("\t",cell," : ", cell.value, " : ", cell.entry.get()) for cell in cell_column.entry_cell_column]
@@ -304,6 +304,8 @@ def main():
 
 
     processdata_wrapper_body.pack(fill="both", expand=Y)
+    
+    
 
     processdata_wrapper_footer = LabelFrame(process_data_frame, text="Options", height="50")
 
