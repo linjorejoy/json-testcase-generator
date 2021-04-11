@@ -1,9 +1,9 @@
-from tkinter import Tk, Frame, filedialog, LabelFrame, Scrollbar, OptionMenu, Checkbutton
+from tkinter import Tk, Frame, filedialog, LabelFrame, Scrollbar, OptionMenu, Checkbutton, Canvas
 from tkinter import Text, Button, Label, Entry
 from tkinter import IntVar, StringVar
 from tkinter import ttk
 from tkinter.ttk import Combobox, Treeview, Progressbar
-from tkinter import RIGHT, LEFT, END, TOP, SE, W, BOTTOM
+from tkinter import RIGHT, LEFT, END, BOTH, TOP, SE, W, BOTTOM, HORIZONTAL, VERTICAL
 from tkinter import X, Y, N, WORD
 import json
 import os
@@ -109,7 +109,7 @@ def main():
         for index, json_file_obj in enumerate(output_files.get_output_json_file_array()):
             vales_to_add_list = [json_file_obj.file_name, *json_file_obj.variable_dictionary.values()]
             vales_to_add_tuple = tuple(vales_to_add_list)
-            preview_tree.insert(parent='', index="end", iid=index, text=index+1, values=vales_to_add_tuple)
+            preview_tree.insert(parent='', index="end", iid=index, text=(index+1), values=vales_to_add_tuple)
             
         preview_tree.pack()
 
@@ -156,6 +156,7 @@ def main():
             for cell in column.entry_cell_column:
                 cell.value = cell.entry.get()
                 cell.entry = None
+
                 # print(cell.value, type(cell.value))
         all_combinations = GetAllCombinations.get_all_dictionaries(entry_cell_collection)
 
@@ -174,7 +175,21 @@ def main():
         this_entry = Entry(processdata_wrapper_body, width=10)
         this_entry.grid(row=(yindex+2), column=(index + 1), pady=1, padx=8, ipadx=1, ipady=3)
         this_cell.entry = this_entry
+
+        # processdata_wrapper_body_canvas.config(scrollregion=processdata_subframe.bbox())
+        # processdata_wrapper_body_canvas.bind(
+        #         '<Configure>',
+        #         lambda e : processdata_wrapper_body_canvas.configure(
+        #             scrollregion = processdata_wrapper_body_canvas.bbox("all")
+        #         )
+        #     )
         
+
+        # processdata_wrapper_body_canvas.create_window(
+        #     (0, 0),
+        #     window = processdata_subframe,
+        #     anchor = "nw"
+        # )
 
     def select_file():
         global TEMPLATE_JSON_FILE
@@ -215,14 +230,14 @@ def main():
             this_var_entry_col.add_cell(entry_cell = this_var_entry_col_cell)
             entry_cell_collection.add_column(this_var_entry_col)
 
-            processdata_wrapper_body.config(height=580)
+            # processdata_wrapper_body.config(height=580)
             column_index = index
             # print("Column Index : ", column_index)
-            this_processdata_variable_add_cell_button = Button(processdata_wrapper_body, text="Add cell", command=partial(add_cell, this_var_entry_col, column_index))
-            this_processdata_variable_add_cell_button.grid(row=0, column=(index+1), pady=2, padx=8)
+            this_processdata_variable_add_cell_button = Button(processdata_subframe, text="Add cell", command=partial(add_cell, this_var_entry_col, column_index))
+            this_processdata_variable_add_cell_button.grid(row=0, column=(index+1), pady=2, padx=3)
 
-            this_processdata_variable_header = Label(processdata_wrapper_body, width="10", text=variable, font=("bold", 12))
-            this_processdata_variable_header.grid(row=table_start_row, column=(index+1), pady=2, padx=8)
+            this_processdata_variable_header = Label(processdata_subframe, width="10", text=variable, font=("bold", 12))
+            this_processdata_variable_header.grid(row=table_start_row, column=(index+1), pady=2, padx=3)
 
             for yindex, cell in enumerate(this_var_entry_col.entry_cell_column):
                 this_entry = Entry(processdata_wrapper_body, width=10)
@@ -233,7 +248,7 @@ def main():
         # ) for cell_column in entry_cell_collection.entry_cells_collection]
         # print(to_dict(entry_cell_collection))
 
-        processdata_wrapper_col1_label = Label(processdata_wrapper_body, text="Fill the variations here", font=("bold", 12))
+        processdata_wrapper_col1_label = Label(processdata_subframe, text="Fill the variations here", font=("bold", 12))
         processdata_wrapper_col1_label.grid(row=1, column=0, pady=2, padx=8)
 
 
@@ -299,12 +314,62 @@ def main():
 
     processdata_wapper_top.pack(fill="both", expand=N)
 
-    processdata_wrapper_body = LabelFrame(process_data_frame, text="Body", height="500")
+    # Frame
+    processdata_wrapper_body = LabelFrame(process_data_frame, text="Body")
+    processdata_wrapper_body.pack(fill="both", expand=1)
+
+    # Canvas
+    processdata_wrapper_body_canvas = Canvas(processdata_wrapper_body)
+    processdata_wrapper_body_canvas.pack(side=LEFT, fill=BOTH, expand=1)
+
+    # Scrollbar
+
+    processdata_wrapper_body_canvas_y = ttk.Scrollbar(
+        processdata_wrapper_body,
+        orient="vertical",
+        command=processdata_wrapper_body_canvas.yview
+    )
+    processdata_wrapper_body_canvas_y.pack(side=RIGHT, fill=Y)
 
 
+    processdata_wrapper_body_canvas_x = ttk.Scrollbar(
+        processdata_wrapper_body,
+        orient="horizontal",
+        command=processdata_wrapper_body_canvas.xview
+    )
+    processdata_wrapper_body_canvas_x.pack(side=BOTTOM, fill='x')
+
+    # Configure Scroll Bar
+    processdata_wrapper_body_canvas.configure(
+        yscrollcommand=processdata_wrapper_body_canvas_y.set,
+        xscrollcommand=processdata_wrapper_body_canvas_x.set
+    )
+
+
+    processdata_wrapper_body_canvas.bind(
+        '<Configure>',
+        lambda e : processdata_wrapper_body_canvas.configure(
+            scrollregion = processdata_wrapper_body_canvas.bbox("all")
+        )
+    )
+    
+    # New frame inside Canvas
+
+    processdata_subframe = Frame(processdata_wrapper_body_canvas)
+
+
+    # Add new frame to window of canvas
+
+    processdata_wrapper_body_canvas.create_window(
+        (0, 0),
+        window = processdata_subframe,
+        anchor = "nw"
+    )
+    # for j in range(20):
+    #     for i in range(10):
+    #         Button(processdata_subframe, text=f"Button {j}{i}").grid(row = i, column = j, pady=20, padx=15)
 
     processdata_wrapper_body.pack(fill="both", expand=Y)
-    
     
 
     processdata_wrapper_footer = LabelFrame(process_data_frame, text="Options", height="50")
@@ -324,9 +389,8 @@ def main():
 
 
     filename_generator_frame = Frame(my_notebook, width=1000, height=650)
+
     filename_generator_wrapper_body = LabelFrame(filename_generator_frame, text="Body", height="560")
-
-
     filename_generator_wrapper_body.pack(fill="both", expand=Y)
 
     filename_generator_wrapper_footer = LabelFrame(filename_generator_frame, text="Options", height="50")
@@ -349,6 +413,7 @@ def main():
 
 
     preview_wrapper_body.pack(fill="both", expand=Y)
+
 
     preview_wrapper_footer = LabelFrame(preview_data_frame, text="Options", height="50")
 
