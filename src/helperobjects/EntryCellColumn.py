@@ -1,5 +1,5 @@
 
-from EntryCell import EntryCell
+from helperobjects.EntryCell import EntryCell
 from typing import List
 
 

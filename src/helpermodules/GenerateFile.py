@@ -1,8 +1,8 @@
 import json
 import os
 
-from OutputFiles import OutputFiles
-from OutputJsonFile import OutputJsonFile
+from helperobjects.OutputFiles import OutputFiles
+from helperobjects.OutputJsonFile import OutputJsonFile
 
 
 def generate_all_files(output_files:OutputFiles, template:dict, output_location:str):

@@ -9,16 +9,16 @@ import json
 import os
 from functools import partial
 
-from EntryCellCollection import EntryCellCollection
-from EntryCellColumn import EntryCellColumn
-from EntryCell import EntryCell
-from OutputFiles import OutputFiles
-from OutputJsonFile import OutputJsonFile
+from helperobjects.EntryCellCollection import EntryCellCollection
+from helperobjects.EntryCellColumn import EntryCellColumn
+from helperobjects.EntryCell import EntryCell
+from helperobjects.OutputFiles import OutputFiles
+from helperobjects.OutputJsonFile import OutputJsonFile
 
-import ProcessData
-import GetAllCombinations
-import FileNameGenerator
-import GenerateFile
+import helpermodules.ProcessData as ProcessData
+import helpermodules.GetAllCombinations as GetAllCombinations
+import helpermodules.FileNameGenerator as FileNameGenerator
+import helpermodules.GenerateFile as GenerateFile
 
 """
 

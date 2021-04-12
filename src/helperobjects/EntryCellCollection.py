@@ -1,4 +1,4 @@
-from EntryCellColumn import EntryCellColumn
+from helperobjects.EntryCellColumn import EntryCellColumn
 
 from typing import List
 

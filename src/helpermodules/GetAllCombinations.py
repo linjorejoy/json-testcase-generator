@@ -1,6 +1,6 @@
-from EntryCellCollection import EntryCellCollection
-from EntryCellColumn import EntryCellColumn
-from EntryCell import EntryCell 
+from helperobjects.EntryCellCollection import EntryCellCollection
+from helperobjects.EntryCellColumn import EntryCellColumn
+from helperobjects.EntryCell import EntryCell 
 
 from typing import Dict, List
 from copy import deepcopy

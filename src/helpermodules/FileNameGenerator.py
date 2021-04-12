@@ -1,6 +1,6 @@
-from EntryCellCollection import EntryCellCollection
-from OutputFiles import OutputFiles
-from OutputJsonFile import OutputJsonFile
+from helperobjects.EntryCellCollection import EntryCellCollection
+from helperobjects.OutputFiles import OutputFiles
+from helperobjects.OutputJsonFile import OutputJsonFile
 from tkinter import StringVar, Entry
 
 GENERATE_NAMES = []
