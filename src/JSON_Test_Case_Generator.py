@@ -3,7 +3,7 @@ from tkinter import Text, Button, Label, Entry
 from tkinter import IntVar, StringVar
 from tkinter import ttk
 from tkinter.ttk import Combobox, Treeview, Progressbar
-from tkinter import RIGHT, LEFT, END, BOTH, TOP, SE, W, BOTTOM, HORIZONTAL, VERTICAL
+from tkinter import RIGHT, LEFT, END, BOTH, TOP, SE, W, NSEW, BOTTOM, HORIZONTAL, VERTICAL
 from tkinter import X, Y, N, WORD
 import json
 import os
@@ -37,7 +37,6 @@ reference_arr_for_name_gen = []
 
 WINDOW_HEIGHT = 650
 WINDOW_WIDTH = 800
-
 
 
     
@@ -522,5 +521,6 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    pass
+    # main()
 
