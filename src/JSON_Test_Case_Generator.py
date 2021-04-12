@@ -68,7 +68,6 @@ def main():
             generated_files_text.config(state="disabled")
 
 
-
     def select_output_loc():
         global output_location
         current_dir = os.curdir
@@ -80,30 +79,12 @@ def main():
         genereate_button = Button(generate_file_wrapper_progress, text = "Generate", command = generate_outputs)
         genereate_button.pack(pady = 10)
 
+
     def goto_generate_files():
         my_notebook.select(4)
         global json_data
         select_output_loc_button = Button(generate_file_wrapper_progress, text = "Select Output Loc", command = select_output_loc)
         select_output_loc_button.pack(pady=10)
-
-        # output_location = os
-        # # output_location = "E:/my_works/programming/python/JSON_Test_Case_Generator/For testing/Output"
-        # total_length = 300
-        # progress_bar = Progressbar(generate_file_wrapper_progress, orient="horizontal", length=total_length)
-        # progress_bar.pack(pady=10)
-
-        # num_files = output_files.count
-        # progress_jump = int(total_length // num_files)
-
-        # for json_file_obj in output_files.get_output_json_file_array():
-        #     generated_files_text.config(state="normal")
-        #     generated_files_text.insert(END, f"\n{json_file_obj.file_name:>50}............Creating")
-        #     generated_files_text.config(state="disabled")
-        #     GenerateFile.generate_one_file(json_file_obj, json_data, output_location)
-        #     progress_bar['value'] += progress_jump
-        #     generated_files_text.config(state="normal")
-        #     generated_files_text.insert(END, f"\n{json_file_obj.file_name:>50}............Done")
-        #     generated_files_text.config(state="disabled")
 
         
     def preview_all_files():
@@ -265,6 +246,7 @@ def main():
         #     anchor = "nw"
         # )
 
+
     def select_file():
         global TEMPLATE_JSON_FILE
         global JSON_STR
@@ -310,17 +292,14 @@ def main():
             this_processdata_variable_add_cell_button = Button(processdata_subframe, text="Add cell", command=partial(add_cell, this_var_entry_col, column_index))
             this_processdata_variable_add_cell_button.grid(row=0, column=(index+1), pady=2, padx=3)
 
-            this_processdata_variable_header = Label(processdata_subframe, width="10", text=variable, font=("bold", 12))
+            this_processdata_variable_header = Label(processdata_subframe, text=variable, font=("bold", 12))
             this_processdata_variable_header.grid(row=table_start_row, column=(index+1), pady=2, padx=3)
 
             for yindex, cell in enumerate(this_var_entry_col.entry_cell_column):
                 this_entry = Entry(processdata_subframe, width=10)
                 this_entry.grid(row=(yindex+table_start_row+1), column=(index+1), pady=1, padx=8)
                 cell.entry = this_entry
-        # [(
-        #     [print("\t",cell," : ", cell.value, " : ", cell.entry.get()) for cell in cell_column.entry_cell_column]
-        # ) for cell_column in entry_cell_collection.entry_cells_collection]
-        # print(to_dict(entry_cell_collection))
+                
 
         processdata_wrapper_col1_label = Label(processdata_subframe, text="Fill the variations here", font=("bold", 12))
         processdata_wrapper_col1_label.grid(row=1, column=0, pady=2, padx=8)
