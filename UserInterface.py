@@ -32,6 +32,7 @@ JSON_STR_TO_PRINT = ""
 VARIABLES_PRESENT = []
 entry_cell_collection = None
 output_files = OutputFiles()
+output_location = ""
 reference_arr_for_name_gen = []
 
 WINDOW_HEIGHT = 650
@@ -47,10 +48,8 @@ def to_dict(obj):
 def main():
     global VARIABLES_PRESENT
 
-    def generate_files():
-        my_notebook.select(4)
-        global json_data
-        output_location = "E:/my_works/programming/python/JSON_Test_Case_Generator/For testing/Output"
+    def generate_outputs():
+        global output_location
         total_length = 300
         progress_bar = Progressbar(generate_file_wrapper_progress, orient="horizontal", length=total_length)
         progress_bar.pack(pady=10)
@@ -67,6 +66,44 @@ def main():
             generated_files_text.config(state="normal")
             generated_files_text.insert(END, f"\n{json_file_obj.file_name:>50}............Done")
             generated_files_text.config(state="disabled")
+
+
+
+    def select_output_loc():
+        global output_location
+        current_dir = os.curdir
+        
+        output_location = filedialog.askdirectory(
+            initialdir = current_dir,
+            title = "Select a Folder"
+        )
+        genereate_button = Button(generate_file_wrapper_progress, text = "Generate", command = generate_outputs)
+        genereate_button.pack(pady = 10)
+
+    def goto_generate_files():
+        my_notebook.select(4)
+        global json_data
+        select_output_loc_button = Button(generate_file_wrapper_progress, text = "Select Output Loc", command = select_output_loc)
+        select_output_loc_button.pack(pady=10)
+
+        # output_location = os
+        # # output_location = "E:/my_works/programming/python/JSON_Test_Case_Generator/For testing/Output"
+        # total_length = 300
+        # progress_bar = Progressbar(generate_file_wrapper_progress, orient="horizontal", length=total_length)
+        # progress_bar.pack(pady=10)
+
+        # num_files = output_files.count
+        # progress_jump = int(total_length // num_files)
+
+        # for json_file_obj in output_files.get_output_json_file_array():
+        #     generated_files_text.config(state="normal")
+        #     generated_files_text.insert(END, f"\n{json_file_obj.file_name:>50}............Creating")
+        #     generated_files_text.config(state="disabled")
+        #     GenerateFile.generate_one_file(json_file_obj, json_data, output_location)
+        #     progress_bar['value'] += progress_jump
+        #     generated_files_text.config(state="normal")
+        #     generated_files_text.insert(END, f"\n{json_file_obj.file_name:>50}............Done")
+        #     generated_files_text.config(state="disabled")
 
         
     def preview_all_files():
@@ -114,7 +151,7 @@ def main():
         preview_tree.pack()
 
         # preview_wrapper_footer
-        generate_json_files_button = Button(preview_wrapper_footer, text="Generate All Files", command=generate_files)
+        generate_json_files_button = Button(preview_wrapper_footer, text="Generate All Files", command=goto_generate_files)
         generate_json_files_button.place(rely=1.0, relx=1.0, x=-5, y=-5, anchor=SE)
 
 
