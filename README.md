@@ -4,6 +4,11 @@ This is an application with the intent of easing the JSON test case generation f
 
 ## Downloads
 
+### [v0.0.6](dist/UserInterface%20v0.0.6.exe)
+
+- Select output location added
+- splitted generate into multiple functions
+
 ### [v0.0.5](dist/UserInterface%20v0.0.5.exe)
 
 - Added the scroll bar name gen section
