@@ -4,6 +4,14 @@ This is an application with the intent of easing the JSON test case generation f
 
 ## Downloads
 
+### [v0.0.8](dist/JSON_Test_Case_Generator%20v0.0.8.exe)
+
+- Generating Combinations memory usage error reduced
+
+### [v0.0.7](dist/JSON_Test_Case_Generator%20v0.0.7.exe)
+
+- No change in functionality but Code Organized
+
 ### [v0.0.6](dist/JSON_Test_Case_Generator%20v0.0.6.exe)
 
 - Select output location added

@@ -305,7 +305,7 @@ def main():
 
 
     root = Tk()
-    root.title("JSON Testcase Creator v0.0.7")
+    root.title("JSON Testcase Creator v0.0.8")
     root.geometry("1000x650")
 
     # Notebook
