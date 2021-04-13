@@ -166,16 +166,16 @@ def main():
             anchor = 'nw'
         )
         
-        veriables_for_dropdown = ["None", "Counter", *VARIABLES_PRESENT]
+        variables_for_dropdown = ["None", "Counter", *VARIABLES_PRESENT]
         
         entry_0 = Entry(filename_generator_canvas_subframe, width=10)
         entry_0.grid(row=0, column=0, ipadx=1, ipady=3)
         reference_arr_for_name_gen.append(entry_0)
 
-        for index in range(len(veriables_for_dropdown)):
+        for index in range(len(variables_for_dropdown)):
 
-            if not veriables_for_dropdown:
-                veriables_for_dropdown = [""]
+            if not variables_for_dropdown:
+                variables_for_dropdown = [""]
             
             
             plus_label_0 = Label(filename_generator_canvas_subframe, text="+", font=("bold",14))
@@ -183,7 +183,7 @@ def main():
 
             this_dropdown_var = StringVar()
             this_dropdown_var.set(None)
-            this_dropdown = OptionMenu(filename_generator_canvas_subframe, this_dropdown_var, *veriables_for_dropdown)
+            this_dropdown = OptionMenu(filename_generator_canvas_subframe, this_dropdown_var, *variables_for_dropdown)
             this_dropdown.grid(row=index, column=2, ipadx=1, ipady=3)
             reference_arr_for_name_gen.append(this_dropdown_var)
 
@@ -522,5 +522,5 @@ def main():
 
 if __name__ == '__main__':
     pass
-    # main()
+    main()
 
