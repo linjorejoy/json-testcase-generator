@@ -20,6 +20,7 @@ import helpermodules.GetAllCombinations as GetAllCombinations
 import helpermodules.FileNameGenerator as FileNameGenerator
 import helpermodules.GenerateFile as GenerateFile
 
+# 
 
 CURRENT_VERSION = "V0.0.7"
 ICON = "src/resources/favicon-32x32.ico"
@@ -163,7 +164,7 @@ class UploadPage(Frame):
 
         Frame.__init__(self, parent)
 
-        head_wrapper = Wrapper(self, controller, text="Head")
+        head_wrapper = Wrapper(self, controller, text="Head", expand=N)
         
         upload_label = MyLabel(
             head_wrapper, controller,
@@ -181,7 +182,7 @@ class UploadPage(Frame):
         )
         
         body_wrapper = Wrapper(self, controller, text="Body")
-        footer_wrapper = Wrapper(self, controller, text="Footer")
+        footer_wrapper = Wrapper(self, controller, text="Footer", expand=N)
 
         next_button = Button(
             self,
