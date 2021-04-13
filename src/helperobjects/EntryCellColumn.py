@@ -25,6 +25,9 @@ class EntryCellColumn:
             return self.entry_cell_count
         else:
             raise KeyError
+    
+    def get_all_cells(self):
+        return self.entry_cell_column
 
     def __hash__(self):
         return hash(self)

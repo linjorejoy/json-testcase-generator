@@ -16,5 +16,8 @@ class EntryCellCollection:
         self.entry_cells_collection.append(entry_cell_column)
         self.column_count += 1
 
+    def get_all_columns(self):
+        return self.entry_cells_collection
+
     def __hash__(self):
         return hash(self)
