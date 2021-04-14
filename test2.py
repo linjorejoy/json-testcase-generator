@@ -19,23 +19,14 @@ import helpermodules.ProcessData as ProcessData
 import helpermodules.GetAllCombinations as GetAllCombinations
 import helpermodules.FileNameGenerator as FileNameGenerator
 import helpermodules.GenerateFile as GenerateFile
-
-# 
-
-CURRENT_VERSION = "V0.0.7"
-ICON = "src/resources/favicon-32x32.ico"
-
-FONTS = {
-    "LARGE_FONT": ("bold", 12),
-    "BUTTON_FONT": ("bold", 10),
-    "LABEL_FONT": ("bold", 10)
-}
-
-def default_func():
-    print("Assign command to this button")
-
-def print_smtg(string):
-    print(string)
+from helpermodules.constants import SCREEN_RATIO, CURRENT_VERSION, ICON
+from helpermodules.constants import FONTS, ACCEPTABLE_FILE_TYPES
+from helpermodules.constants import DEF_BUTTON_TEXT, DEF_BUTTON_FUNC, DEF_BUTTON_WIDTH
+from helpermodules.constants import DEF_LABELFRAME_EXPAND, DEF_LABELFRAME_HEIGHT, DEF_LABELFRAME_TEXT, DEF_LABELFRAME_FILL
+from helpermodules.constants import DEF_LABEL_TEXT
+from helpermodules.constants import DEF_TEXT_TEXT
+from helpermodules.constants import JSON_PREVIEW_INDENT
+from helpermodules.constants import default_func
 
 
 class JsonTestCaseTracker(Tk):
@@ -59,6 +50,7 @@ class JsonTestCaseTracker(Tk):
         self.output_files = OutputFiles()
         self.output_location = ""
         self.reference_arr_for_name_gen = []
+        self.current_dir = os.curdir
 
 
 
@@ -69,7 +61,7 @@ class JsonTestCaseTracker(Tk):
 
 
         # Setting Size of UI
-        Tk.geometry(self, self.get_screen_dimentions(0.75))
+        Tk.geometry(self, self.get_screen_dimentions(SCREEN_RATIO))
         
 
         # Global Container
@@ -108,6 +100,159 @@ class JsonTestCaseTracker(Tk):
         FramePosY   = int((ScreenSizeY - FrameSizeY)/2)
         
         return f"{FrameSizeX}x{FrameSizeY}+{FramePosX}+{FramePosY}"
+
+
+
+class UploadPage(Frame):
+
+    def __init__(self, parent, controller: JsonTestCaseTracker):
+
+        Frame.__init__(self, parent)
+        self.parent = parent
+        self.controller = controller
+        self.indent = JSON_PREVIEW_INDENT
+
+        head_wrapper = MyLabelFrame(self, controller, text="Head", expand=N)
+        
+        upload_label = MyLabel(
+            head_wrapper, controller,
+            text="Please Upload the JSON Template File : ",
+            font=FONTS['LARGE_FONT'],
+            x = 250, y = 0
+        )
+
+        upload_button = MyButton(
+            head_wrapper, controller,
+            command=self.upload_json_file_for_processing,
+            text="Select File",
+            width=20,
+            x = 500,
+            y = 0
+        )
+        
+        body_wrapper = MyLabelFrame(self, controller, text="Body")
+
+        self.json_preview_text = MyText(body_wrapper, controller, width=200, height=200, wrap=WORD)
+
+
+
+        footer_wrapper = MyLabelFrame(self, controller, text="Footer", expand=N)
+
+        next_button = Button(
+            self,
+            text="Goto Page 0",
+            command=lambda:controller.show_frame(StartPage)
+        )
+        next_button.pack(pady=10, padx=10)
+
+    def upload_json_file_for_processing(self):
+        self.get_json_file_name()
+        self.get_json_data()
+
+
+    def get_json_file_name(self):
+        self.controller.TEMPLATE_JSON_FILE = filedialog.askopenfilename(
+            initialdir = self.controller.current_dir    ,
+            title = "Select a File",
+            filetypes = ACCEPTABLE_FILE_TYPES
+        )
+
+    def get_json_data(self):
+        with open(self.controller.TEMPLATE_JSON_FILE, mode="r") as json_file:
+            self.controller.json_data = json.load(json_file)
+            self.controller.JSON_STR_TO_PRINT = json.dumps(self.controller.json_data, indent=self.indent)
+            self.controller.JSON_STR = json.dumps(self.controller.json_data)
+            self.controller.VARIABLES_PRESENT = ProcessData.get_all_variables(self.controller.JSON_STR)
+
+    def preview_json_data(self):
+        
+        pass
+        
+
+class MyLabelFrame(LabelFrame):
+    def __init__(
+        self,
+        parent,
+        controller : JsonTestCaseTracker,
+        text:str=DEF_LABELFRAME_TEXT,
+        height:str=DEF_LABELFRAME_HEIGHT,
+        expand:str=DEF_LABELFRAME_EXPAND
+    ):
+        LabelFrame.__init__(self, parent, text=text, height=height)
+
+        self.pack(fill=DEF_LABELFRAME_FILL, expand=expand)
+
+
+class MyLabel(Label):
+
+    def __init__(
+        self,
+        parent,
+        controller :JsonTestCaseTracker,
+        text:str=DEF_LABEL_TEXT,
+        font = FONTS["LABEL_FONT"],
+        x:int = None,
+        y:int = None
+    ):
+        Label.__init__(self, parent, text=text, font=font)
+        if x is not None and y is not None:
+            self.place(x=x, y=y)
+
+
+class MyButton(ttk.Button):
+
+    def __init__(
+        self,
+        parent,
+        controller : JsonTestCaseTracker,
+        text : str = DEF_BUTTON_TEXT,
+        command = DEF_BUTTON_FUNC,
+        width:int = DEF_BUTTON_WIDTH,
+        x = None,
+        y = None
+    ):
+        ttk.Button.__init__(self, parent, text=text, command=command, width= width, font=FONTS['BUTTON_FONT'])
+
+        if x is not None and y is not None:
+            self.place(x=x, y=y)
+
+
+class MyText(Text):
+
+    def __init__(
+        self,
+        parent,
+        controller:JsonTestCaseTracker,
+        width:int,
+        height:int,
+        wrap:str = WORD,
+        text:str = DEF_TEXT_TEXT,
+        font = FONTS["DEFAULT_TEXT_FONT"]
+    ):
+        Text.__init__(self, parent, width=width, height=height, wrap=wrap, font=font)
+
+        self.insert(END, text)
+        self.pack(side=TOP, fill=X)
+
+
+class EntryWithType(Entry, OptionMenu):
+    def __init__(
+        self, parent,
+        controller,
+        entry_var,
+        entry_width:int = 20,
+        option_var=None,
+        options:list = ["None"]
+    ):
+        pass
+    pass
+
+
+# 
+# 
+# 
+# 
+# 
 
 
 class StartPage(Frame):
@@ -156,102 +301,6 @@ class PageTwo(Frame):
             command=lambda:controller.show_frame(StartPage)
         )
         button1.pack(pady=10, padx=10)
-
-
-class UploadPage(Frame):
-
-    def __init__(self, parent, controller: JsonTestCaseTracker):
-
-        Frame.__init__(self, parent)
-
-        head_wrapper = Wrapper(self, controller, text="Head", expand=N)
-        
-        upload_label = MyLabel(
-            head_wrapper, controller,
-            text="Please Upload the JSON Template File : ",
-            font=FONTS['LABEL_FONT'],
-            x = 250, y = 0
-        )
-
-        upload_button = MyButton(
-            head_wrapper, controller,
-            text="Select File",
-            width=20,
-            x = 500,
-            y = 0
-        )
-        
-        body_wrapper = Wrapper(self, controller, text="Body")
-        footer_wrapper = Wrapper(self, controller, text="Footer", expand=N)
-
-        next_button = Button(
-            self,
-            text="Goto Page 0",
-            command=lambda:controller.show_frame(StartPage)
-        )
-        next_button.pack(pady=10, padx=10)
-
-
-class Wrapper(LabelFrame):
-    def __init__(
-        self,
-        parent,
-        controller : JsonTestCaseTracker,
-        text:str="Wrapper",
-        height:str="50",
-        expand:str="yes"
-    ):
-        LabelFrame.__init__(self, parent, text=text, height=height)
-
-        self.pack(fill="both", expand=expand)
-
-
-class MyLabel(Label):
-
-    def __init__(
-        self,
-        parent,
-        controller :JsonTestCaseTracker,
-        text:str="Enter Something",
-        font = FONTS["LABEL_FONT"],
-        x:int = None,
-        y:int = None
-    ):
-        Label.__init__(self, parent, text=text, font=font)
-        if x is not None and y is not None:
-            self.place(x=x, y=y)
-
-
-class MyButton(ttk.Button):
-
-    def __init__(
-        self,
-        parent,
-        controller : JsonTestCaseTracker,
-        text : str = "Button",
-        command = default_func,
-        width:int = 25,
-        x = None,
-        y = None
-    ):
-        ttk.Button.__init__(self, parent, text=text, command=command, width= width)
-
-        if x is not None and y is not None:
-            self.place(x=x, y=y)
-
-
-class EntryWithType(Entry, OptionMenu):
-    def __init__(
-        self, parent,
-        controller,
-        entry_var,
-        entry_width:int = 20,
-        option_var=None,
-        options:list = ["None"]
-    ):
-        pass
-    pass
-
 
 app = JsonTestCaseTracker()
 app.mainloop()
