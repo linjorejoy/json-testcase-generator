@@ -11,13 +11,6 @@ SCREEN_RATIO = 0.75
 # Global requirements
 
 
-FONTS = {
-    "LARGE_FONT":{'font':{'family':"monospace", 'size':20, 'weight':'bold'}},
-    "BUTTON_FONT":{'font':{'family':"monospace", 'size':10, 'weight':'bold'}},
-    "LABEL_FONT":{'font':{'size':10, 'weight':'bold'}},
-    "DEFAULT_TEXT_FONT":{'font':{'family':"Comic Sans MS", 'size':10, 'weight':'bold'}},
-    "JSON_DATA_PREVIEW":{'font':{'family':"monospace", 'size':10, 'weight':'bold'}}
-}
 
 # Widget requirements
 

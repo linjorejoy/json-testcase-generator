@@ -2,6 +2,7 @@ from tkinter import Tk, Frame, filedialog, LabelFrame, Scrollbar, OptionMenu, Ch
 from tkinter import Text, Button, Label, Entry
 from tkinter import IntVar, StringVar
 from tkinter import ttk
+import tkinter.font as tkfont
 from tkinter.ttk import Combobox, Treeview, Progressbar
 from tkinter import RIGHT, LEFT, END, BOTH, TOP, SE, W, NSEW, BOTTOM, HORIZONTAL, VERTICAL
 from tkinter import X, Y, N, WORD
@@ -19,8 +20,11 @@ import helpermodules.ProcessData as ProcessData
 import helpermodules.GetAllCombinations as GetAllCombinations
 import helpermodules.FileNameGenerator as FileNameGenerator
 import helpermodules.GenerateFile as GenerateFile
+
+from helpermodules.MyFonts import FONTS
+
 from helpermodules.constants import SCREEN_RATIO, CURRENT_VERSION, ICON
-from helpermodules.constants import FONTS, ACCEPTABLE_FILE_TYPES
+from helpermodules.constants import ACCEPTABLE_FILE_TYPES
 from helpermodules.constants import DEF_BUTTON_TEXT, DEF_BUTTON_FUNC, DEF_BUTTON_WIDTH
 from helpermodules.constants import DEF_LABELFRAME_EXPAND, DEF_LABELFRAME_HEIGHT, DEF_LABELFRAME_TEXT, DEF_LABELFRAME_FILL
 from helpermodules.constants import DEF_LABEL_TEXT
@@ -29,11 +33,13 @@ from helpermodules.constants import JSON_PREVIEW_INDENT
 from helpermodules.constants import default_func
 
 
+
 class JsonTestCaseTracker(Tk):
 
     def __init__(self, *args, **kwargs):
         Tk.__init__(self, *args, **kwargs)
-        
+
+        self.FONTS = FONTS
         
 
         # For Storing Frames
@@ -118,13 +124,14 @@ class UploadPage(Frame):
             head_wrapper, controller,
             text="Please Upload the JSON Template File : ",
             font=FONTS['LARGE_FONT'],
-            x = 250, y = 0
+            x = 150, y = 0
         )
 
         upload_button = MyButton(
             head_wrapper, controller,
             command=self.upload_json_file_for_processing,
             text="Select File",
+            font=FONTS['BUTTON_FONT'],
             width=20,
             x = 500,
             y = 0
@@ -133,7 +140,7 @@ class UploadPage(Frame):
         body_wrapper = MyLabelFrame(self, controller, text="Body")
 
         self.json_preview_text = MyText(body_wrapper, controller, width=200, height=200, wrap=WORD)
-
+        self.json_preview_text
 
 
         footer_wrapper = MyLabelFrame(self, controller, text="Footer", expand=N)
@@ -146,8 +153,14 @@ class UploadPage(Frame):
         next_button.pack(pady=10, padx=10)
 
     def upload_json_file_for_processing(self):
-        self.get_json_file_name()
-        self.get_json_data()
+        try:
+            self.get_json_file_name()
+            self.get_json_data()
+
+        except FileNotFoundError:
+            print("File not Selected or Not Found..")
+        finally:
+            pass
 
 
     def get_json_file_name(self):
@@ -190,16 +203,17 @@ class MyLabel(Label):
         parent,
         controller :JsonTestCaseTracker,
         text:str=DEF_LABEL_TEXT,
-        font = FONTS["LABEL_FONT"],
+        font = None,
         x:int = None,
         y:int = None
     ):
-        Label.__init__(self, parent, text=text, font=font)
+        Label.__init__(self, parent, text=text, font=tkfont.Font(**FONTS['LABEL_FONT']))
+
         if x is not None and y is not None:
             self.place(x=x, y=y)
 
 
-class MyButton(ttk.Button):
+class MyButton(Button):
 
     def __init__(
         self,
@@ -208,11 +222,23 @@ class MyButton(ttk.Button):
         text : str = DEF_BUTTON_TEXT,
         command = DEF_BUTTON_FUNC,
         width:int = DEF_BUTTON_WIDTH,
+        font=FONTS['BUTTON_FONT'],
         x = None,
         y = None
     ):
-        ttk.Button.__init__(self, parent, text=text, command=command, width= width, font=FONTS['BUTTON_FONT'])
+        Button.__init__(
+            self,
+            parent,
+            text=text,
+            command=command,
+            width= width,
+            font=tkfont.Font(**font)
+        )
 
+        # if font is None:
+        #     font = FONTS['BUTTON_FONT']
+        # self['font'] = FONTS['BUTTON_FONT']
+        # self.config(font = font)
         if x is not None and y is not None:
             self.place(x=x, y=y)
 
@@ -227,9 +253,10 @@ class MyText(Text):
         height:int,
         wrap:str = WORD,
         text:str = DEF_TEXT_TEXT,
-        font = FONTS["DEFAULT_TEXT_FONT"]
+        font = FONTS['DEFAULT_TEXT_FONT']
     ):
-        Text.__init__(self, parent, width=width, height=height, wrap=wrap, font=font)
+        Text.__init__(self, parent, width=width, height=height, wrap=wrap, font=tkfont.Font(**font))
+        # print(**font)
 
         self.insert(END, text)
         self.pack(side=TOP, fill=X)
