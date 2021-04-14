@@ -14,6 +14,9 @@ SCREEN_RATIO = 0.85
 
 # Widget requirements
 
+PADX = 2
+PADY = 2
+
 # Button
 
 def default_func():
