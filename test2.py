@@ -4,7 +4,7 @@ from tkinter import IntVar, StringVar
 from tkinter import ttk
 import tkinter.font as tkfont
 from tkinter.ttk import Combobox, Treeview, Progressbar
-from tkinter import RIGHT, LEFT, END, BOTH, TOP, SW, NE, SE, NW, W, NSEW, BOTTOM, HORIZONTAL, VERTICAL
+from tkinter import RIGHT, LEFT, END, BOTH, NONE, TOP, SW, NE, SE, NW, W, NSEW, BOTTOM, HORIZONTAL, VERTICAL
 from tkinter import X, Y, N, WORD
 import json
 import os
@@ -79,7 +79,7 @@ class JsonTestCaseTracker(Tk):
         global_container.columnconfigure(0, weight=1)
 
 
-        FRAMES = [UploadPage, ProcessVariables, SetNames]
+        FRAMES = [UploadPage, ProcessVariables, SetNames, StartPage]
 
         for FRAME in FRAMES:
             frame = FRAME(global_container, self)
@@ -122,6 +122,8 @@ class UploadPage(Frame):
         self.json_preview_text = None
 
         head_wrapper = MyLabelFrame(self, controller, height="100", text="Head", expand=N)
+
+        # entry_0 = EntryWithType(head_wrapper, controller)
         
         upload_label = MyLabel(
             head_wrapper, controller,
@@ -251,7 +253,6 @@ class ProcessVariables(Frame):
 
         self.body_subframe = DoubleScrolledFrame(self.body_label_frame)
 
-
         self.footer_label_frame = MyLabelFrame(
             self, 
             controller,
@@ -278,7 +279,7 @@ class ProcessVariables(Frame):
             self.footer_label_frame,
             controller,
             text="Name Selection",
-            command=lambda:controller.show_frame(SetNames),
+            command=self.goto_next,
             rely=1.0,
             relx=1.0,
             x=-5,
@@ -347,16 +348,48 @@ class ProcessVariables(Frame):
         )
         this_cell.entry = this_entry
 
+    def goto_next(self):
+        self.controller.show_frame(SetNames)
+        self.controller.frames[SetNames].set_ui()
+        
 
 class SetNames(Frame):
 
     def __init__(self, parent, controller:JsonTestCaseTracker):
         Frame.__init__(self, parent)
+        self.parent = parent
+        self.controller = controller
+        print(f"VARS PRESENT : {self.controller.VARIABLES_PRESENT} ")
+        self.variables_for_dropdown = ["None", "Counter"]
 
-        test_label = Label(self, text="Preview Results", font = FONTS["LARGE_FONT"])
+        self.header_label_frame = MyLabelFrame(
+            self,
+            controller,
+            text="Info",
+            height="50",
+            expand=N
+        )
+
+        test_label = Label(self.header_label_frame, text="Set Names", font = FONTS["LARGE_FONT"])
         test_label.pack(padx=10, pady=10)
 
+        self.body_label_frame = MyLabelFrame(
+            self,
+            controller,
+            text="Body",
+            height="500",
+            expand=Y
+        )
 
+        self.body_scrollable = DoubleScrolledFrame(self.body_label_frame)
+
+        self.footer_label_frame = MyLabelFrame(
+            self,
+            controller,
+            text="Footer",
+            height="50",
+            expand=N
+        )
 
         button_prev = MyButton(
             self.footer_label_frame,
@@ -382,10 +415,66 @@ class SetNames(Frame):
             y=-5,
             anchor=SE
         )
-    
-    
+
     def set_ui(self):
+        
+        self.variables_for_dropdown = ["None", "Counter", *self.controller.VARIABLES_PRESENT]
+        entry_0 = MyEntry(
+            self.body_scrollable,
+            self.controller,
+            grid=(0, 0)
+        )
+        self.controller.reference_arr_for_name_gen.append(entry_0)
+        for index in range(len(self.variables_for_dropdown)):
+
+            if not self.variables_for_dropdown:
+                self.variables_for_dropdown = [""]
+            
+            plus_label_0 = MyLabel(
+                self.body_scrollable,
+                self.controller,
+                text="+",
+                font=FONTS['FONT_PLUS_SIGN'],
+                grid=(index, 1)
+            )
+
+            this_dropdown_var = StringVar(value=None)
+
+            this_dropdown = MyOptionMenu(
+                self.body_scrollable,
+                self.controller,
+                this_dropdown_var,
+                options=self.variables_for_dropdown,
+                grid=(index, 2),
+                padx=1,
+                pady=3
+            )
+            self.controller.reference_arr_for_name_gen.append(this_dropdown_var)
+            
+            plus_label_1 = MyLabel(
+                self.body_scrollable,
+                self.controller,
+                text="+",
+                font=FONTS['FONT_PLUS_SIGN'],
+                grid=(index, 1)
+            )
+
+            entry_n = MyEntry(
+                self.body_scrollable,
+                self.controller,
+                grid=(index, 4),
+                padx=1,
+                pady=3
+            )
+            self.controller.reference_arr_for_name_gen.append(entry_n)
+        self.body_scrollable.pack(side="top", fill="both", expand=True)
+
+
+    def goto_next(self):
+
         pass
+
+
 
 class MyLabelFrame(LabelFrame):
     def __init__(
@@ -519,18 +608,59 @@ class MyCanvas(Canvas):
             self.config(xscrollcommand=xscrollcommand)
 
 
-class EntryWithType(Entry, OptionMenu):
-    def __init__(
-        self, parent,
-        controller,
-        entry_var,
-        entry_width:int = 20,
-        option_var=None,
-        options:list = ["None"]
-    ):
-        pass
-    pass
+class MyOptionMenu(OptionMenu):
 
+    def __init__(
+        self,
+        parent,
+        controller:JsonTestCaseTracker,
+        variable:StringVar,
+        options:list=["No","Options","Given"],
+        x = 0,
+        y = 0,
+        relx=0,
+        rely=0,
+        grid = None,
+        pady=PADY,
+        padx=PADX
+    ):
+        OptionMenu.__init__(self, parent, variable, *options)
+        if grid:
+            row, col = grid
+            self.grid(row=row, column=col, padx=padx, pady=pady)
+        else:
+            self.place(rely=rely, relx=relx, x=x, y=y, anchor=anchor)
+
+
+
+class EntryWithType(Frame):
+    def __init__(
+        self,
+        parent,
+        controller:JsonTestCaseTracker,
+        entry_cell:EntryCell=None,
+        entry_var=None,
+        entry_width:int = 20,
+        option_var:StringVar=None,
+        options:list = ["None"]
+    ):  
+        Frame.__init__(self, parent, width=20, height=50)
+        # Frame.__init__(parent)
+        self.pack(expand="yes")
+        this_entry = Entry(self)
+        this_entry.grid(row=0, column=0, rowspan=2, columnspan=1, sticky="nsew")
+
+        this_dropdown_var = StringVar(value="str")
+        this_dropdown = OptionMenu(self, this_dropdown_var, *options)
+        this_dropdown.config(font=tkfont.Font(**FONTS['SMALL_FONT']))
+        this_dropdown.grid(row=0, column=1, sticky="nsew")
+        
+        delete_button = Button(self, text="del", command = default_func)
+        delete_button.config(font=tkfont.Font(**FONTS['SMALL_FONT']))
+        delete_button.grid(row=1, column = 1, sticky="nsew")
+
+
+        
 
 class MyEntry(Entry):
 
@@ -636,6 +766,11 @@ class StartPage(Frame):
 
     def __init__(self, parent, controller:JsonTestCaseTracker):
         Frame.__init__(self, parent)
+        
+        for i in range(10):
+            EntryWithType(self, controller, options=["int", "str", "bool", "float"])
+            
+
 
         test_label = Label(self, text="Page 0 : Hello World", font = FONTS["LARGE_FONT"])
         test_label.pack(padx=10, pady=10)
