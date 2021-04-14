@@ -49,10 +49,10 @@ class JsonTestCaseTracker(Tk):
         # Global Variables
         self.TEMPLATE_JSON_FILE = ""
         self.json_data = {}
-        self.JSON_STR = ""
-        self.JSON_STR_TO_PRINT = ""
+        self.JSON_STR = "{None}"
+        self.JSON_STR_TO_PRINT = f"{None}"
         self.VARIABLES_PRESENT = []
-        self.entry_cell_collection = None
+        self.entry_cell_collection = EntryCellCollection()
         self.output_files = OutputFiles()
         self.output_location = ""
         self.reference_arr_for_name_gen = []
@@ -78,7 +78,7 @@ class JsonTestCaseTracker(Tk):
         global_container.columnconfigure(0, weight=1)
 
 
-        FRAMES = [StartPage, PageOne, PageTwo, UploadPage]
+        FRAMES = [UploadPage, ProcessVariables]
 
         for FRAME in FRAMES:
             frame = FRAME(global_container, self)
@@ -117,8 +117,10 @@ class UploadPage(Frame):
         self.parent = parent
         self.controller = controller
         self.indent = JSON_PREVIEW_INDENT
+        self.file_name_label = None
+        self.json_preview_text = None
 
-        head_wrapper = MyLabelFrame(self, controller, text="Head", expand=N)
+        head_wrapper = MyLabelFrame(self, controller, height="50", text="Head", expand=N)
         
         upload_label = MyLabel(
             head_wrapper, controller,
@@ -136,32 +138,45 @@ class UploadPage(Frame):
             x = 500,
             y = 0
         )
-        
-        body_wrapper = MyLabelFrame(self, controller, text="Body")
 
-        self.json_preview_text = MyText(body_wrapper, controller, width=200, height=200, wrap=WORD)
-        self.json_preview_text
-
-
-        footer_wrapper = MyLabelFrame(self, controller, text="Footer", expand=N)
-
-        next_button = Button(
-            self,
-            text="Goto Page 0",
-            command=lambda:controller.show_frame(StartPage)
+        self.file_name_label = MyLabel(
+            head_wrapper, controller,
+            text="",
+            font=FONTS['FILE_NAME_PREVIEW'],
+            x=750, y = 0
         )
-        next_button.pack(pady=10, padx=10)
+        
+
+        body_wrapper = MyLabelFrame(self, controller, text="Body", height="200", expand=Y)
+        
+        preview_text_scroll = MyScrollBar(body_wrapper, controller, orient="vertical", side=RIGHT)
+
+        self.json_preview_text = MyText(body_wrapper, controller, width=10, height="10", wrap=WORD, sticky=NSEW)
+        
+        preview_text_scroll.config(command=self.json_preview_text.yview)
+
+        self.json_preview_text.config( yscrollcommand=preview_text_scroll.set)
+
+        footer_wrapper = MyLabelFrame(self, controller, text="Footer", height ="50", expand=N)
+
+        process_variables_button = Button(
+            footer_wrapper,
+            text="Process Variables",
+            command=lambda:controller.show_frame(ProcessVariables)
+        )
+        process_variables_button.pack(pady=10, padx=10)
 
     def upload_json_file_for_processing(self):
         try:
             self.get_json_file_name()
             self.get_json_data()
+            self.preview_json_data()
+            self.update_file_name_preview()
 
         except FileNotFoundError:
             print("File not Selected or Not Found..")
         finally:
             pass
-
 
     def get_json_file_name(self):
         self.controller.TEMPLATE_JSON_FILE = filedialog.askopenfilename(
@@ -173,14 +188,38 @@ class UploadPage(Frame):
     def get_json_data(self):
         with open(self.controller.TEMPLATE_JSON_FILE, mode="r") as json_file:
             self.controller.json_data = json.load(json_file)
-            self.controller.JSON_STR_TO_PRINT = json.dumps(self.controller.json_data, indent=self.indent)
+            self.controller.JSON_STR_TO_PRINT = json.dumps(self.controller.json_data, indent=JSON_PREVIEW_INDENT)
             self.controller.JSON_STR = json.dumps(self.controller.json_data)
             self.controller.VARIABLES_PRESENT = ProcessData.get_all_variables(self.controller.JSON_STR)
 
     def preview_json_data(self):
+        self.json_preview_text.config(state="normal")
+        self.json_preview_text.delete("1.0",END)
+        self.json_preview_text.insert(END, self.controller.JSON_STR_TO_PRINT)
+        self.json_preview_text.config(state="disabled")
         
-        pass
+    def update_file_name_preview(self):
+        self.file_name_label.configure(text=self.controller.TEMPLATE_JSON_FILE)
         
+
+class ProcessVariables(Frame):
+
+    def __init__(self, parent, controller:JsonTestCaseTracker):
+        Frame.__init__(self, parent)
+
+        
+
+        test_label = Label(self, text="Process", font = FONTS["LARGE_FONT"])
+        test_label.pack(padx=10, pady=10)
+
+        
+
+        button1 = Button(
+            self,
+            text="Goto Page 1",
+            command=lambda:controller.show_frame(UploadPage)
+        )
+        button1.pack(pady=10, padx=10)
 
 class MyLabelFrame(LabelFrame):
     def __init__(
@@ -253,13 +292,30 @@ class MyText(Text):
         height:int,
         wrap:str = WORD,
         text:str = DEF_TEXT_TEXT,
-        font = FONTS['DEFAULT_TEXT_FONT']
+        font = FONTS['DEFAULT_TEXT_FONT'],
+        sticky:str=NSEW
     ):
-        Text.__init__(self, parent, width=width, height=height, wrap=wrap, font=tkfont.Font(**font))
+        Text.__init__(self, parent, wrap=wrap, font=tkfont.Font(**font))
         # print(**font)
 
         self.insert(END, text)
-        self.pack(side=TOP, fill=X)
+        self.pack(side=TOP, fill=BOTH, expand="yes")
+
+
+class MyScrollBar(Scrollbar):
+
+    def __init__(
+        self,
+        parent,
+        controller:JsonTestCaseTracker,
+        command = None,
+        orient:str="vertical",
+        side:str=RIGHT
+    ):
+        Scrollbar.__init__(self, parent, orient=orient)
+        self.pack(side=side, fill=Y)
+        if command:
+            self.config(command=command)
 
 
 class EntryWithType(Entry, OptionMenu):
@@ -273,7 +329,6 @@ class EntryWithType(Entry, OptionMenu):
     ):
         pass
     pass
-
 
 # 
 # 

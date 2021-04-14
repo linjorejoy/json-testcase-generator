@@ -6,7 +6,7 @@ ICON = "src/resources/favicon-32x32.ico"
 
 # Initialzation
 
-SCREEN_RATIO = 0.75
+SCREEN_RATIO = 0.85
 
 # Global requirements
 
