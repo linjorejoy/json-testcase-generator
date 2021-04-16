@@ -177,6 +177,7 @@ class UploadPage(Frame):
             rely=1.0,anchor=SE
         )
         
+        
 
     def upload_json_file_for_processing(self):
         try:
