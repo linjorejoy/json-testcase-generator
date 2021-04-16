@@ -661,7 +661,7 @@ class GeneratePage(Frame):
             self.header_label_frame,
             self.controller,
             text="Generate",
-            command=self.select_output_loc,
+            command=self.generate_outputs,
             width=50,
             grid=(0, 1),
             pady=5,
@@ -733,8 +733,8 @@ class GeneratePage(Frame):
     def generate_outputs(self):
         progress_bar_length = 300
         
-        progress_bar = Progressbar(self.header_label_frame, orient="horizontal", length=total_length)
-        progress_bar.pack(pady=10)
+        progress_bar = Progressbar(self.header_label_frame, orient="horizontal", length=progress_bar_length)
+        progress_bar.grid(row=1, column=0, columnspan=2)
 
         num_files = self.controller.output_files.count
         progress_jump = int(progress_bar_length // num_files)
@@ -745,7 +745,7 @@ class GeneratePage(Frame):
             self.generated_report.config(state="disabled")
             GenerateFile.generate_one_file(
                 json_file_obj,
-                self.controllerjson_data,
+                self.controller.json_data,
                 self.controller.output_location
             )
             progress_bar['value'] += progress_jump
