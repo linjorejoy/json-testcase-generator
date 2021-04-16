@@ -79,7 +79,7 @@ class JsonTestCaseTracker(Tk):
         global_container.columnconfigure(0, weight=1)
 
 
-        FRAMES = [StartPage, UploadPage, ProcessVariables, SetNames, PreviewVariables, GeneratePage]
+        FRAMES = [UploadPage, ProcessVariables, SetNames, PreviewVariables, GeneratePage]
 
         for FRAME in FRAMES:
             frame = FRAME(global_container, self)
@@ -87,7 +87,7 @@ class JsonTestCaseTracker(Tk):
             frame.grid(row=0, column=0, sticky=NSEW)
 
 
-        self.show_frame(StartPage)
+        self.show_frame(UploadPage)
 
 
     def show_frame(self, FrameName):
@@ -240,7 +240,8 @@ class UploadPage(Frame):
             x=-5,
             y=-5,
             relx=1.0,
-            rely=1.0,anchor=SE
+            rely=1.0,
+            anchor=SE
         )
         
         
@@ -876,7 +877,6 @@ class MyButton(Button):
         text : str = DEF_BUTTON_TEXT,
         command = DEF_BUTTON_FUNC,
         width:int = DEF_BUTTON_HEIGHT,
-        height:int=20,
         font=FONTS['BUTTON_FONT'],
         x = 0,
         y = 0,
@@ -894,8 +894,6 @@ class MyButton(Button):
             parent,
             text=text,
             command=command,
-            width= width,
-            height=height,
             font=tkfont.Font(**font),
             state=state
         )

@@ -23,7 +23,7 @@ def default_func():
     print("Assign command to this button")
 
 DEF_BUTTON_TEXT ="Button"
-DEF_BUTTON_WIDTH = 25
+DEF_BUTTON_WIDTH = 50
 DEF_BUTTON_HEIGHT = 10
 DEF_BUTTON_FUNC = default_func
 
