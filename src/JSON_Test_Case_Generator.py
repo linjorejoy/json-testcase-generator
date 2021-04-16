@@ -4,7 +4,7 @@ from tkinter import IntVar, StringVar
 from tkinter import ttk
 import tkinter.font as tkfont
 from tkinter.ttk import Combobox, Treeview, Progressbar
-from tkinter import RIGHT, LEFT, END, BOTH, NONE, TOP, SW, NE, SE, NW, W, NSEW, BOTTOM, HORIZONTAL, VERTICAL
+from tkinter import RIGHT, LEFT, END, BOTH, NONE, TOP, SW, NE, SE, NW, W, NSEW, CENTER, BOTTOM, HORIZONTAL, VERTICAL
 from tkinter import X, Y, N, WORD
 import json
 import os
@@ -26,7 +26,7 @@ from helpermodules.MyFonts import FONTS
 from helpermodules.constants import SCREEN_RATIO, CURRENT_VERSION, ICON
 from helpermodules.constants import ACCEPTABLE_FILE_TYPES
 from helpermodules.constants import PADX, PADY
-from helpermodules.constants import DEF_BUTTON_TEXT, DEF_BUTTON_FUNC, DEF_BUTTON_WIDTH
+from helpermodules.constants import DEF_BUTTON_TEXT, DEF_BUTTON_FUNC, DEF_BUTTON_WIDTH, DEF_BUTTON_HEIGHT
 from helpermodules.constants import DEF_LABELFRAME_EXPAND, DEF_LABELFRAME_HEIGHT, DEF_LABELFRAME_TEXT, DEF_LABELFRAME_FILL
 from helpermodules.constants import DEF_LABEL_TEXT
 from helpermodules.constants import DEF_TEXT_TEXT
@@ -79,7 +79,7 @@ class JsonTestCaseTracker(Tk):
         global_container.columnconfigure(0, weight=1)
 
 
-        FRAMES = [UploadPage, ProcessVariables, SetNames, PreviewVariables, GeneratePage]
+        FRAMES = [StartPage, UploadPage, ProcessVariables, SetNames, PreviewVariables, GeneratePage]
 
         for FRAME in FRAMES:
             frame = FRAME(global_container, self)
@@ -87,7 +87,7 @@ class JsonTestCaseTracker(Tk):
             frame.grid(row=0, column=0, sticky=NSEW)
 
 
-        self.show_frame(UploadPage)
+        self.show_frame(StartPage)
 
 
     def show_frame(self, FrameName):
@@ -107,6 +107,72 @@ class JsonTestCaseTracker(Tk):
         FramePosY   = int((ScreenSizeY - FrameSizeY)/2)
         
         return f"{FrameSizeX}x{FrameSizeY}+{FramePosX}+{FramePosY}"
+
+
+class StartPage(Frame):
+
+    def __init__(self, parent, controller:JsonTestCaseTracker):
+        Frame.__init__(self, parent)
+        self.parent = parent
+        self.controller = controller
+
+        self.body_label_frame = MyLabelFrame(
+            self,
+            controller,
+            text="DD",
+            height="10",
+            expand=Y
+        )
+        
+        make_combination_tree_button = MyButton(
+            self.body_label_frame,
+            controller,
+            text="Make All Combinations",
+            command=default_func,
+            width="150",
+            height="10",
+            grid=(0, 0),
+            padx=0,
+            pady=0,
+            sticky=NSEW
+        )
+        
+        make_combination_tree_button = MyButton(
+            self.body_label_frame,
+            controller,
+            text="Make All Combinations",
+            command=default_func,
+            width="150",
+            height="10",
+            grid=(1, 0),
+            padx=0,
+            pady=0,
+            sticky=NSEW
+        )
+        
+        make_combination_tree_button = MyButton(
+            self.body_label_frame,
+            controller,
+            text="Make All Combinations",
+            command=default_func,
+            height="10",
+            grid=(2, 0),
+            padx=0,
+            pady=0,
+            sticky=NSEW
+        )
+
+
+
+        button1 = Button(
+            self,
+            text="Goto Page 1",
+            command=lambda:controller.show_frame(UploadPage)
+        )
+        button1.pack(pady=10, padx=10)
+    
+    def set_ui(self):
+        pass
 
 
 class UploadPage(Frame):
@@ -809,7 +875,8 @@ class MyButton(Button):
         controller : JsonTestCaseTracker,
         text : str = DEF_BUTTON_TEXT,
         command = DEF_BUTTON_FUNC,
-        width:int = DEF_BUTTON_WIDTH,
+        width:int = DEF_BUTTON_HEIGHT,
+        height:int=20,
         font=FONTS['BUTTON_FONT'],
         x = 0,
         y = 0,
@@ -819,6 +886,7 @@ class MyButton(Button):
         grid = None,
         pady=PADY,
         padx=PADX,
+        sticky=N,
         state="normal"
     ):
         Button.__init__(
@@ -827,6 +895,7 @@ class MyButton(Button):
             text=text,
             command=command,
             width= width,
+            height=height,
             font=tkfont.Font(**font),
             state=state
         )
@@ -834,7 +903,7 @@ class MyButton(Button):
             self.place(rely=rely, relx=relx, x=x, y=y, anchor=anchor)
         else:
             row, col = grid
-            self.grid(row=row, column=col, pady=pady, padx=padx)
+            self.grid(row=row, column=col, pady=pady, padx=padx, sticky=sticky)
 
 
 class MyText(Text):
@@ -1051,7 +1120,7 @@ class DoubleScrolledFrame:
 # 
 
 
-class StartPage(Frame):
+class StartPage2(Frame):
 
     def __init__(self, parent, controller:JsonTestCaseTracker):
         Frame.__init__(self, parent)

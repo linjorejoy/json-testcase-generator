@@ -24,13 +24,14 @@ def default_func():
 
 DEF_BUTTON_TEXT ="Button"
 DEF_BUTTON_WIDTH = 25
+DEF_BUTTON_HEIGHT = 10
 DEF_BUTTON_FUNC = default_func
 
 #  LabelFrame
 
 DEF_LABELFRAME_TEXT = "Wrapper"
 DEF_LABELFRAME_HEIGHT = "50"
-DEF_LABELFRAME_EXPAND = "yes"
+DEF_LABELFRAME_EXPAND = "y"
 DEF_LABELFRAME_FILL = "both"
 
 # Label
