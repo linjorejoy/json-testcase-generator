@@ -1,9 +1,10 @@
-from tkinter import Tk, Frame, filedialog, LabelFrame, Scrollbar, OptionMenu, Checkbutton, Canvas
+from tkinter import Tk, Frame, filedialog, LabelFrame, Scrollbar, OptionMenu, Checkbutton, Canvas, Widget
 from tkinter import Text, Button, Label, Entry
 from tkinter import IntVar, StringVar
 from tkinter import ttk
+import tkinter.font as tkfont
 from tkinter.ttk import Combobox, Treeview, Progressbar
-from tkinter import RIGHT, LEFT, END, BOTH, TOP, SE, W, NSEW, BOTTOM, HORIZONTAL, VERTICAL
+from tkinter import RIGHT, LEFT, END, BOTH, NONE, TOP, SW, NE, SE, NW, W, NSEW, BOTTOM, HORIZONTAL, VERTICAL
 from tkinter import X, Y, N, WORD
 import json
 import os
@@ -20,512 +21,1081 @@ import helpermodules.GetAllCombinations as GetAllCombinations
 import helpermodules.FileNameGenerator as FileNameGenerator
 import helpermodules.GenerateFile as GenerateFile
 
-"""
+from helpermodules.MyFonts import FONTS
 
-my_notebook.select(get_data_frame)
-"""
-
-TEMPLATE_JSON_FILE = ""
-json_data = {}
-JSON_STR = ""
-JSON_STR_TO_PRINT = ""
-VARIABLES_PRESENT = []
-entry_cell_collection = None
-output_files = OutputFiles()
-output_location = ""
-reference_arr_for_name_gen = []
-
-WINDOW_HEIGHT = 650
-WINDOW_WIDTH = 800
+from helpermodules.constants import SCREEN_RATIO, CURRENT_VERSION, ICON
+from helpermodules.constants import ACCEPTABLE_FILE_TYPES
+from helpermodules.constants import PADX, PADY
+from helpermodules.constants import DEF_BUTTON_TEXT, DEF_BUTTON_FUNC, DEF_BUTTON_WIDTH
+from helpermodules.constants import DEF_LABELFRAME_EXPAND, DEF_LABELFRAME_HEIGHT, DEF_LABELFRAME_TEXT, DEF_LABELFRAME_FILL
+from helpermodules.constants import DEF_LABEL_TEXT
+from helpermodules.constants import DEF_TEXT_TEXT
+from helpermodules.constants import JSON_PREVIEW_INDENT
+from helpermodules.constants import default_func
 
 
+
+class JsonTestCaseTracker(Tk):
+
+    def __init__(self, *args, **kwargs):
+        Tk.__init__(self, *args, **kwargs)
+
+        self.FONTS = FONTS
+        
+
+        # For Storing Frames
+        self.frames = {}
+
+
+        # Global Variables
+        self.TEMPLATE_JSON_FILE = ""
+        self.json_data = {}
+        self.JSON_STR = "{None}"
+        self.JSON_STR_TO_PRINT = f"{None}"
+        self.VARIABLES_PRESENT = []
+        self.entry_cell_collection = EntryCellCollection()
+        self.output_files = OutputFiles()
+        self.output_location = ""
+        self.reference_arr_for_name_gen = []
+        self.current_dir = os.curdir
+
+
+
+        # Setting UI 
+        Tk.iconbitmap(self, default=ICON)
+        Tk.wm_title(self, f"JSON Test Case Tracker {CURRENT_VERSION}")
+
+
+
+        # Setting Size of UI
+        Tk.geometry(self, self.get_screen_dimentions(SCREEN_RATIO))
+        
+
+        # Global Container
+        global_container = Frame(self)
+        global_container.pack(side=TOP, fill=BOTH, expand=True)
+
+        global_container.grid_rowconfigure(0, weight=1)
+        global_container.columnconfigure(0, weight=1)
+
+
+        FRAMES = [UploadPage, ProcessVariables, SetNames, PreviewVariables, GeneratePage]
+
+        for FRAME in FRAMES:
+            frame = FRAME(global_container, self)
+            self.frames[FRAME] = frame
+            frame.grid(row=0, column=0, sticky=NSEW)
+
+
+        self.show_frame(UploadPage)
+
+
+    def show_frame(self, FrameName):
+
+        frame = self.frames[FrameName]
+        frame.tkraise()
+
+
+    def get_screen_dimentions(self, ratio:float = 0.8):
+        
+        ScreenSizeX = self.winfo_screenwidth()
+        ScreenSizeY = self.winfo_screenheight()
+        ScreenRatio = ratio
+        FrameSizeX  = int(ScreenSizeX * ScreenRatio)
+        FrameSizeY  = int(ScreenSizeY * ScreenRatio)
+        FramePosX   = int((ScreenSizeX - FrameSizeX)/2)
+        FramePosY   = int((ScreenSizeY - FrameSizeY)/2)
+        
+        return f"{FrameSizeX}x{FrameSizeY}+{FramePosX}+{FramePosY}"
+
+
+class UploadPage(Frame):
+
+    def __init__(self, parent, controller: JsonTestCaseTracker):
+
+        Frame.__init__(self, parent)
+        self.parent = parent
+        self.controller = controller
+        self.indent = JSON_PREVIEW_INDENT
+        self.file_name_label = None
+        self.json_preview_text = None
+
+        head_wrapper = MyLabelFrame(self, controller, height="100", text="Head", expand=N)
+
+        # entry_0 = EntryWithType(head_wrapper, controller)
+        
+        upload_label = MyLabel(
+            head_wrapper, controller,
+            text="Please Upload the JSON Template File : ",
+            font=FONTS['LARGE_FONT'],
+            x = 150, y = 0, anchor=NW
+        )
+
+        upload_button = MyButton(
+            head_wrapper, controller,
+            command=self.upload_json_file_for_processing,
+            text="Select File",
+            font=FONTS['BUTTON_FONT'],
+            width=20,
+            x = 500,
+            y = 0,
+            anchor=NW
+        )
+
+        self.file_name_label = MyLabel(
+            head_wrapper, controller,
+            text="",
+            font=FONTS['FILE_NAME_PREVIEW'],
+            x=100, y = 50, anchor=NW
+        )
+        
+
+        body_wrapper = MyLabelFrame(self, controller, text="Body", height="200", expand=Y)
+        
+        preview_text_scroll_y = MyScrollBar(body_wrapper, controller, orient="vertical", side=RIGHT)
+        
+        preview_text_scroll_x = MyScrollBar(body_wrapper, controller, orient="horizontal", side=BOTTOM, fill=X)
+
+        self.json_preview_text = MyText(body_wrapper, controller, width=10, height="10", wrap="none", sticky=NSEW)
+        
+        preview_text_scroll_y.config(command=self.json_preview_text.yview)
+        
+        preview_text_scroll_x.config(command=self.json_preview_text.xview)
+
+        self.json_preview_text.config( yscrollcommand=preview_text_scroll_y.set, xscrollcommand=preview_text_scroll_x.set)
+
+        footer_wrapper = MyLabelFrame(self, controller, text="Footer", height ="50", expand=N)
+
+        process_variables_button = MyButton(
+            footer_wrapper,
+            controller,
+            text="Process Variables",
+            command=self.goto_next,
+            x=-5,
+            y=-5,
+            relx=1.0,
+            rely=1.0,anchor=SE
+        )
+        
+        
+
+    def upload_json_file_for_processing(self):
+        try:
+            self.get_json_file_name()
+            self.get_json_data()
+            self.preview_json_data()
+            self.update_file_name_preview()
+
+        except FileNotFoundError:
+            print("File not Selected or Not Found..")
+        finally:
+            pass
+
+    def get_json_file_name(self):
+        self.controller.TEMPLATE_JSON_FILE = filedialog.askopenfilename(
+            initialdir = self.controller.current_dir    ,
+            title = "Select a File",
+            filetypes = ACCEPTABLE_FILE_TYPES
+        )
+
+    def get_json_data(self):
+        with open(self.controller.TEMPLATE_JSON_FILE, mode="r") as json_file:
+            self.controller.json_data = json.load(json_file)
+            self.controller.JSON_STR_TO_PRINT = json.dumps(self.controller.json_data, indent=JSON_PREVIEW_INDENT)
+            self.controller.JSON_STR = json.dumps(self.controller.json_data)
+            self.controller.VARIABLES_PRESENT = ProcessData.get_all_variables(self.controller.JSON_STR)
+
+    def preview_json_data(self):
+        self.json_preview_text.config(state="normal")
+        self.json_preview_text.delete("1.0",END)
+        self.json_preview_text.insert(END, self.controller.JSON_STR_TO_PRINT)
+        self.json_preview_text.config(state="disabled")
+        
+    def update_file_name_preview(self):
+        self.file_name_label.configure(text=f"File : {self.controller.TEMPLATE_JSON_FILE}")
+        
+    def goto_next(self):
+        self.controller.show_frame(ProcessVariables)
+        self.controller.frames[ProcessVariables].set_ui()
+        
+    def set_ui(self):
+        print("UploadPage : set_ui")
+
+
+class ProcessVariables(Frame):
+
+    def __init__(self, parent, controller:JsonTestCaseTracker):
+        Frame.__init__(self, parent)
+        self.controller = controller
+        self.table_start_row = 1
+
+
+        self.head_label_frame = MyLabelFrame(
+            self, 
+            controller,
+            text="Stats",
+            height="50",
+            expand=N
+        )
+
+        test_label = Label(self.head_label_frame, text="Process", font = FONTS["LARGE_FONT"])
+        test_label.pack(padx=10, pady=10)
+
+
+        self.body_label_frame = MyLabelFrame(
+            self, 
+            controller,
+            text="Variables",
+            height="50",
+            expand=Y
+        )
+        
+
+        self.body_subframe = DoubleScrolledFrame(self.body_label_frame)
+
+        self.footer_label_frame = MyLabelFrame(
+            self, 
+            controller,
+            text="Goto",
+            height="50",
+            expand=N
+        )
+
+
+        button_prev = MyButton(
+            self.footer_label_frame,
+            controller,
+            text="Go Back",
+            command=lambda:controller.show_frame(UploadPage),
+            rely=1,
+            relx=0,
+            x=5,
+            y=-5,
+            anchor=SW
+        )
+
+
+        button_next = MyButton(
+            self.footer_label_frame,
+            controller,
+            text="Name Selection",
+            command=self.goto_next,
+            rely=1.0,
+            relx=1.0,
+            x=-5,
+            y=-5,
+            anchor=SE
+        )
     
 
-def to_dict(obj):
-    return json.dumps(obj, default=lambda o: o.__dict__, indent=2)
-
-def main():
-    global VARIABLES_PRESENT
-
-    def generate_outputs():
-        global output_location
-        total_length = 300
-        progress_bar = Progressbar(generate_file_wrapper_progress, orient="horizontal", length=total_length)
-        progress_bar.pack(pady=10)
-
-        num_files = output_files.count
-        progress_jump = int(total_length // num_files)
-
-        for json_file_obj in output_files.get_output_json_file_array():
-            generated_files_text.config(state="normal")
-            generated_files_text.insert(END, f"\n{json_file_obj.file_name:>50}............Creating")
-            generated_files_text.config(state="disabled")
-            GenerateFile.generate_one_file(json_file_obj, json_data, output_location)
-            progress_bar['value'] += progress_jump
-            generated_files_text.config(state="normal")
-            generated_files_text.insert(END, f"\n{json_file_obj.file_name:>50}............Done")
-            generated_files_text.config(state="disabled")
+    def set_ui(self):
+        self.create_entry_columns()
 
 
-    def select_output_loc():
-        global output_location
-        current_dir = os.curdir
-        
-        output_location = filedialog.askdirectory(
-            initialdir = current_dir,
-            title = "Select a Folder"
-        )
-        genereate_button = Button(generate_file_wrapper_progress, text = "Generate", command = generate_outputs)
-        genereate_button.pack(pady = 10)
-
-
-    # Done  
-    def goto_generate_files():
-        my_notebook.select(4)
-        global json_data
-        select_output_loc_button = Button(generate_file_wrapper_progress, text = "Select Output Loc", command = select_output_loc)
-        select_output_loc_button.pack(pady=10)
-
-      
-    # Done  
-    def preview_all_files():
-        global reference_arr_for_name_gen
-        my_notebook.select(3)
-        FileNameGenerator.generate_file_name(output_files, reference_arr_for_name_gen)
-        for widget in preview_wrapper_body.winfo_children():
-            widget.destroy()
-        
-        preview_tree_scroll_frame = Frame(preview_wrapper_body)
-        preview_tree_scroll_frame.pack(pady=20)
-
-        preview_tree_scrollbar_y = Scrollbar(preview_tree_scroll_frame, orient='vertical')
-        preview_tree_scrollbar_y.pack(side=RIGHT, fill=Y)
-
-        preview_tree_scrollbar_x = Scrollbar(preview_tree_scroll_frame, orient='horizontal')
-        preview_tree_scrollbar_x.pack(side=BOTTOM, fill="x")
-
-        preview_tree = Treeview(preview_tree_scroll_frame,yscrollcommand=preview_tree_scrollbar_y.set, xscrollcommand=preview_tree_scrollbar_x)
-
-        preview_tree_scrollbar_y.config(command=preview_tree.yview)
-        preview_tree_scrollbar_x.config(command=preview_tree.xview)
-
-        preview_tree_variables = ["File Name", *VARIABLES_PRESENT]
-
-        # Columns
-        preview_tree['columns'] = tuple(preview_tree_variables)
-
-        # Format Column
-
-        preview_tree.column("#0", width=60, minwidth=45)
-        for var in preview_tree_variables:
-            preview_tree.column(var, width=200, anchor=W, minwidth=45)
-
-        # Headings
-        preview_tree.heading("#0", text="Count", anchor=W)
-        for var in preview_tree_variables:
-            preview_tree.heading(var, text=var.title(), anchor=W)
-
-        for index, json_file_obj in enumerate(output_files.get_output_json_file_array()):
-            vales_to_add_list = [json_file_obj.file_name, *json_file_obj.variable_dictionary.values()]
-            vales_to_add_tuple = tuple(vales_to_add_list)
-            preview_tree.insert(parent='', index="end", iid=index, text=(index+1), values=vales_to_add_tuple)
-            
-        preview_tree.pack()
-
-        # preview_wrapper_footer
-        generate_json_files_button = Button(preview_wrapper_footer, text="Generate All Files", command=goto_generate_files)
-        generate_json_files_button.place(rely=1.0, relx=1.0, x=-5, y=-5, anchor=SE)
-
-
-    # Done
-    def set_name_page():
-
-        global reference_arr_for_name_gen
-        global VARIABLES_PRESENT
-
-        filename_generator_canvas = Canvas(filename_generator_wrapper_body)
-        filename_generator_canvas.pack(side=LEFT, fill=BOTH, expand=1)
-
-        filename_generator_canvas_scroll_y = Scrollbar(
-            filename_generator_wrapper_body,
-            orient = VERTICAL,
-            command = filename_generator_canvas.yview
-        )
-        filename_generator_canvas_scroll_y.pack(side = RIGHT, fill = Y)
-
-        filename_generator_canvas.configure(yscrollcommand=filename_generator_canvas_scroll_y.set)
-        filename_generator_canvas.bind(
-            '<Configure>',
-            lambda e : filename_generator_canvas.configure(
-                scrollregion = filename_generator_canvas.bbox('all')
-            )
-        )
-
-        filename_generator_canvas_subframe = Frame(filename_generator_canvas)
-
-        filename_generator_canvas.create_window(
-            (0, 0),
-            window = filename_generator_canvas_subframe,
-            anchor = 'nw'
-        )
-        
-        variables_for_dropdown = ["None", "Counter", *VARIABLES_PRESENT]
-        
-        entry_0 = Entry(filename_generator_canvas_subframe, width=10)
-        entry_0.grid(row=0, column=0, ipadx=1, ipady=3)
-        reference_arr_for_name_gen.append(entry_0)
-
-        for index in range(len(variables_for_dropdown)):
-
-            if not variables_for_dropdown:
-                variables_for_dropdown = [""]
-            
-            
-            plus_label_0 = Label(filename_generator_canvas_subframe, text="+", font=("bold",14))
-            plus_label_0.grid(row=index, column=1, ipadx=1, ipady=3)
-
-            this_dropdown_var = StringVar()
-            this_dropdown_var.set(None)
-            this_dropdown = OptionMenu(filename_generator_canvas_subframe, this_dropdown_var, *variables_for_dropdown)
-            this_dropdown.grid(row=index, column=2, ipadx=1, ipady=3)
-            reference_arr_for_name_gen.append(this_dropdown_var)
-
-            plus_label_1 = Label(filename_generator_canvas_subframe, text="+", font=("bold",14))
-            plus_label_1.grid(row=index, column=3, ipadx=1, ipady=3)
-
-            entry_n = Entry(filename_generator_canvas_subframe, width=10)
-            entry_n.grid(row=index, column=4, ipadx=1, ipady=3)
-            reference_arr_for_name_gen.append(entry_n)
-
-        
-            
-        goto_preview_button = Button(filename_generator_wrapper_footer,text="Preview All Files", command=preview_all_files)
-        goto_preview_button.place(rely=1.0, relx=1.0, x=-5, y=-5, anchor=SE)
-
-    # Done
-    def generate_output_file_obj():
-        global entry_cell_collection
-        global output_files
-
-        for column in entry_cell_collection.entry_cells_collection:
-            # print("column : ", column.variable_name)
-            for cell in column.entry_cell_column:
-                cell.value = cell.entry.get()
-                cell.entry = None
-
-                # print(cell.value, type(cell.value))
-        all_combinations = GetAllCombinations.get_all_dictionaries(entry_cell_collection)
-
-        [(
-            output_files.add_output_json_file(OutputJsonFile(variable_dictionary=combination))
-        ) for combination in all_combinations]
-
-        my_notebook.select(2)
-        set_name_page()
-
-
-    # Done
-    def add_cell(entry_col: EntryCellColumn, index:int):
-        
-        this_cell = EntryCell()
-        yindex = entry_col.add_cell(this_cell)
-        this_entry = Entry(processdata_subframe, width=10)
-        this_entry.grid(row=(yindex+2), column=(index + 1), pady=1, padx=8)
-        this_cell.entry = this_entry
-        
-
-        # processdata_wrapper_body_canvas.config(scrollregion=processdata_subframe.bbox())
-        # processdata_wrapper_body_canvas.bind(
-        #         '<Configure>',
-        #         lambda e : processdata_wrapper_body_canvas.configure(
-        #             scrollregion = processdata_wrapper_body_canvas.bbox("all")
-        #         )
-        #     )
-        
-
-        # processdata_wrapper_body_canvas.create_window(
-        #     (0, 0),
-        #     window = processdata_subframe,
-        #     anchor = "nw"
-        # )
-
-
-    # Done
-    def select_file():
-        global TEMPLATE_JSON_FILE
-        global JSON_STR
-        global VARIABLES_PRESENT
-        global entry_cell_collection
-        global json_data
-        current_dir = os.curdir
-        filename = filedialog.askopenfilename(initialdir = current_dir,
-                                            title = "Select a File",
-                                                filetypes = (
-                                                    ("JSON files","*.json*"),    
-                                                    ("all files","*.*")
-                                                )
-                                            )
-        
-        TEMPLATE_JSON_FILE = filename
-        with open(TEMPLATE_JSON_FILE, mode="r") as json_file:
-            json_data = json.load(json_file)
-            JSON_STR_TO_PRINT = json.dumps(json_data, indent=2)
-            JSON_STR = json.dumps(json_data)
-            VARIABLES_PRESENT = ProcessData.get_all_variables(JSON_STR)
-            
-
-
-
-        json_string_label.delete("1.0",END)
-        json_string_label.insert(END, JSON_STR_TO_PRINT)
-        json_string_label.config(state="disabled")
-        file_name_label.configure(text=TEMPLATE_JSON_FILE)
-        entry_cell_collection = EntryCellCollection()
-
-        table_start_row = 1
-
-        for index, variable in enumerate(VARIABLES_PRESENT):
+    def create_entry_columns(self):
+        for index, variable in enumerate(self.controller.VARIABLES_PRESENT):
             this_var_entry_col = EntryCellColumn(variable_name=variable)
             this_var_entry_col_cell = EntryCell()
             this_var_entry_col.add_cell(entry_cell = this_var_entry_col_cell)
-            entry_cell_collection.add_column(this_var_entry_col)
-
-            # processdata_wrapper_body.config(height=580)
-            column_index = index
-            # print("Column Index : ", column_index)
-            this_processdata_variable_add_cell_button = Button(processdata_subframe, text="Add cell", command=partial(add_cell, this_var_entry_col, column_index))
-            this_processdata_variable_add_cell_button.grid(row=0, column=(index+1), pady=2, padx=3)
-
-            this_processdata_variable_header = Label(processdata_subframe, text=variable, font=("bold", 12))
-            this_processdata_variable_header.grid(row=table_start_row, column=(index+1), pady=2, padx=3)
-
-            for yindex, cell in enumerate(this_var_entry_col.entry_cell_column):
-                this_entry = Entry(processdata_subframe, width=10)
-                this_entry.grid(row=(yindex+table_start_row+1), column=(index+1), pady=1, padx=8)
-                cell.entry = this_entry
-                
-
-        processdata_wrapper_col1_label = Label(processdata_subframe, text="Fill the variations here", font=("bold", 12))
-        processdata_wrapper_col1_label.grid(row=1, column=0, pady=2, padx=8)
+            self.controller.entry_cell_collection.add_column(this_var_entry_col)
+            self.add_widget_for_col(index, variable, this_var_entry_col)
+            self.body_subframe.pack(side="top", fill="both", expand=True)
 
 
-    root = Tk()
-    root.title("JSON Testcase Creator v0.0.8")
-    root.geometry("1000x650")
+    def add_widget_for_col(self, index, variable, this_var_entry_col):
 
-    # Notebook
-    my_notebook = ttk.Notebook(master=root)
-    my_notebook.pack(pady="6")
-
-
-    # Get Data Frame
-    get_data_frame = Frame(my_notebook, width=WINDOW_WIDTH, height=WINDOW_HEIGHT)
-
-
-    getdata_wrapper_top = LabelFrame(get_data_frame, text="Upload", height="50")
-
-    upload_file_label = Label(getdata_wrapper_top, width=30, text="Please Upload the JSON Template File : ", font=("bold", 10))
-    upload_file_label.place(x=250,y=0)
-
-    # Upload File
-    select_file_button = Button(getdata_wrapper_top, text="Select File", command=select_file, width=20)
-    select_file_button.place(x=500,y=0)
-
-    file_name_label = Label(getdata_wrapper_top, text=TEMPLATE_JSON_FILE, font=("bold", 6))
-    file_name_label.place(x=700)
-    getdata_wrapper_top.pack(fill="both", expand="yes")
-
-
-
-    getdata_wrapper_body = LabelFrame(get_data_frame, text="File", height="580")
-
-    getdata_vertical_scroll = Scrollbar(getdata_wrapper_body, orient="vertical")
-
-    getdata_vertical_scroll.pack(side=RIGHT, fill=Y)
-
-    json_str = "Please Select a JSON File"
-
-    json_string_label = Text(getdata_wrapper_body, width=200, height=200, wrap=WORD, yscrollcommand=getdata_vertical_scroll.set)
-    json_string_label.insert(END, json_str)
-    json_string_label.pack(side=TOP, fill=X)
-    
-    getdata_vertical_scroll.config(command=json_string_label.yview)
-    getdata_wrapper_body.pack(fill="both", expand="yes")
-
-
-
-
-
-
-    # Process Data Frame
-
-    process_data_frame = Frame(my_notebook, width=1000, height=650)
-
-    VARIABLES_PRESENT = []
-
-    processdata_wapper_top = LabelFrame(process_data_frame, text="Head", height="50")
-
-
-
-
-
-    processdata_wapper_top.pack(fill="both", expand=N)
-
-    # Frame
-    processdata_wrapper_body = LabelFrame(process_data_frame, text="Body")
-    processdata_wrapper_body.pack(fill="both", expand=1)
-
-    # Canvas
-    processdata_wrapper_body_canvas = Canvas(processdata_wrapper_body)
-    processdata_wrapper_body_canvas.pack(side=LEFT, fill=BOTH, expand=1)
-
-    # Scrollbar
-
-    processdata_wrapper_body_canvas_y = ttk.Scrollbar(
-        processdata_wrapper_body,
-        orient="vertical",
-        command=processdata_wrapper_body_canvas.yview
-    )
-    processdata_wrapper_body_canvas_y.pack(side=RIGHT, fill=Y)
-
-
-    processdata_wrapper_body_canvas_x = ttk.Scrollbar(
-        processdata_wrapper_body,
-        orient="horizontal",
-        command=processdata_wrapper_body_canvas.xview
-    )
-    processdata_wrapper_body_canvas_x.pack(side=BOTTOM, fill='x')
-
-    # Configure Scroll Bar
-    processdata_wrapper_body_canvas.configure(
-        yscrollcommand=processdata_wrapper_body_canvas_y.set,
-        xscrollcommand=processdata_wrapper_body_canvas_x.set
-    )
-
-
-    processdata_wrapper_body_canvas.bind(
-        '<Configure>',
-        lambda e : processdata_wrapper_body_canvas.configure(
-            scrollregion = processdata_wrapper_body_canvas.bbox("all")
+        this_processdata_variable_add_cell_button = MyButton(
+            self.body_subframe,
+            self.controller,
+            text="Add Cell",
+            command=partial(self.add_cell, this_var_entry_col, index),
+            width="15",
+            grid=(0, (index + 1)),
+            pady=2,
+            padx=3
         )
-    )
+        this_processdata_variable_header = MyLabel(
+            self.body_subframe,
+            self.controller,
+            text=variable,
+            font=FONTS['LABEL_FONT'],
+            grid=(self.table_start_row, (index+1)),
+            pady=2,
+            padx=3
+        )
+
+        for yindex, cell in enumerate(this_var_entry_col.entry_cell_column):
+            this_entry = MyEntry(
+                self.body_subframe,
+                self.controller,
+                grid=((yindex+self.table_start_row+1),(index+1)),
+                pady=1,
+                padx=8
+            )
+            cell.entry = this_entry
+        
+
+    def add_cell(self, entry_col:EntryCellColumn, index:int):
+
+        this_cell = EntryCell()
+        yindex = entry_col.add_cell(this_cell)
+        this_entry = MyEntry(
+            self.body_subframe,
+            self.controller,
+            grid = ((yindex + 2), (index + 1)),
+            pady=1,
+            padx=8
+        )
+        this_cell.entry = this_entry
     
-    # New frame inside Canvas
+    def generate_output_file_obj(self):
+        for column in self.controller.entry_cell_collection.entry_cells_collection:
+            for cell in column.entry_cell_column:
+                cell.value = cell.entry.get()
+        
+        all_combinations = GetAllCombinations.get_all_dictionaries(self.controller.entry_cell_collection)
 
-    processdata_subframe = Frame(processdata_wrapper_body_canvas)
+        [(
+            self.controller.output_files.add_output_json_file(OutputJsonFile(variable_dictionary=combination))
+        ) for combination in all_combinations]
+
+        [(
+            print(combination)
+        )for combination in all_combinations]
 
 
-    # Add new frame to window of canvas
 
-    processdata_wrapper_body_canvas.create_window(
-        (0, 0),
-        window = processdata_subframe,
-        anchor = "nw"
-    )
-    # for j in range(20):
-    #     for i in range(10):
-    #         Button(processdata_subframe, text=f"Button {j}{i}").grid(row = i, column = j, pady=20, padx=15)
+    def goto_next(self):
+        self.generate_output_file_obj()
+        self.controller.show_frame(SetNames)
+        self.controller.frames[SetNames].set_ui()
+        
 
-    processdata_wrapper_body.pack(fill="both", expand=Y)
+class SetNames(Frame):
+
+    def __init__(self, parent, controller:JsonTestCaseTracker):
+        Frame.__init__(self, parent)
+        self.parent = parent
+        self.controller = controller
+        print(f"VARS PRESENT : {self.controller.VARIABLES_PRESENT} ")
+        self.variables_for_dropdown = ["None", "Counter"]
+
+        self.header_label_frame = MyLabelFrame(
+            self,
+            controller,
+            text="Info",
+            height="50",
+            expand=N
+        )
+
+        test_label = Label(self.header_label_frame, text="Set Names", font = FONTS["LARGE_FONT"])
+        test_label.pack(padx=10, pady=10)
+
+        self.body_label_frame = MyLabelFrame(
+            self,
+            controller,
+            text="Body",
+            height="500",
+            expand=Y
+        )
+
+        self.body_scrollable = DoubleScrolledFrame(self.body_label_frame)
+
+        self.footer_label_frame = MyLabelFrame(
+            self,
+            controller,
+            text="Footer",
+            height="50",
+            expand=N
+        )
+
+        button_prev = MyButton(
+            self.footer_label_frame,
+            controller,
+            text="Go Back",
+            command=lambda:controller.show_frame(ProcessVariables),
+            rely=1,
+            relx=0,
+            x=5,
+            y=-5,
+            anchor=SW
+        )
+
+
+        button_next = MyButton(
+            self.footer_label_frame,
+            controller,
+            text="Preview Results",
+            command=self.goto_next,
+            rely=1.0,
+            relx=1.0,
+            x=-5,
+            y=-5,
+            anchor=SE
+        )
+
+    def set_ui(self):
+        
+        self.variables_for_dropdown = ["None", "Counter", *self.controller.VARIABLES_PRESENT]
+        entry_0 = MyEntry(
+            self.body_scrollable,
+            self.controller,
+            grid=(0, 0)
+        )
+        self.controller.reference_arr_for_name_gen.append(entry_0)
+        for index in range(len(self.variables_for_dropdown)):
+
+            if not self.variables_for_dropdown:
+                self.variables_for_dropdown = [""]
+            
+            plus_label_0 = MyLabel(
+                self.body_scrollable,
+                self.controller,
+                text="+",
+                font=FONTS['FONT_PLUS_SIGN'],
+                grid=(index, 1)
+            )
+
+            this_dropdown_var = StringVar()
+            this_dropdown_var.set(None)
+
+            this_dropdown = MyOptionMenu(
+                self.body_scrollable,
+                self.controller,
+                this_dropdown_var,
+                options=self.variables_for_dropdown,
+                grid=(index, 2),
+                padx=1,
+                pady=3
+            )
+            self.controller.reference_arr_for_name_gen.append(this_dropdown_var)
+            
+            plus_label_1 = MyLabel(
+                self.body_scrollable,
+                self.controller,
+                text="+",
+                font=FONTS['FONT_PLUS_SIGN'],
+                grid=(index, 1)
+            )
+
+            entry_n = MyEntry(
+                self.body_scrollable,
+                self.controller,
+                grid=(index, 4),
+                padx=1,
+                pady=3
+            )
+            self.controller.reference_arr_for_name_gen.append(entry_n)
+        self.body_scrollable.pack(side="top", fill="both", expand=True)
+
+
+    def goto_next(self):
+        self.controller.show_frame(PreviewVariables)
+        self.controller.frames[PreviewVariables].set_ui()
+
+
+class PreviewVariables(Frame):
+
+    def __init__(self, parent, controller:JsonTestCaseTracker):
+        Frame.__init__(self, parent)
+        self.parent = parent
+        self.controller = controller
+        self.preview_tree_variables:list = None
+
+        
+        self.header_label_frame = MyLabelFrame(
+            self,
+            self.controller,
+            text="Stats",
+            height="80",
+            expand=N
+        )
+
+        
+        self.body_label_frame = MyLabelFrame(
+            self,
+            self.controller,
+            text="All Variables",
+            height="500",
+            expand=Y
+        )
+
+        self.srollable_treeview_frame = DoubleScrolledFrame(self.body_label_frame)
+
+        self.srollable_treeview_frame.pack(fill=BOTH, expand=True)
+
+        # self.preview_tree = Treeview(self.srollable_treeview_frame)
+        
+        self.footer_label_frame = MyLabelFrame(
+            self,
+            self.controller,
+            text="Options",
+            height="80",
+            expand=N
+        )
+        
+
+        button_prev = MyButton(
+            self.footer_label_frame,
+            controller,
+            text="Go Back",
+            command=lambda:controller.show_frame(SetNames),
+            rely=1,
+            relx=0,
+            x=5,
+            y=-5,
+            anchor=SW
+        )
+
+
+        button_next = MyButton(
+            self.footer_label_frame,
+            controller,
+            text="Preview Results",
+            command=self.goto_next,
+            rely=1.0,
+            relx=1.0,
+            x=-5,
+            y=-5,
+            anchor=SE
+        )
+
+    
+    def set_ui(self):
+        self.generate_file_name_to_output_files()
+        # self.destroy_preexisting_widgets()
+        self.set_treeview()
+        self.set_columns_treeview()
+        self.set_headers_treeview()
+        self.add_values_treeview()
+
+
+    def generate_file_name_to_output_files(self):
+        [(
+            print(json_file_obj.__dict__)
+        ) for json_file_obj in self.controller.output_files.get_output_json_file_array()]
+        FileNameGenerator.generate_file_name(
+            output_files=self.controller.output_files,
+            ref_arr=self.controller.reference_arr_for_name_gen
+        )
+        [(
+            print(json_file_obj.__dict__)
+        ) for json_file_obj in self.controller.output_files.get_output_json_file_array()]
     
 
-    processdata_wrapper_footer = LabelFrame(process_data_frame, text="Options", height="50")
+    def destroy_preexisting_widgets(self):
 
-    goto_filename_button = Button(processdata_wrapper_footer, text="Set Names", command=generate_output_file_obj)
+        for widget in self.srollable_treeview_frame.winfo_children():
+            widget.destroy()
+        
 
-    goto_filename_button.place(rely=1.0, relx=1.0, x=-5, y=-5, anchor=SE)
+    def set_treeview(self):
+        self.preview_tree = Treeview(self.srollable_treeview_frame)
+        self.preview_tree_variables = ["File Name", *self.controller.VARIABLES_PRESENT]
+        
 
-    processdata_wrapper_footer.pack(fill="both", expand=N)
+        print(f"\n\n{self.preview_tree_variables}\n\n")
+
+    def set_columns_treeview(self):
+        self.preview_tree['columns'] = tuple(self.preview_tree_variables)
+        self.preview_tree.column('#0', width=60, minwidth=45)
+
+        for var in self.preview_tree_variables:
+            self.preview_tree.column(var, width=150, anchor=W, minwidth=45)
+        
+    def set_headers_treeview(self):
+        self.preview_tree.heading('#0', text="Count", anchor=W)
+        for var in self.preview_tree_variables:
+            self.preview_tree.heading(
+                var,
+                text=var.replace("$", "").title(),
+                anchor=W
+            )
+    
+    def add_values_treeview(self):
+        for index, json_file_obj in enumerate(self.controller.output_files.get_output_json_file_array()):
+            values_to_add_list = [json_file_obj.file_name, *json_file_obj.variable_dictionary.values()]
+            values_to_add_tuple = tuple(values_to_add_list)
+            self.preview_tree.insert(
+                parent='',
+                index='end',
+                iid=index,
+                text=index+1,
+                values=values_to_add_tuple
+            )
+        self.preview_tree.pack(fill=BOTH, expand=True)
+
+
+    def goto_next(self):
+        self.controller.show_frame(GeneratePage)
+        self.controller.frames[GeneratePage].set_ui()
 
 
 
+class GeneratePage(Frame):
+
+    def __init__(self, parent, controller:JsonTestCaseTracker):
+        Frame.__init__(self, parent)
+        self.parent = parent
+        self.controller = controller
+
+        self.header_label_frame = MyLabelFrame(
+            self,
+            self.controller,
+            text="Options",
+            height="50",
+            expand=N
+        )
+
+        select_output_loc_button = MyButton(
+            self.header_label_frame,
+            self.controller,
+            text="Select Output Location",
+            command=self.select_output_loc,
+            width=50,
+            grid=(0, 0),
+            pady=5,
+            padx=50
+        )
+
+        self.generate_output_button = MyButton(
+            self.header_label_frame,
+            self.controller,
+            text="Generate",
+            command=self.generate_outputs,
+            width=50,
+            grid=(0, 1),
+            pady=5,
+            padx=50,
+            state="disabled"
+        )
+
+        self.body_label_frame = MyLabelFrame(
+            self,
+            self.controller,
+            text="Options",
+            height="500",
+            expand=Y
+        )
+
+        self.generated_report = MyText(
+            self.body_label_frame,
+            controller,
+            width=500,
+            height=500,
+            wrap=WORD,
+            text="Click on Generate",
+            sticky=NSEW
+        )
+
+        self.footer_label_frame = MyLabelFrame(
+            self,
+            self.controller,
+            text="Options",
+            height="50",
+            expand=N
+        )
 
 
 
-    # File Name specifier Frame
+        button_prev = MyButton(
+            self.footer_label_frame,
+            controller,
+            text="Go Back",
+            command=lambda:controller.show_frame(PreviewVariables),
+            rely=1,
+            relx=0,
+            x=5,
+            y=-5,
+            anchor=SW
+        )
 
 
-    filename_generator_frame = Frame(my_notebook, width=1000, height=650)
+        button_next = MyButton(
+            self.footer_label_frame,
+            controller,
+            text="Restart",
+            command=self.goto_next,
+            rely=1.0,
+            relx=1.0,
+            x=-5,
+            y=-5,
+            anchor=SE
+        )
+    
+    def select_output_loc(self):
+        
+        self.controller.output_location = filedialog.askdirectory(
+            initialdir = self.controller.current_dir,
+            title = "Select Output Directory"
+        )
+        self.generate_output_button.config(state="normal")
 
-    filename_generator_wrapper_body = LabelFrame(filename_generator_frame, text="Body", height="560")
-    filename_generator_wrapper_body.pack(fill="both", expand=Y)
+    def generate_outputs(self):
+        progress_bar_length = 300
+        
+        progress_bar = Progressbar(self.header_label_frame, orient="horizontal", length=progress_bar_length)
+        progress_bar.grid(row=1, column=0, columnspan=2)
 
-    filename_generator_wrapper_footer = LabelFrame(filename_generator_frame, text="Options", height="50")
+        num_files = self.controller.output_files.count
+        progress_jump = int(progress_bar_length // num_files)
 
-    filename_generator_wrapper_footer.pack(fill="both", expand=N)
+        for json_file_obj in self.controller.output_files.get_output_json_file_array():
+            self.generated_report.config(state="normal")
+            self.generated_report.insert(END, f"\n{json_file_obj.file_name:>50}............Creating")
+            self.generated_report.config(state="disabled")
+            GenerateFile.generate_one_file(
+                json_file_obj,
+                self.controller.json_data,
+                self.controller.output_location
+            )
+            progress_bar['value'] += progress_jump
+            self.generated_report.config(state="normal")
+            self.generated_report.insert(END, f"\n{json_file_obj.file_name:>50}............Done")
+            self.generated_report.config(state="disabled")
+        
 
+    def set_ui(self):
+        pass
+
+    def goto_next(self):
+        pass
     
 
-    # Preview Outputs Frame
+
+class MyLabelFrame(LabelFrame):
+    def __init__(
+        self,
+        parent,
+        controller : JsonTestCaseTracker,
+        text:str=DEF_LABELFRAME_TEXT,
+        height:str=DEF_LABELFRAME_HEIGHT,
+        expand:str=DEF_LABELFRAME_EXPAND
+    ):
+        LabelFrame.__init__(self, parent, text=text, height=height)
+
+        self.pack(fill=DEF_LABELFRAME_FILL, expand=expand)
 
 
-    preview_data_frame = Frame(my_notebook, width=1000, height=650)
+class MyLabel(Label):
+
+    def __init__(
+        self,
+        parent,
+        controller :JsonTestCaseTracker,
+        text:str=DEF_LABEL_TEXT,
+        font = None,
+        x:int = 0,
+        y:int = 0,
+        relx:int = 0,
+        rely:int = 0,
+        anchor=NE,
+        grid=None,
+        pady=PADY,
+        padx=PADX
+    ):
+        Label.__init__(self, parent, text=text, font=tkfont.Font(**FONTS['LABEL_FONT']))
+
+        if not grid:
+            self.place(x=x, y=y, relx=relx, rely=rely, anchor=anchor)
+        else:
+            row, col = grid
+            self.grid(row=row, column=col, pady=pady, padx=padx)
 
 
-    preview_wrapper_head = LabelFrame(preview_data_frame, text="Head", height="50")
+class MyButton(Button):
 
-    preview_wrapper_head.pack(fill="both", expand=N)
+    def __init__(
+        self,
+        parent,
+        controller : JsonTestCaseTracker,
+        text : str = DEF_BUTTON_TEXT,
+        command = DEF_BUTTON_FUNC,
+        width:int = DEF_BUTTON_WIDTH,
+        font=FONTS['BUTTON_FONT'],
+        x = 0,
+        y = 0,
+        relx=0,
+        rely=0,
+        anchor=NE,
+        grid = None,
+        pady=PADY,
+        padx=PADX,
+        state="normal"
+    ):
+        Button.__init__(
+            self,
+            parent,
+            text=text,
+            command=command,
+            width= width,
+            font=tkfont.Font(**font),
+            state=state
+        )
+        if not grid:
+            self.place(rely=rely, relx=relx, x=x, y=y, anchor=anchor)
+        else:
+            row, col = grid
+            self.grid(row=row, column=col, pady=pady, padx=padx)
 
-    preview_wrapper_body = LabelFrame(preview_data_frame, text="Body", height="560")
+
+class MyText(Text):
+
+    def __init__(
+        self,
+        parent,
+        controller:JsonTestCaseTracker,
+        width:int,
+        height:int,
+        wrap:str = WORD,
+        text:str = DEF_TEXT_TEXT,
+        font = FONTS['DEFAULT_TEXT_FONT'],
+        sticky:str=NSEW
+    ):
+        Text.__init__(self, parent, wrap=wrap, font=tkfont.Font(**font))
+        # print(**font)
+
+        self.insert(END, text)
+        self.pack(side=TOP, fill=BOTH, expand="yes")
 
 
-    preview_wrapper_body.pack(fill="both", expand=Y)
+class MyScrollBar(Scrollbar):
+
+    def __init__(
+        self,
+        parent,
+        controller:JsonTestCaseTracker,
+        command = None,
+        orient:str="vertical",
+        side:str=RIGHT, fill:str=Y
+    ):
+        Scrollbar.__init__(self, parent, orient=orient)
+        self.pack(side=side, fill=fill)
+        if command:
+            self.config(command=command)
 
 
-    preview_wrapper_footer = LabelFrame(preview_data_frame, text="Options", height="50")
+class MyCanvas(Canvas):
 
-    preview_wrapper_footer.pack(fill="both", expand=N)
+    def __init__(
+        self,
+        parent,
+        controller:JsonTestCaseTracker,
+        side:str=LEFT,
+        fill:str=BOTH,
+        expand = 1,
+        yscrollcommand = None,
+        xscrollcommand = None
+    ):
+        Canvas.__init__(self, parent)
+        self.pack(side=side, fill=fill, expand=expand)
+
+        if yscrollcommand:
+            self.config(yscrollcommand=yscrollcommand)
+
+        if xscrollcommand:
+            self.config(xscrollcommand=xscrollcommand)
+
+
+class MyOptionMenu(OptionMenu):
+
+    def __init__(
+        self,
+        parent,
+        controller:JsonTestCaseTracker,
+        variable:StringVar,
+        options:list=["No","Options","Given"],
+        x = 0,
+        y = 0,
+        relx=0,
+        rely=0,
+        grid = None,
+        pady=PADY,
+        padx=PADX
+    ):
+        OptionMenu.__init__(self, parent, variable, *options)
+        if grid:
+            row, col = grid
+            self.grid(row=row, column=col, padx=padx, pady=pady)
+        else:
+            self.place(rely=rely, relx=relx, x=x, y=y, anchor=anchor)
 
 
 
+class EntryWithType(LabelFrame):
+    def __init__(
+        self,
+        parent,
+        controller:JsonTestCaseTracker,
+        frame_name:str="",
+        entry_cell:EntryCell=None,
+        entry_var=None,
+        entry_width:int = 20,
+        option_var:StringVar=None,
+        options:list = ["None"],
+        grid=None,
+        padx:int=PADX,
+        pady:int=PADY
+    ):  
+        LabelFrame.__init__(self, parent, text=frame_name, width=20, height=50)
+        # Frame.__init__(parent)
+        this_entry = Entry(self)
+        this_entry.grid(row=0, column=0, rowspan=2, columnspan=1, sticky="nsew")
+
+        this_dropdown_var = StringVar(value="str")
+        this_dropdown = OptionMenu(self, this_dropdown_var, *options)
+        this_dropdown.config(font=tkfont.Font(**FONTS['SMALL_FONT']))
+        this_dropdown.grid(row=0, column=1, sticky="nsew")
+        
+        delete_button = Button(self, text="del", command = default_func)
+        delete_button.config(font=tkfont.Font(**FONTS['SMALL_FONT']))
+        delete_button.grid(row=1, column = 1, sticky="nsew")
+        row, col = grid
+        self.grid(row=row, column=col, padx=padx, pady=pady)
 
 
-    # Generate Status Frame
+        
 
-    generate_file_frame = Frame(my_notebook, width=1000, height=650)
+class MyEntry(Entry):
 
-    generate_file_wrapper_progress = LabelFrame(generate_file_frame, text="Progree", height="75")
+    def __init__(
+        self,
+        parent,
+        controller:JsonTestCaseTracker,
+        x = 0,
+        y = 0,
+        relx=0,
+        rely=0,
+        anchor=NW,
+        grid = None,
+        pady=PADY,
+        padx=PADX
 
-    generate_file_wrapper_progress.pack(fill="both", expand=N)
+    ):
+        Entry.__init__(self, parent)
+        if not grid:
+            self.place(rely=rely, relx=relx, x=x, y=y, anchor=anchor)
+        else:
+            row, col = grid
+            self.grid(row=row, column=col, pady=pady, padx=padx)
 
+
+class DoubleScrolledFrame:
+
+    def __init__(self, master, **kwargs):
+        width = kwargs.pop('width', None)
+        height = kwargs.pop('height', None)
+        self.outer = Frame(master, **kwargs)
+
+        self.vsb = Scrollbar(self.outer, orient=VERTICAL)
+        self.vsb.grid(row=0, column=1, sticky='ns')
+        self.hsb = Scrollbar(self.outer, orient=HORIZONTAL)
+        self.hsb.grid(row=1, column=0, sticky='ew')
+        self.canvas = Canvas(self.outer, highlightthickness=0, width=width, height=height)
+        self.canvas.grid(row=0, column=0, sticky='nsew')
+        self.outer.rowconfigure(0, weight=1)
+        self.outer.columnconfigure(0, weight=1)
+        self.canvas['yscrollcommand'] = self.vsb.set
+        self.canvas['xscrollcommand'] = self.hsb.set
+
+        self.canvas.bind("<Enter>", self._bind_mouse)
+        self.canvas.bind("<Leave>", self._unbind_mouse)
+
+        self.vsb['command'] = self.canvas.yview
+        self.hsb['command'] = self.canvas.xview
+
+        self.inner = Frame(self.canvas)
+        
+        self.canvas.create_window(4, 4, window=self.inner, anchor='nw')
+        self.inner.bind("<Configure>", self._on_frame_configure)
+
+        self.outer_attr = set(dir(Widget))
+
+    def __getattr__(self, item):
+        if item in self.outer_attr:
+            
+            return getattr(self.outer, item)
+        else:
+            
+            return getattr(self.inner, item)
+
+    def _on_frame_configure(self, event=None):
+        x1, y1, x2, y2 = self.canvas.bbox("all")
+        height = self.canvas.winfo_height()
+        width = self.canvas.winfo_width()
+        self.canvas.config(scrollregion = (0,0, max(x2, width), max(y2, height)))
+
+    def _bind_mouse(self, event=None):
+        self.canvas.bind_all("<4>", self._on_mousewheel)
+        self.canvas.bind_all("<5>", self._on_mousewheel)
+        self.canvas.bind_all("<MouseWheel>", self._on_mousewheel)
+
+    def _unbind_mouse(self, event=None):
+        self.canvas.unbind_all("<4>")
+        self.canvas.unbind_all("<5>")
+        self.canvas.unbind_all("<MouseWheel>")
+        
+    def _on_mousewheel(self, event):
+        
+        func = self.canvas.xview_scroll if event.state & 1 else self.canvas.yview_scroll 
+        if event.num == 4 or event.delta > 0:
+            func(-1, "units" )
+        elif event.num == 5 or event.delta < 0:
+            func(1, "units" )
     
+    def __str__(self):
+        return str(self.outer)
+
+
+
+
+# 
+# 
+# 
+# 
+# 
+
+
+class StartPage(Frame):
+
+    def __init__(self, parent, controller:JsonTestCaseTracker):
+        Frame.__init__(self, parent)
+        self.parent = parent
+        self.controller = controller
+
+        self.subframe = MyLabelFrame(
+            self,
+            controller,
+            text="Main",
+            height="500",
+            expand=Y
+        )
+
+        self.subframe_scrollable = DoubleScrolledFrame(self.subframe)
+        for j in range(10):
+            for i in range(20):
+                EntryWithType(
+                    self.subframe_scrollable,
+                    controller,
+                    frame_name=f"{i} {j} ",
+                    options=["int", "str", "bool", "float"],
+                    grid=(i, j)
+                )
+            
+        self.subframe_scrollable.pack(side="top", fill="both", expand=True)
+
+        test_label = Label(self, text="Page 0 : Hello World", font = FONTS["LARGE_FONT"])
+        test_label.pack(padx=10, pady=10)
+
+        button1 = Button(
+            self,
+            text="Goto Page 1",
+            command=lambda:controller.show_frame(UploadPage)
+        )
+        button1.pack(pady=10, padx=10)
     
-    generate_file_wrapper_status = LabelFrame(generate_file_frame, text="Status", height="500")
+    def set_ui(self):
+        pass
 
-    generated_files_text_scroll_y = Scrollbar(generate_file_wrapper_status, orient="vertical")
-    generated_files_text_scroll_y.pack(side=RIGHT, fill=Y)
-
-    generated_files_text = Text(generate_file_wrapper_status, width=200, height=200, wrap=WORD, yscrollcommand=generated_files_text_scroll_y.set)
-
-    generated_files_text.insert(END, "Generating JSON Files....")
-    generated_files_text.pack(side=TOP, fill=X)
-    
-
-    generated_files_text_scroll_y.config(command=generated_files_text.yview)
-    generate_file_wrapper_status.pack(fill="both", expand=Y)
-
-
-
-    # Pack Frames
-    get_data_frame.pack(fill="both", expand=1)
-    process_data_frame.pack(fill="both", expand=1)
-    filename_generator_frame.pack(fill="both", expand=1)
-    preview_data_frame.pack(fill="both", expand=1)
-    generate_file_frame.pack(fill="both", expand=1)
-
-    # adding tabs
-
-    my_notebook.add(get_data_frame, text="Get Data")
-    my_notebook.add(process_data_frame, text="Process Data")
-    my_notebook.add(filename_generator_frame, text="File Name")
-    my_notebook.add(preview_data_frame, text="Preview Data")
-    my_notebook.add(generate_file_frame, text="Generate Data")
-
-    root.mainloop()
-
-
-
-if __name__ == '__main__':
-    pass
-    main()
-
+app = JsonTestCaseTracker()
+app.mainloop()
