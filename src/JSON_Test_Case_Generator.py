@@ -79,13 +79,15 @@ def main():
         genereate_button.pack(pady = 10)
 
 
+    # Done  
     def goto_generate_files():
         my_notebook.select(4)
         global json_data
         select_output_loc_button = Button(generate_file_wrapper_progress, text = "Select Output Loc", command = select_output_loc)
         select_output_loc_button.pack(pady=10)
 
-        
+      
+    # Done  
     def preview_all_files():
         global reference_arr_for_name_gen
         my_notebook.select(3)
@@ -135,6 +137,7 @@ def main():
         generate_json_files_button.place(rely=1.0, relx=1.0, x=-5, y=-5, anchor=SE)
 
 
+    # Done
     def set_name_page():
 
         global reference_arr_for_name_gen
@@ -199,7 +202,7 @@ def main():
         goto_preview_button = Button(filename_generator_wrapper_footer,text="Preview All Files", command=preview_all_files)
         goto_preview_button.place(rely=1.0, relx=1.0, x=-5, y=-5, anchor=SE)
 
-
+    # Done
     def generate_output_file_obj():
         global entry_cell_collection
         global output_files
@@ -221,6 +224,7 @@ def main():
         set_name_page()
 
 
+    # Done
     def add_cell(entry_col: EntryCellColumn, index:int):
         
         this_cell = EntryCell()
@@ -246,6 +250,7 @@ def main():
         # )
 
 
+    # Done
     def select_file():
         global TEMPLATE_JSON_FILE
         global JSON_STR
