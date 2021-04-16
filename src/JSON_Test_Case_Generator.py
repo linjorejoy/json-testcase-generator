@@ -359,9 +359,9 @@ class ProcessVariables(Frame):
             self.controller.output_files.add_output_json_file(OutputJsonFile(variable_dictionary=combination))
         ) for combination in all_combinations]
 
-        [(
-            print(combination)
-        )for combination in all_combinations]
+        # [(
+        #     print(combination)
+        # )for combination in all_combinations]
 
 
 
@@ -377,7 +377,7 @@ class SetNames(Frame):
         Frame.__init__(self, parent)
         self.parent = parent
         self.controller = controller
-        print(f"VARS PRESENT : {self.controller.VARIABLES_PRESENT} ")
+        # print(f"VARS PRESENT : {self.controller.VARIABLES_PRESENT} ")
         self.variables_for_dropdown = ["None", "Counter"]
 
         self.header_label_frame = MyLabelFrame(
@@ -571,16 +571,16 @@ class PreviewVariables(Frame):
 
 
     def generate_file_name_to_output_files(self):
-        [(
-            print(json_file_obj.__dict__)
-        ) for json_file_obj in self.controller.output_files.get_output_json_file_array()]
+        # [(
+        #     print(json_file_obj.__dict__)
+        # ) for json_file_obj in self.controller.output_files.get_output_json_file_array()]
         FileNameGenerator.generate_file_name(
             output_files=self.controller.output_files,
             ref_arr=self.controller.reference_arr_for_name_gen
         )
-        [(
-            print(json_file_obj.__dict__)
-        ) for json_file_obj in self.controller.output_files.get_output_json_file_array()]
+        # [(
+        #     print(json_file_obj.__dict__)
+        # ) for json_file_obj in self.controller.output_files.get_output_json_file_array()]
     
 
     def destroy_preexisting_widgets(self):
@@ -594,7 +594,7 @@ class PreviewVariables(Frame):
         self.preview_tree_variables = ["File Name", *self.controller.VARIABLES_PRESENT]
         
 
-        print(f"\n\n{self.preview_tree_variables}\n\n")
+        # print(f"\n\n{self.preview_tree_variables}\n\n")
 
     def set_columns_treeview(self):
         self.preview_tree['columns'] = tuple(self.preview_tree_variables)
@@ -629,7 +629,6 @@ class PreviewVariables(Frame):
     def goto_next(self):
         self.controller.show_frame(GeneratePage)
         self.controller.frames[GeneratePage].set_ui()
-
 
 
 class GeneratePage(Frame):
@@ -760,7 +759,6 @@ class GeneratePage(Frame):
 
     def goto_next(self):
         pass
-    
 
 
 class MyLabelFrame(LabelFrame):
@@ -921,7 +919,6 @@ class MyOptionMenu(OptionMenu):
             self.place(rely=rely, relx=relx, x=x, y=y, anchor=anchor)
 
 
-
 class EntryWithType(LabelFrame):
     def __init__(
         self,
@@ -953,8 +950,6 @@ class EntryWithType(LabelFrame):
         row, col = grid
         self.grid(row=row, column=col, padx=padx, pady=pady)
 
-
-        
 
 class MyEntry(Entry):
 
