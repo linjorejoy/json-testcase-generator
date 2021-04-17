@@ -6,6 +6,7 @@ import tkinter.font as tkfont
 from widgetclasses.MyLabelFrame import MyLabelFrame
 
 import pages.UploadPage as UploadPage
+import pages.TableUploadPage as TableUploadPage
 
 from helpermodules.MyFonts import FONTS
 
@@ -39,11 +40,12 @@ class StartPage(Frame):
         make_combination_from_sheet = Button(
             self.body_label_frame,
             text="Make Combinations from Table",
-            command=lambda:controller.show_frame(UploadPage.UploadPage),
+            command=lambda:controller.show_frame(TableUploadPage.TableUploadPage),
             font=tkfont.Font(**FONTS['VERY_LARGE_FONT']),
             width=20,
             height=5
         )
+        
         make_combination_from_sheet.grid(row=1, column=2, padx=0, pady=0, sticky=NSEW)
 
         self.body_label_frame.grid_columnconfigure(0, weight=1)

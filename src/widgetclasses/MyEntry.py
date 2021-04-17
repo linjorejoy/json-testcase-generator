@@ -18,7 +18,8 @@ class MyEntry(Entry):
         anchor=NW,
         grid = None,
         pady=PADY,
-        padx=PADX
+        padx=PADX,
+        sticky=None
 
     ):
         Entry.__init__(self, parent)
@@ -26,4 +27,4 @@ class MyEntry(Entry):
             self.place(rely=rely, relx=relx, x=x, y=y, anchor=anchor)
         else:
             row, col = grid
-            self.grid(row=row, column=col, pady=pady, padx=padx)
+            self.grid(row=row, column=col, pady=pady, padx=padx, sticky=sticky)

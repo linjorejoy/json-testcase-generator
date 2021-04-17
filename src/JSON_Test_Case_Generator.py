@@ -15,9 +15,11 @@ import pages.ProcessVariables as ProcessVariables
 import pages.SetNames as SetNames
 import pages.PreviewVariables as PreviewVariables
 import pages.GeneratePage as GeneratePage
+import pages.TableUploadPage as TableUploadPage
+import pages.TableProcessVariables as TableProcessVariables
+import pages.TableSetNames as TableSetNames
 
 from helpermodules.constants import SCREEN_RATIO, CURRENT_VERSION, ICON
-
 
 class JsonTestCaseTracker(Tk):
 
@@ -69,7 +71,10 @@ class JsonTestCaseTracker(Tk):
             ProcessVariables.ProcessVariables,
             SetNames.SetNames,
             PreviewVariables.PreviewVariables,
-            GeneratePage.GeneratePage
+            GeneratePage.GeneratePage,
+            TableUploadPage.TableUploadPage,
+            TableProcessVariables.TableProcessVariables,
+            TableSetNames.TableSetNames
         ]
 
         for FRAME in FRAMES:

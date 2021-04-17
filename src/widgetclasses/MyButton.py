@@ -26,7 +26,9 @@ class MyButton(Button):
         pady=PADY,
         padx=PADX,
         sticky=N,
-        state="normal"
+        state="normal",
+        rowspan=1,
+        columnspan=1
     ):
         Button.__init__(
             self,
@@ -40,4 +42,4 @@ class MyButton(Button):
             self.place(rely=rely, relx=relx, x=x, y=y, anchor=anchor)
         else:
             row, col = grid
-            self.grid(row=row, column=col, pady=pady, padx=padx, sticky=sticky)
+            self.grid(row=row, column=col, pady=pady, padx=padx, rowspan=rowspan, columnspan=columnspan, sticky=sticky)

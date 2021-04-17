@@ -10,7 +10,7 @@ SCREEN_RATIO = 0.85
 
 # Global requirements
 
-
+INT_MAX_VALUE = 100
 
 # Widget requirements
 
