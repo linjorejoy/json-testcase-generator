@@ -1,37 +1,49 @@
+from tkinter import RIGHT, LEFT, END, BOTH, NONE, TOP, SW, NE, SE, NW, W, NSEW, CENTER, BOTTOM, HORIZONTAL, VERTICAL
 from tkinter import Tk, Frame, filedialog, LabelFrame, Scrollbar, OptionMenu, Checkbutton, Canvas, Widget
+from tkinter.ttk import Combobox, Treeview, Progressbar
 from tkinter import Text, Button, Label, Entry
 from tkinter import IntVar, StringVar
-from tkinter import ttk
-import tkinter.font as tkfont
-from tkinter.ttk import Combobox, Treeview, Progressbar
-from tkinter import RIGHT, LEFT, END, BOTH, NONE, TOP, SW, NE, SE, NW, W, NSEW, CENTER, BOTTOM, HORIZONTAL, VERTICAL
 from tkinter import X, Y, N, WORD
+import tkinter.font as tkfont
+from tkinter import ttk
+
+from functools import partial
 import json
 import os
-from functools import partial
 
 from helperobjects.EntryCellCollection import EntryCellCollection
 from helperobjects.EntryCellColumn import EntryCellColumn
-from helperobjects.EntryCell import EntryCell
-from helperobjects.OutputFiles import OutputFiles
 from helperobjects.OutputJsonFile import OutputJsonFile
+from helperobjects.OutputFiles import OutputFiles
+from helperobjects.EntryCell import EntryCell
 
-import helpermodules.ProcessData as ProcessData
+from widgetclasses.DoubleScrolledFrame import DoubleScrolledFrame
+from widgetclasses.EntryWithType import EntryWithType
+from widgetclasses.MyOptionMenu import MyOptionMenu
+from widgetclasses.MyLabelFrame import MyLabelFrame
+from widgetclasses.MyScrollBar import MyScrollBar
+from widgetclasses.MyButton import MyButton
+from widgetclasses.MyCanvas import MyCanvas
+from widgetclasses.MyLabel import MyLabel
+from widgetclasses.MyEntry import MyEntry
+from widgetclasses.MyText import MyText
+
 import helpermodules.GetAllCombinations as GetAllCombinations
 import helpermodules.FileNameGenerator as FileNameGenerator
 import helpermodules.GenerateFile as GenerateFile
+import helpermodules.ProcessData as ProcessData
 
 from helpermodules.MyFonts import FONTS
 
+from helpermodules.constants import DEF_LABELFRAME_EXPAND, DEF_LABELFRAME_HEIGHT, DEF_LABELFRAME_TEXT, DEF_LABELFRAME_FILL
+from helpermodules.constants import DEF_BUTTON_TEXT, DEF_BUTTON_FUNC, DEF_BUTTON_WIDTH, DEF_BUTTON_HEIGHT
 from helpermodules.constants import SCREEN_RATIO, CURRENT_VERSION, ICON
 from helpermodules.constants import ACCEPTABLE_FILE_TYPES
-from helpermodules.constants import PADX, PADY
-from helpermodules.constants import DEF_BUTTON_TEXT, DEF_BUTTON_FUNC, DEF_BUTTON_WIDTH, DEF_BUTTON_HEIGHT
-from helpermodules.constants import DEF_LABELFRAME_EXPAND, DEF_LABELFRAME_HEIGHT, DEF_LABELFRAME_TEXT, DEF_LABELFRAME_FILL
+from helpermodules.constants import JSON_PREVIEW_INDENT
 from helpermodules.constants import DEF_LABEL_TEXT
 from helpermodules.constants import DEF_TEXT_TEXT
-from helpermodules.constants import JSON_PREVIEW_INDENT
 from helpermodules.constants import default_func
+from helpermodules.constants import PADX, PADY
 
 
 
@@ -817,287 +829,6 @@ class GeneratePage(Frame):
         pass
 
 
-class MyLabelFrame(LabelFrame):
-    def __init__(
-        self,
-        parent,
-        controller : JsonTestCaseTracker,
-        text:str=DEF_LABELFRAME_TEXT,
-        height:str=DEF_LABELFRAME_HEIGHT,
-        expand:str=DEF_LABELFRAME_EXPAND
-    ):
-        LabelFrame.__init__(self, parent, text=text, height=height)
-
-        self.pack(fill=DEF_LABELFRAME_FILL, expand=expand)
-
-
-class MyLabel(Label):
-
-    def __init__(
-        self,
-        parent,
-        controller :JsonTestCaseTracker,
-        text:str=DEF_LABEL_TEXT,
-        font = None,
-        x:int = 0,
-        y:int = 0,
-        relx:int = 0,
-        rely:int = 0,
-        anchor=NE,
-        grid=None,
-        pady=PADY,
-        padx=PADX
-    ):
-        Label.__init__(self, parent, text=text, font=tkfont.Font(**FONTS['LABEL_FONT']))
-
-        if not grid:
-            self.place(x=x, y=y, relx=relx, rely=rely, anchor=anchor)
-        else:
-            row, col = grid
-            self.grid(row=row, column=col, pady=pady, padx=padx)
-
-
-class MyButton(Button):
-
-    def __init__(
-        self,
-        parent,
-        controller : JsonTestCaseTracker,
-        text : str = DEF_BUTTON_TEXT,
-        command = DEF_BUTTON_FUNC,
-        width:int = DEF_BUTTON_HEIGHT,
-        font=FONTS['BUTTON_FONT'],
-        x = 0,
-        y = 0,
-        relx=0,
-        rely=0,
-        anchor=NE,
-        grid = None,
-        pady=PADY,
-        padx=PADX,
-        sticky=N,
-        state="normal"
-    ):
-        Button.__init__(
-            self,
-            parent,
-            text=text,
-            command=command,
-            font=tkfont.Font(**font),
-            state=state
-        )
-        if not grid:
-            self.place(rely=rely, relx=relx, x=x, y=y, anchor=anchor)
-        else:
-            row, col = grid
-            self.grid(row=row, column=col, pady=pady, padx=padx, sticky=sticky)
-
-
-class MyText(Text):
-
-    def __init__(
-        self,
-        parent,
-        controller:JsonTestCaseTracker,
-        width:int,
-        height:int,
-        wrap:str = WORD,
-        text:str = DEF_TEXT_TEXT,
-        font = FONTS['DEFAULT_TEXT_FONT'],
-        sticky:str=NSEW
-    ):
-        Text.__init__(self, parent, wrap=wrap, font=tkfont.Font(**font))
-        # print(**font)
-
-        self.insert(END, text)
-        self.pack(side=TOP, fill=BOTH, expand="yes")
-
-
-class MyScrollBar(Scrollbar):
-
-    def __init__(
-        self,
-        parent,
-        controller:JsonTestCaseTracker,
-        command = None,
-        orient:str="vertical",
-        side:str=RIGHT, fill:str=Y
-    ):
-        Scrollbar.__init__(self, parent, orient=orient)
-        self.pack(side=side, fill=fill)
-        if command:
-            self.config(command=command)
-
-
-class MyCanvas(Canvas):
-
-    def __init__(
-        self,
-        parent,
-        controller:JsonTestCaseTracker,
-        side:str=LEFT,
-        fill:str=BOTH,
-        expand = 1,
-        yscrollcommand = None,
-        xscrollcommand = None
-    ):
-        Canvas.__init__(self, parent)
-        self.pack(side=side, fill=fill, expand=expand)
-
-        if yscrollcommand:
-            self.config(yscrollcommand=yscrollcommand)
-
-        if xscrollcommand:
-            self.config(xscrollcommand=xscrollcommand)
-
-
-class MyOptionMenu(OptionMenu):
-
-    def __init__(
-        self,
-        parent,
-        controller:JsonTestCaseTracker,
-        variable:StringVar,
-        options:list=["No","Options","Given"],
-        x = 0,
-        y = 0,
-        relx=0,
-        rely=0,
-        grid = None,
-        pady=PADY,
-        padx=PADX
-    ):
-        OptionMenu.__init__(self, parent, variable, *options)
-        if grid:
-            row, col = grid
-            self.grid(row=row, column=col, padx=padx, pady=pady)
-        else:
-            self.place(rely=rely, relx=relx, x=x, y=y, anchor=anchor)
-
-
-class EntryWithType(LabelFrame):
-    def __init__(
-        self,
-        parent,
-        controller:JsonTestCaseTracker,
-        frame_name:str="",
-        entry_cell:EntryCell=None,
-        entry_var=None,
-        entry_width:int = 20,
-        option_var:StringVar=None,
-        options:list = ["None"],
-        grid=None,
-        padx:int=PADX,
-        pady:int=PADY
-    ):  
-        LabelFrame.__init__(self, parent, text=frame_name, width=20, height=50)
-        # Frame.__init__(parent)
-        this_entry = Entry(self)
-        this_entry.grid(row=0, column=0, rowspan=2, columnspan=1, sticky="nsew")
-
-        this_dropdown_var = StringVar(value="str")
-        this_dropdown = OptionMenu(self, this_dropdown_var, *options)
-        this_dropdown.config(font=tkfont.Font(**FONTS['SMALL_FONT']))
-        this_dropdown.grid(row=0, column=1, sticky="nsew")
-        
-        delete_button = Button(self, text="del", command = default_func)
-        delete_button.config(font=tkfont.Font(**FONTS['SMALL_FONT']))
-        delete_button.grid(row=1, column = 1, sticky="nsew")
-        row, col = grid
-        self.grid(row=row, column=col, padx=padx, pady=pady)
-
-
-class MyEntry(Entry):
-
-    def __init__(
-        self,
-        parent,
-        controller:JsonTestCaseTracker,
-        x = 0,
-        y = 0,
-        relx=0,
-        rely=0,
-        anchor=NW,
-        grid = None,
-        pady=PADY,
-        padx=PADX
-
-    ):
-        Entry.__init__(self, parent)
-        if not grid:
-            self.place(rely=rely, relx=relx, x=x, y=y, anchor=anchor)
-        else:
-            row, col = grid
-            self.grid(row=row, column=col, pady=pady, padx=padx)
-
-
-class DoubleScrolledFrame:
-
-    def __init__(self, master, **kwargs):
-        width = kwargs.pop('width', None)
-        height = kwargs.pop('height', None)
-        self.outer = Frame(master, **kwargs)
-
-        self.vsb = Scrollbar(self.outer, orient=VERTICAL)
-        self.vsb.grid(row=0, column=1, sticky='ns')
-        self.hsb = Scrollbar(self.outer, orient=HORIZONTAL)
-        self.hsb.grid(row=1, column=0, sticky='ew')
-        self.canvas = Canvas(self.outer, highlightthickness=0, width=width, height=height)
-        self.canvas.grid(row=0, column=0, sticky='nsew')
-        self.outer.rowconfigure(0, weight=1)
-        self.outer.columnconfigure(0, weight=1)
-        self.canvas['yscrollcommand'] = self.vsb.set
-        self.canvas['xscrollcommand'] = self.hsb.set
-
-        self.canvas.bind("<Enter>", self._bind_mouse)
-        self.canvas.bind("<Leave>", self._unbind_mouse)
-
-        self.vsb['command'] = self.canvas.yview
-        self.hsb['command'] = self.canvas.xview
-
-        self.inner = Frame(self.canvas)
-        
-        self.canvas.create_window(4, 4, window=self.inner, anchor='nw')
-        self.inner.bind("<Configure>", self._on_frame_configure)
-
-        self.outer_attr = set(dir(Widget))
-
-    def __getattr__(self, item):
-        if item in self.outer_attr:
-            
-            return getattr(self.outer, item)
-        else:
-            
-            return getattr(self.inner, item)
-
-    def _on_frame_configure(self, event=None):
-        x1, y1, x2, y2 = self.canvas.bbox("all")
-        height = self.canvas.winfo_height()
-        width = self.canvas.winfo_width()
-        self.canvas.config(scrollregion = (0,0, max(x2, width), max(y2, height)))
-
-    def _bind_mouse(self, event=None):
-        self.canvas.bind_all("<4>", self._on_mousewheel)
-        self.canvas.bind_all("<5>", self._on_mousewheel)
-        self.canvas.bind_all("<MouseWheel>", self._on_mousewheel)
-
-    def _unbind_mouse(self, event=None):
-        self.canvas.unbind_all("<4>")
-        self.canvas.unbind_all("<5>")
-        self.canvas.unbind_all("<MouseWheel>")
-        
-    def _on_mousewheel(self, event):
-        
-        func = self.canvas.xview_scroll if event.state & 1 else self.canvas.yview_scroll 
-        if event.num == 4 or event.delta > 0:
-            func(-1, "units" )
-        elif event.num == 5 or event.delta < 0:
-            func(1, "units" )
-    
-    def __str__(self):
-        return str(self.outer)
-
-
 
 
 # 
@@ -1148,5 +879,8 @@ class DoubleScrolledFrame:
 #     def set_ui(self):
 #         pass
 
-app = JsonTestCaseTracker()
-app.mainloop()
+
+if __name__=='__main__':
+
+    app = JsonTestCaseTracker()
+    app.mainloop()
