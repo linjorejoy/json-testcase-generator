@@ -1,4 +1,4 @@
-from tkinter import Frame, Scrollbar, Canvas
+from tkinter import Frame, Scrollbar, Canvas, Widget
 from tkinter import VERTICAL, HORIZONTAL
 
 
