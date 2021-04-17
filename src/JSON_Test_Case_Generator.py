@@ -79,7 +79,7 @@ class JsonTestCaseTracker(Tk):
         global_container.columnconfigure(0, weight=1)
 
 
-        FRAMES = [UploadPage, ProcessVariables, SetNames, PreviewVariables, GeneratePage]
+        FRAMES = [StartPage, UploadPage, ProcessVariables, SetNames, PreviewVariables, GeneratePage]
 
         for FRAME in FRAMES:
             frame = FRAME(global_container, self)
@@ -87,7 +87,7 @@ class JsonTestCaseTracker(Tk):
             frame.grid(row=0, column=0, sticky=NSEW)
 
 
-        self.show_frame(UploadPage)
+        self.show_frame(StartPage)
 
 
     def show_frame(self, FrameName):
@@ -123,53 +123,42 @@ class StartPage(Frame):
             height="10",
             expand=Y
         )
+
+        # centering_frame_left = Frame(self.body_label_frame)
+        # centering_frame_left
+        # centering_frame_right = Frame(self.body_label_frame)
         
-        make_combination_tree_button = MyButton(
+        make_combination_tree_button = Button(
             self.body_label_frame,
-            controller,
             text="Make All Combinations",
-            command=default_func,
-            width="150",
-            height="10",
-            grid=(0, 0),
-            padx=0,
-            pady=0,
-            sticky=NSEW
+            command=lambda:controller.show_frame(UploadPage),
+            font=tkfont.Font(**FONTS['VERY_LARGE_FONT']),
+            width=20,
+            height=5
         )
+        make_combination_tree_button.grid(row=0, column=0, padx=0, pady=0, ipadx=2, ipady=2, sticky=NSEW)
         
-        make_combination_tree_button = MyButton(
+        make_combination_from_sheet = Button(
             self.body_label_frame,
-            controller,
-            text="Make All Combinations",
-            command=default_func,
-            width="150",
-            height="10",
-            grid=(1, 0),
-            padx=0,
-            pady=0,
-            sticky=NSEW
+            text="Make Combinations from Table",
+            command=lambda:controller.show_frame(UploadPage),
+            font=tkfont.Font(**FONTS['VERY_LARGE_FONT']),
+            width=20,
+            height=5
         )
+        make_combination_from_sheet.grid(row=1, column=2, padx=0, pady=0, sticky=NSEW)
+
+        self.body_label_frame.grid_columnconfigure(0, weight=1)
+        self.body_label_frame.grid_columnconfigure(2, weight=1)
         
-        make_combination_tree_button = MyButton(
-            self.body_label_frame,
-            controller,
-            text="Make All Combinations",
-            command=default_func,
-            height="10",
-            grid=(2, 0),
-            padx=0,
-            pady=0,
-            sticky=NSEW
-        )
 
 
-
-        button1 = Button(
-            self,
-            text="Goto Page 1",
-            command=lambda:controller.show_frame(UploadPage)
-        )
-        button1.pack(pady=10, padx=10)
+        # button1 = Button(
+        #     self,
+        #     text="Goto Page 1",
+        #     command=lambda:controller.show_frame(UploadPage)
+        # )
+        # button1.pack(pady=10, padx=10)
     
     def set_ui(self):
         pass
