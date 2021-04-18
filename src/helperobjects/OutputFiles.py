@@ -14,4 +14,7 @@ class OutputFiles:
 
     def get_output_json_file_array(self):
         return self.output_json_file_array
+    
+    def clear_output_json_file_arr(self):
+        self.output_json_file_array.clear()
         

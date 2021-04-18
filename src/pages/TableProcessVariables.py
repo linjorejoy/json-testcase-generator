@@ -7,9 +7,11 @@ from widgetclasses.MyLabelFrame import MyLabelFrame
 from widgetclasses.MyButton import MyButton
 from widgetclasses.MyLabel import MyLabel
 from widgetclasses.MyEntry import MyEntry
+from widgetclasses.DoubleScrolledFrame import DoubleScrolledFrame
 
 from helperobjects.EntryCellRow import EntryCellRow
 from helperobjects.EntryCell import EntryCell
+from helperobjects.OutputJsonFile import OutputJsonFile
 
 from helpermodules.constants import INT_MAX_VALUE
 from helpermodules.MyFonts import FONTS
@@ -65,8 +67,9 @@ class TableProcessVariables(Frame):
         )
 
     def goto_next(self):
+        self.genetrate_output_files()
         self.controller.show_frame(TableSetNames.TableSetNames)
-        pass
+        self.controller.frames[TableSetNames.TableSetNames].set_ui()
 
     def set_ui(self):
         self.set_row_initialization()
@@ -131,10 +134,30 @@ class TableProcessVariables(Frame):
                 self.body_label_frame,
                 self.controller,
                 grid=(current_row_count + 1, index + 2),
+                padx=0,
+                pady=0,
                 sticky=NSEW
             )
             entry_cell.entry = entry_n
             entry_row.add_cell(entry_cell)
         self.controller.entry_cell_collection.add_row(entry_row)
 
-        print(len(self.controller.entry_cell_collection.get_all_rows()))
+        # print(len(self.controller.entry_cell_collection.get_all_rows()))
+
+    def genetrate_output_files(self):
+        self.controller.output_files.clear_output_json_file_arr()
+
+        for row in self.controller.entry_cell_collection.get_all_rows():
+            this_variable_dictionary = {
+                var:entry_obj.entry.get()
+             for var, entry_obj in zip(
+                 self.controller.VARIABLES_PRESENT,
+                 row.entry_cell_list
+             )}
+            this_json_file = OutputJsonFile(file_name=None, variable_dictionary=this_variable_dictionary)
+            self.controller.output_files.add_output_json_file(this_json_file)
+        
+        # [print(json_file_obj.__dict__) for json_file_obj in self.controller.output_files.get_output_json_file_array()]
+
+
+        

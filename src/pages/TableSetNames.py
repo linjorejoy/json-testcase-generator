@@ -11,9 +11,12 @@ from widgetclasses.DoubleScrolledFrame import DoubleScrolledFrame
 from widgetclasses.MyEntry import MyEntry
 
 from helpermodules.MyFonts import FONTS
+import helpermodules.FileNameGenerator as FileNameGenerator
 
-import pages.ProcessVariables as ProcessVariables
+
+import pages.TableProcessVariables as TableProcessVariables
 import pages.PreviewVariables as PreviewVariables
+# import pages.PreviewVariables as PreviewVariables
 
 import JSON_Test_Case_Generator
 
@@ -24,7 +27,6 @@ class TableSetNames(Frame):
         Frame.__init__(self, parent)
         self.parent = parent
         self.controller = controller
-        # print(f"VARS PRESENT : {self.controller.VARIABLES_PRESENT} ")
         self.variables_for_dropdown = ["None", "Counter"]
 
         self.header_label_frame = MyLabelFrame(
@@ -60,7 +62,7 @@ class TableSetNames(Frame):
             self.footer_label_frame,
             controller,
             text="Go Back",
-            command=lambda:controller.show_frame(ProcessVariables.ProcessVariables),
+            command=lambda:controller.show_frame(TableProcessVariables.TableProcessVariables),
             rely=1,
             relx=0,
             x=5,
@@ -137,5 +139,14 @@ class TableSetNames(Frame):
 
 
     def goto_next(self):
+        # self.generate_file_name()
         self.controller.show_frame(PreviewVariables.PreviewVariables)
         self.controller.frames[PreviewVariables.PreviewVariables].set_ui()
+
+    # def generate_file_name(self):
+    #     FileNameGenerator.generate_file_name(
+    #         self.controller.output_files,
+    #         self.controller.reference_arr_for_name_gen
+    #     )
+    #     print("\n"*2)
+    #     [print(json_file_obj.__dict__) for json_file_obj in self.controller.output_files.get_output_json_file_array()]
