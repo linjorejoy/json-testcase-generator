@@ -21,6 +21,7 @@ import pages.TableSetNames as TableSetNames
 
 from helpermodules.constants import SCREEN_RATIO, CURRENT_VERSION, ICON
 
+
 class JsonTestCaseTracker(Tk):
 
     def __init__(self, *args, **kwargs):
