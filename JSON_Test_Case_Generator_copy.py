@@ -39,8 +39,6 @@ WINDOW_HEIGHT = 650
 WINDOW_WIDTH = 800
 
 
-    
-
 def to_dict(obj):
     return json.dumps(obj, default=lambda o: o.__dict__, indent=2)
 
