@@ -1,5 +1,5 @@
 from tkinter import Frame
-from tkinter import N, Y, SE, NSEW
+from tkinter import N, Y, SE, NSEW, BOTH
 
 import sys
 
@@ -37,6 +37,7 @@ class TableProcessVariables(Frame):
             height="50",
             expand=N
         )
+        
 
         self.body_label_frame = MyLabelFrame(
             self,
@@ -45,6 +46,11 @@ class TableProcessVariables(Frame):
             height="500",
             expand=Y
         )
+
+        self.body_scrollable = DoubleScrolledFrame(
+            self.body_label_frame
+        )
+        self.body_scrollable.pack(fill=BOTH,expand=1)
 
         self.footer_label_frame = MyLabelFrame(
             self,
@@ -88,7 +94,7 @@ class TableProcessVariables(Frame):
         for index, var in enumerate(self.controller.VARIABLES_PRESENT):
 
             header = MyLabel(
-                self.body_label_frame,
+                self.body_scrollable,
                 self.controller,
                 text=var,
                 font=FONTS['LARGE_FONT'],
@@ -102,7 +108,7 @@ class TableProcessVariables(Frame):
         for row_index, row in enumerate(self.controller.entry_cell_collection.entry_cell_rows):
             for col_index, cell in enumerate(row.get_all()):
                 entry_0 = MyEntry(
-                    self.body_label_frame,
+                    self.body_scrollable,
                     self.controller,
                     grid=(row_index + 1, col_index + 2),
                     padx=0,
@@ -115,7 +121,7 @@ class TableProcessVariables(Frame):
         if len(self.controller.VARIABLES_PRESENT) > 0:
 
             add_more_button = MyButton(
-                self.body_label_frame,
+                self.body_scrollable,
                 self.controller,
                 command=self.add_one_row,
                 text="Add more Empty",
@@ -131,7 +137,7 @@ class TableProcessVariables(Frame):
             entry_cell = EntryCell()
             # entry_row.add_cell(EntryCell())
             entry_n = MyEntry(
-                self.body_label_frame,
+                self.body_scrollable,
                 self.controller,
                 grid=(current_row_count + 1, index + 2),
                 padx=0,
