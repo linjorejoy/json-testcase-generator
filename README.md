@@ -4,6 +4,11 @@ This is an application with the intent of easing the JSON test case generation f
 
 ## Downloads
 
+### [v0.1.4](dist/JSON_Test_Case_Generator%20v0.1.4.exe?raw=true)
+
+- Scrollable part in Variable Processing
+- JSON Report Gen addded
+
 ### [v0.1.3](dist/JSON_Test_Case_Generator%20v0.1.3.exe?raw=true)
 
 - Added JSON Generation from In-App Table
