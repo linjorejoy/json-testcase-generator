@@ -1,4 +1,4 @@
-from tkinter import Frame, Label
+from tkinter import Frame, Label, StringVar
 from tkinter import N, Y, SW, SE
 
 from functools import partial
@@ -9,6 +9,7 @@ from widgetclasses.MyButton import MyButton
 from widgetclasses.MyLabel import MyLabel
 from widgetclasses.MyEntry import MyEntry
 from widgetclasses.DoubleScrolledFrame import DoubleScrolledFrame
+from widgetclasses.EntryWithType import EntryWithType
 
 from helperobjects.EntryCellColumn import EntryCellColumn
 from helperobjects.EntryCell import EntryCell
@@ -96,6 +97,7 @@ class ProcessVariables(Frame):
         for index, variable in enumerate(self.controller.VARIABLES_PRESENT):
             this_var_entry_col = EntryCellColumn(variable_name=variable)
             this_var_entry_col_cell = EntryCell()
+            this_var_entry_col_cell.option_value =StringVar(value="str")
             this_var_entry_col.add_cell(entry_cell = this_var_entry_col_cell)
             self.controller.entry_cell_collection.add_column(this_var_entry_col)
             self.add_widget_for_col(index, variable, this_var_entry_col)
@@ -125,28 +127,58 @@ class ProcessVariables(Frame):
         )
 
         for yindex, cell in enumerate(this_var_entry_col.entry_cell_column):
-            this_entry = MyEntry(
+            this_entry = EntryWithType(
                 self.body_subframe,
                 self.controller,
+                frame_name="",
+                entry_cell=cell,
+                options=self.controller.accepted_data_types,
+                delete_command=partial(self.remove_cell, cell),
                 grid=((yindex+self.table_start_row+1),(index+1)),
                 pady=1,
                 padx=8
             )
-            cell.entry = this_entry
+            # this_entry = MyEntry(
+            #     self.body_subframe,
+            #     self.controller,
+            #     grid=((yindex+self.table_start_row+1),(index+1)),
+            #     pady=1,
+            #     padx=8
+            # )
+            # cell.entry = this_entry
+    
+    def remove_cell(self, cell):
+        for widget in self.body_subframe.winfo_children():
+            if widget == cell:
+                widget.destroy()
+                return 
+        
         
 
     def add_cell(self, entry_col:EntryCellColumn, index:int):
 
         this_cell = EntryCell()
+        this_cell.option_value  = StringVar(value="str")
         yindex = entry_col.add_cell(this_cell)
-        this_entry = MyEntry(
+        this_entry = EntryWithType(
             self.body_subframe,
             self.controller,
-            grid = ((yindex + 2), (index + 1)),
+            frame_name="",
+            entry_cell=this_cell,
+            options=self.controller.accepted_data_types,
+            grid=((yindex+self.table_start_row+1),(index+1)),
             pady=1,
             padx=8
         )
-        this_cell.entry = this_entry
+
+        # this_entry = MyEntry(
+        #     self.body_subframe,
+        #     self.controller,
+        #     grid = ((yindex + 2), (index + 1)),
+        #     pady=1,
+        #     padx=8
+        # )
+        # this_cell.entry = this_entry
     
     def generate_output_file_obj(self):
         for column in self.controller.entry_cell_collection.entry_cells_collection:

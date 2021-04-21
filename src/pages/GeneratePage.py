@@ -1,6 +1,7 @@
 from tkinter import Frame, filedialog
 from tkinter.ttk import Progressbar
 from tkinter import N, Y, WORD, NSEW, SW, SE, END
+import json
 
 from widgetclasses.MyLabelFrame import MyLabelFrame
 from widgetclasses.MyButton import MyButton
@@ -133,7 +134,16 @@ class GeneratePage(Frame):
             self.generated_report.config(state="normal")
             self.generated_report.insert(END, f"\n{json_file_obj.file_name:>50}............Done")
             self.generated_report.config(state="disabled")
-        
+    
+        with open(self.controller.output_location + "/report.json", mode="w") as json_file:
+            json.dump(
+                json.loads(self.to_dict(self.controller.output_files)),
+                json_file,
+                indent=4
+            )
+
+    def to_dict(self,obj):
+        return json.dumps(obj, default=lambda o: o.__dict__, indent=2)
 
     def set_ui(self):
         pass

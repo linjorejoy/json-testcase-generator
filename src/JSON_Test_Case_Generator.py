@@ -45,6 +45,7 @@ class JsonTestCaseTracker(Tk):
         self.output_location = ""
         self.reference_arr_for_name_gen = []
         self.current_dir = os.curdir
+        self.accepted_data_types = ["int", "str", "bool", "float", "null"]
 
 
 
