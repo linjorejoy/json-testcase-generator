@@ -3,7 +3,6 @@ from helperobjects.EntryCellColumn import EntryCellColumn
 from helperobjects.EntryCell import EntryCell 
 
 from typing import Dict, List
-from copy import deepcopy
 
 def get_all_dictionaries(entry_cell_collections: EntryCellCollection):
     combinations = []
@@ -18,7 +17,7 @@ def get_all_dictionaries(entry_cell_collections: EntryCellCollection):
         
         
         for cell in entry_collections.get_all_columns()[index].get_all_cells():
-            combined_dict_copy = deepcopy(combined_dict)
+            combined_dict_copy = combined_dict.copy()
             combined_dict_copy[variables[index]] = cell.value
             combine2(entry_collections, combined_dict_copy, index + 1)
             
