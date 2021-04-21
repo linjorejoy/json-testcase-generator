@@ -1,5 +1,5 @@
 json_testcase_generator
-__pycache__
+**/__pycache__
 .vscode
 test.py
 For Testing
