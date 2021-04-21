@@ -1,5 +1,5 @@
-from tkinter import Frame, Label, StringVar
-from tkinter import N, Y, SW, SE
+from tkinter import Frame, Label, StringVar, LabelFrame
+from tkinter import N, Y, SW, SE, BOTH
 
 from functools import partial
 
@@ -47,12 +47,14 @@ class ProcessVariables(Frame):
             self, 
             controller,
             text="Variables",
-            height="50",
+            height="500",
             expand=Y
         )
         
 
         self.body_subframe = DoubleScrolledFrame(self.body_label_frame)
+
+        self.label_frame_columns = []
 
         self.footer_label_frame = MyLabelFrame(
             self, 
@@ -100,41 +102,50 @@ class ProcessVariables(Frame):
             this_var_entry_col_cell.option_value =StringVar(value="str")
             this_var_entry_col.add_cell(entry_cell = this_var_entry_col_cell)
             self.controller.entry_cell_collection.add_column(this_var_entry_col)
+            self.body_subframe.pack(side="top", fill=BOTH, expand=True)
             self.add_widget_for_col(index, variable, this_var_entry_col)
-            self.body_subframe.pack(side="top", fill="both", expand=True)
 
 
     def add_widget_for_col(self, index, variable, this_var_entry_col):
+        this_col_label_frame = LabelFrame(
+            self.body_subframe,
+            text=f"Variable {index + 1}",
+            height="1500"
+        )
+        this_col_label_frame.grid(row=0, column=index, sticky="nw")
+        # self.body_subframe.grid_rowconfigure(index, weight=1)
+
+        self.label_frame_columns.append(this_col_label_frame)
 
         this_processdata_variable_add_cell_button = MyButton(
-            self.body_subframe,
+            self.label_frame_columns[index],
             self.controller,
             text="Add Cell",
             command=partial(self.add_cell, this_var_entry_col, index),
             width="15",
-            grid=(0, (index + 1)),
+            grid=(0, 0),
             pady=2,
             padx=3
         )
         this_processdata_variable_header = MyLabel(
-            self.body_subframe,
+            self.label_frame_columns[index],
             self.controller,
             text=variable,
             font=FONTS['LABEL_FONT'],
-            grid=(self.table_start_row, (index+1)),
+            grid=(self.table_start_row, 0),
             pady=2,
             padx=3
         )
 
         for yindex, cell in enumerate(this_var_entry_col.entry_cell_column):
             this_entry = EntryWithType(
-                self.body_subframe,
+                self.label_frame_columns[index],
                 self.controller,
                 frame_name="",
                 entry_cell=cell,
                 options=self.controller.accepted_data_types,
                 delete_command=partial(self.remove_cell, cell),
-                grid=((yindex+self.table_start_row+1),(index+1)),
+                grid=((yindex+self.table_start_row+1),0),
                 pady=1,
                 padx=8
             )
@@ -161,12 +172,12 @@ class ProcessVariables(Frame):
         this_cell.option_value  = StringVar(value="str")
         yindex = entry_col.add_cell(this_cell)
         this_entry = EntryWithType(
-            self.body_subframe,
+            self.label_frame_columns[index],
             self.controller,
             frame_name="",
             entry_cell=this_cell,
             options=self.controller.accepted_data_types,
-            grid=((yindex+self.table_start_row+1),(index+1)),
+            grid=((yindex+self.table_start_row+1),0),
             pady=1,
             padx=8
         )
