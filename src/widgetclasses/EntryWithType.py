@@ -23,12 +23,10 @@ class EntryWithType(LabelFrame):
         pady:int=PADY
     ):  
         LabelFrame.__init__(self, parent, text=frame_name, width=20, height=50)
-        # Frame.__init__(parent)
         this_entry = Entry(self)
         this_entry.grid(row=0, column=1, sticky="nsew")
         entry_cell.entry = this_entry
 
-        # option_var = StringVar(value="str")
         this_dropdown = OptionMenu(self, entry_cell.option_value, *options)
         this_dropdown.config(font=tkfont.Font(**FONTS['SMALL_FONT']))
         this_dropdown.grid(row=0, column=0, sticky="nsew")

@@ -19,7 +19,6 @@ class MyText(Text):
         sticky:str=NSEW
     ):
         Text.__init__(self, parent, wrap=wrap, font=tkfont.Font(**font))
-        # print(**font)
 
         self.insert(END, text)
         self.pack(side=TOP, fill=BOTH, expand="yes")
