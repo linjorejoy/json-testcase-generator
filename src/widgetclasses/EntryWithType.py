@@ -16,6 +16,7 @@ class EntryWithType(LabelFrame):
         frame_name:str="",
         entry_cell:EntryCell=None,
         options:list = ["None"],
+        add_del_button=True,
         delete_command=default_func,
         grid=None,
         padx:int=PADX,
@@ -31,10 +32,13 @@ class EntryWithType(LabelFrame):
         this_dropdown = OptionMenu(self, entry_cell.option_value, *options)
         this_dropdown.config(font=tkfont.Font(**FONTS['SMALL_FONT']))
         this_dropdown.grid(row=0, column=0, sticky="nsew")
+
+        if add_del_button:
         
-        delete_button = Button(self, text="X", command = self.destroy)
-        delete_button.config(font=tkfont.Font(**FONTS['SMALL_FONT']))
-        delete_button.grid(row=0, column = 2, sticky="nsew")
+            delete_button = Button(self, text="X", command = default_func)
+            delete_button.config(font=tkfont.Font(**FONTS['SMALL_FONT']))
+            delete_button.grid(row=0, column = 2, sticky="nsew")
+
         row, col = grid
         self.grid(row=row, column=col, padx=padx, pady=pady)
     

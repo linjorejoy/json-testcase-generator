@@ -1,4 +1,4 @@
-from tkinter import Frame
+from tkinter import Frame, StringVar
 from tkinter import N, Y, SE, NSEW, BOTH
 
 import sys
@@ -8,6 +8,7 @@ from widgetclasses.MyButton import MyButton
 from widgetclasses.MyLabel import MyLabel
 from widgetclasses.MyEntry import MyEntry
 from widgetclasses.DoubleScrolledFrame import DoubleScrolledFrame
+from widgetclasses.EntryWithType import EntryWithType
 
 from helperobjects.EntryCellRow import EntryCellRow
 from helperobjects.EntryCell import EntryCell
@@ -107,15 +108,27 @@ class TableProcessVariables(Frame):
     def set_first_set_entry(self):
         for row_index, row in enumerate(self.controller.entry_cell_collection.entry_cell_rows):
             for col_index, cell in enumerate(row.get_all()):
-                entry_0 = MyEntry(
+                cell.option_value = StringVar(value="str")
+                entry_0 = EntryWithType(
                     self.body_scrollable,
                     self.controller,
+                    frame_name="",
+                    entry_cell=cell,
+                    options=self.controller.accepted_data_types,
+                    add_del_button=False,
                     grid=(row_index + 1, col_index + 2),
-                    padx=0,
-                    pady=0,
-                    sticky=NSEW
+                    padx=1,
+                    pady=1
                 )
-                cell.entry = entry_0
+                # entry_0 = MyEntry(
+                #     self.body_scrollable,
+                #     self.controller,
+                #     grid=(row_index + 1, col_index + 2),
+                #     padx=0,
+                #     pady=0,
+                #     sticky=NSEW
+                # )
+                # cell.entry = entry_0
 
     def set_add_more_empty_button(self):
         if len(self.controller.VARIABLES_PRESENT) > 0:
@@ -135,16 +148,28 @@ class TableProcessVariables(Frame):
         entry_row = EntryCellRow()
         for index, value in enumerate(self.controller.VARIABLES_PRESENT):
             entry_cell = EntryCell()
-            # entry_row.add_cell(EntryCell())
-            entry_n = MyEntry(
+            entry_cell.option_value = StringVar(value="str")
+            entry_n = EntryWithType(
                 self.body_scrollable,
                 self.controller,
+                frame_name="",
+                entry_cell=entry_cell,
+                options=self.controller.accepted_data_types,
+                add_del_button=False,
                 grid=(current_row_count + 1, index + 2),
-                padx=0,
-                pady=0,
-                sticky=NSEW
+                padx=1,
+                pady=1
             )
-            entry_cell.entry = entry_n
+            # entry_row.add_cell(EntryCell())
+            # entry_n = MyEntry(
+            #     self.body_scrollable,
+            #     self.controller,
+            #     grid=(current_row_count + 1, index + 2),
+            #     padx=0,
+            #     pady=0,
+            #     sticky=NSEW
+            # )
+            # entry_cell.entry = entry_n
             entry_row.add_cell(entry_cell)
         self.controller.entry_cell_collection.add_row(entry_row)
 
