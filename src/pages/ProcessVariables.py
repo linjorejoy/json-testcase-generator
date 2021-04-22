@@ -145,6 +145,7 @@ class ProcessVariables(Frame):
                 self.controller,
                 frame_name="",
                 entry_cell=cell,
+                add_del_button=False,
                 options=self.controller.accepted_data_types,
                 delete_command=partial(self.remove_cell_from_column,this_var_entry_col, cell),
                 grid=((yindex+self.table_start_row+1),0),

@@ -1,7 +1,9 @@
-from tkinter import Frame, StringVar
+from tkinter import Frame, StringVar, Button
 from tkinter import N, Y, SE, NSEW, BOTH
 
 import sys
+
+from functools import partial
 
 from widgetclasses.MyLabelFrame import MyLabelFrame
 from widgetclasses.MyButton import MyButton
@@ -30,6 +32,7 @@ class TableProcessVariables(Frame):
         Frame.__init__(self, parent)
         self.parent = parent
         self.controller = controller
+        self.entryrow_children_dict = {}
 
         self.header_label_frame = MyLabelFrame(
             self,
@@ -106,7 +109,17 @@ class TableProcessVariables(Frame):
             self.controller.entry_cell_collection.entry_cell_rows[0].add_cell(EntryCell())
 
     def set_first_set_entry(self):
+
         for row_index, row in enumerate(self.controller.entry_cell_collection.entry_cell_rows):
+            # del_row_button = MyButton(
+            #     self.body_scrollable,
+            #     self.controller,
+            #     text="Delete Row",
+            #     grid=(row_index + 1, 1),
+            #     padx=4,
+            #     pady=2
+            # )
+            self.entryrow_children_dict[row] = []
             for col_index, cell in enumerate(row.get_all()):
                 cell.option_value = StringVar(value="str")
                 entry_0 = EntryWithType(
@@ -120,6 +133,7 @@ class TableProcessVariables(Frame):
                     padx=1,
                     pady=1
                 )
+                self.entryrow_children_dict[row].append(entry_0)
                 # entry_0 = MyEntry(
                 #     self.body_scrollable,
                 #     self.controller,
@@ -129,6 +143,11 @@ class TableProcessVariables(Frame):
                 #     sticky=NSEW
                 # )
                 # cell.entry = entry_0
+    def delete_row(self, entry_row:EntryCellRow):
+        self.controller.entry_cell_collection.delete_row(entry_row)
+        for widget in self.entryrow_children_dict[entry_row]:
+            widget.destroy()
+        
 
     def set_add_more_empty_button(self):
         if len(self.controller.VARIABLES_PRESENT) > 0:
@@ -146,6 +165,19 @@ class TableProcessVariables(Frame):
     def add_one_row(self):
         current_row_count = len(self.controller.entry_cell_collection.get_all_rows())
         entry_row = EntryCellRow()
+        self.entryrow_children_dict[entry_row] = []
+
+        del_row_button = MyButton(
+            self.body_scrollable,
+            self.controller,
+            text="Delete Row",
+            command=partial(self.delete_row, entry_row),
+            grid=(current_row_count + 1, 1),
+            padx=4,
+            pady=2
+        )
+        self.entryrow_children_dict[entry_row].append(del_row_button)
+
         for index, value in enumerate(self.controller.VARIABLES_PRESENT):
             entry_cell = EntryCell()
             entry_cell.option_value = StringVar(value="str")
@@ -160,6 +192,7 @@ class TableProcessVariables(Frame):
                 padx=1,
                 pady=1
             )
+            self.entryrow_children_dict[entry_row].append(entry_n)
             # entry_row.add_cell(EntryCell())
             # entry_n = MyEntry(
             #     self.body_scrollable,
@@ -174,6 +207,10 @@ class TableProcessVariables(Frame):
         self.controller.entry_cell_collection.add_row(entry_row)
 
         # print(len(self.controller.entry_cell_collection.get_all_rows()))
+
+    def delete_one_row(self):
+
+        pass
 
     def genetrate_output_files(self):
         self.controller.output_files.clear_output_json_file_arr()

@@ -43,3 +43,6 @@ class MyButton(Button):
         else:
             row, col = grid
             self.grid(row=row, column=col, pady=pady, padx=padx, rowspan=rowspan, columnspan=columnspan, sticky=sticky)
+
+    def destroy(self):
+        return super().destroy()

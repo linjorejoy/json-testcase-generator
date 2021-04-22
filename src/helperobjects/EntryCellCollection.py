@@ -23,6 +23,12 @@ class EntryCellCollection:
         self.entry_cell_rows.append(entry_cell_row)
         self.row_count += 1
 
+    def delete_row(self,entry_row:EntryCellRow):
+        for index, row in enumerate(self.entry_cell_rows):
+            if row == entry_row:
+                del self.entry_cell_rows[index]
+        
+
     def get_all_columns(self):
         return self.entry_cells_collection
 

@@ -1,4 +1,4 @@
-from tkinter import LabelFrame, StringVar, OptionMenu, Button, Entry
+from tkinter import LabelFrame, StringVar, OptionMenu, Button, Entry, EW
 import tkinter.font as tkfont
 
 from helperobjects.EntryCell import EntryCell
@@ -23,13 +23,14 @@ class EntryWithType(LabelFrame):
         pady:int=PADY
     ):  
         LabelFrame.__init__(self, parent, text=frame_name, width=20, height=50)
-        this_entry = Entry(self)
-        this_entry.grid(row=0, column=1, sticky="nsew")
-        entry_cell.entry = this_entry
 
         this_dropdown = OptionMenu(self, entry_cell.option_value, *options)
         this_dropdown.config(font=tkfont.Font(**FONTS['SMALL_FONT']))
         this_dropdown.grid(row=0, column=0, sticky="nsew")
+        
+        this_entry = Entry(self)
+        this_entry.grid(row=0, column=1, sticky="nsew")
+        entry_cell.entry = this_entry
 
         if add_del_button:
         
@@ -38,7 +39,7 @@ class EntryWithType(LabelFrame):
             delete_button.grid(row=0, column = 2, sticky="nsew")
 
         row, col = grid
-        self.grid(row=row, column=col, padx=padx, pady=pady)
+        self.grid(row=row, column=col, padx=padx, pady=pady, sticky=EW)
     
     def destroy(self):
         return super().destroy()
