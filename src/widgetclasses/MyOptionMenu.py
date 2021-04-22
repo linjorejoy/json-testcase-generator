@@ -3,8 +3,6 @@ from tkinter import StringVar
 
 from helpermodules.constants import PADX, PADY
 
-
-
 class MyOptionMenu(OptionMenu):
 
     def __init__(
