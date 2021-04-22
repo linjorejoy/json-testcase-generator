@@ -33,7 +33,7 @@ class EntryWithType(LabelFrame):
 
         if add_del_button:
         
-            delete_button = Button(self, text="X", command = default_func)
+            delete_button = Button(self, text="X", command = delete_command)
             delete_button.config(font=tkfont.Font(**FONTS['SMALL_FONT']))
             delete_button.grid(row=0, column = 2, sticky="nsew")
 

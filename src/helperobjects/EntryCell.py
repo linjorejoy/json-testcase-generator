@@ -8,6 +8,9 @@ class EntryCell:
         self.value = value
 
     def __hash__(self):
-        return hash(self)
+        return hash(self.__key)
+
+    def __key(self):
+        return (self.entry.__hash__, self.option_value.__hash__)
         
         

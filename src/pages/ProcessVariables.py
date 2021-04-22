@@ -29,6 +29,7 @@ class ProcessVariables(Frame):
         Frame.__init__(self, parent)
         self.controller = controller
         self.table_start_row = 1
+        self.cell_entry_dict = {}
 
 
         self.head_label_frame = MyLabelFrame(
@@ -138,17 +139,19 @@ class ProcessVariables(Frame):
         )
 
         for yindex, cell in enumerate(this_var_entry_col.entry_cell_column):
+            
             this_entry = EntryWithType(
                 self.label_frame_columns[index],
                 self.controller,
                 frame_name="",
                 entry_cell=cell,
                 options=self.controller.accepted_data_types,
-                delete_command=partial(self.remove_cell, cell),
+                delete_command=partial(self.remove_cell_from_column,this_var_entry_col, cell),
                 grid=((yindex+self.table_start_row+1),0),
                 pady=1,
                 padx=8
             )
+            self.cell_entry_dict[cell] = this_entry
             # this_entry = MyEntry(
             #     self.body_subframe,
             #     self.controller,
@@ -157,6 +160,12 @@ class ProcessVariables(Frame):
             #     padx=8
             # )
             # cell.entry = this_entry
+    def remove_cell_from_column(self, entry_col:EntryCellColumn, cell:EntryCell):
+        for index, entry_cell in enumerate(entry_col.entry_cell_column):
+            if cell == entry_cell:
+                del entry_col.entry_cell_column[index]
+                self.cell_entry_dict[cell].destroy()
+        
     
     def remove_cell(self, cell):
         for widget in self.body_subframe.winfo_children():
@@ -177,10 +186,12 @@ class ProcessVariables(Frame):
             frame_name="",
             entry_cell=this_cell,
             options=self.controller.accepted_data_types,
+            delete_command=partial(self.remove_cell_from_column,entry_col, this_cell),
             grid=((yindex+self.table_start_row+1),0),
             pady=1,
             padx=8
         )
+        self.cell_entry_dict[this_cell] = this_entry
 
         # this_entry = MyEntry(
         #     self.body_subframe,
