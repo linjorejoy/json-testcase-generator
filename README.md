@@ -4,6 +4,10 @@ This is an application with the intent of easing the JSON test case generation f
 
 ## Downloads
 
+### [v0.2.1](dist/JSON_Test_Case_Generator%20v0.2.1.exe?raw=true)
+
+- Add and remove cells added to both Tables gen and All Gen
+
 ### [v0.1.4](dist/JSON_Test_Case_Generator%20v0.1.4.exe?raw=true)
 
 - Scrollable part in Variable Processing
