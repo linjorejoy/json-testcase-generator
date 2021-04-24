@@ -87,6 +87,10 @@ class JsonTestCaseTracker(Tk):
 
         self.show_frame(StartPage.StartPage)
 
+    def restart(self):
+        self.pages_navigation_history = []
+        self.show_frame(StartPage.StartPage)
+
 
     def show_frame(self, FrameName):
         frame = self.frames[FrameName]

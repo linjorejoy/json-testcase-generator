@@ -83,7 +83,7 @@ class GeneratePage(Frame):
             self.footer_label_frame,
             controller,
             text="Go Back",
-            command=lambda:controller.show_frame(PreviewVariables.PreviewVariables),
+            command=self.go_back,
             rely=1,
             relx=0,
             x=5,
@@ -123,7 +123,7 @@ class GeneratePage(Frame):
 
         for json_file_obj in self.controller.output_files.get_output_json_file_array():
             self.generated_report.config(state="normal")
-            self.generated_report.insert(END, f"\n{json_file_obj.file_name:>50}............Creating")
+            self.generated_report.insert(END, f"\n{json_file_obj.file_name:<50}............Creating")
             self.generated_report.config(state="disabled")
             GenerateFile.generate_one_file(
                 json_file_obj,
@@ -132,7 +132,7 @@ class GeneratePage(Frame):
             )
             progress_bar['value'] += progress_jump
             self.generated_report.config(state="normal")
-            self.generated_report.insert(END, f"\n{json_file_obj.file_name:>50}............Done")
+            self.generated_report.insert(END, f"\n{json_file_obj.file_name:<50}............Done")
             self.generated_report.config(state="disabled")
     
         with open(self.controller.output_location + "/report.json", mode="w") as json_file:
@@ -149,4 +149,7 @@ class GeneratePage(Frame):
         pass
 
     def goto_next(self):
-        pass
+        self.controller.restart()
+
+    def go_back(self):
+        self.controller.go_back()

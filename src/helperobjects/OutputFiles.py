@@ -16,5 +16,6 @@ class OutputFiles:
         return self.output_json_file_array
     
     def clear_output_json_file_arr(self):
+        self.count = 0
         self.output_json_file_array = []
         
