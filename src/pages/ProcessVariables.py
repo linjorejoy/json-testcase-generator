@@ -70,7 +70,7 @@ class ProcessVariables(Frame):
             self.footer_label_frame,
             controller,
             text="Go Back",
-            command=lambda:controller.show_frame(UploadPage.UploadPage),
+            command=self.go_back,
             rely=1,
             relx=0,
             x=5,
@@ -93,10 +93,16 @@ class ProcessVariables(Frame):
     
 
     def set_ui(self):
+        self.clear_previous_widgets()
         self.create_entry_columns()
 
+    def clear_previous_widgets(self):
+        for column in self.label_frame_columns:
+            column.destroy()
+        self.label_frame_columns = []
 
     def create_entry_columns(self):
+        
         for index, variable in enumerate(self.controller.VARIABLES_PRESENT):
             this_var_entry_col = EntryCellColumn(variable_name=variable)
             this_var_entry_col_cell = EntryCell()
@@ -105,7 +111,8 @@ class ProcessVariables(Frame):
             self.controller.entry_cell_collection.add_column(this_var_entry_col)
             self.body_subframe.pack(side="top", fill=BOTH, expand=True)
             self.add_widget_for_col(index, variable, this_var_entry_col)
-
+        print(f"columns Pressent : {self.label_frame_columns}")
+        print(f"{len(self.label_frame_columns)} are present")
 
     def add_widget_for_col(self, index, variable, this_var_entry_col):
         this_col_label_frame = LabelFrame(
@@ -214,9 +221,6 @@ class ProcessVariables(Frame):
             self.controller.output_files.add_output_json_file(OutputJsonFile(variable_dictionary=combination))
         ) for combination in all_combinations]
 
-        # [(
-        #     print(combination)
-        # )for combination in all_combinations]
 
 
 
@@ -224,3 +228,6 @@ class ProcessVariables(Frame):
         self.generate_output_file_obj()
         self.controller.show_frame(SetNames.SetNames)
         self.controller.frames[SetNames.SetNames].set_ui()
+
+    def go_back(self):
+        self.controller.go_back()
