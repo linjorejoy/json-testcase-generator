@@ -47,7 +47,7 @@ class JsonTestCaseTracker(Tk):
         self.current_dir = os.curdir
         self.accepted_data_types = ["int", "str", "bool", "float", "null"]
 
-
+        self.pages_navigation_history = []
 
         # Setting UI 
         # Tk.iconbitmap(self, default=ICON)
@@ -89,10 +89,14 @@ class JsonTestCaseTracker(Tk):
 
 
     def show_frame(self, FrameName):
-
         frame = self.frames[FrameName]
+        self.pages_navigation_history.append(frame)
         frame.tkraise()
 
+    def go_back(self):
+        self.pages_navigation_history.pop()
+        prev_frame = self.pages_navigation_history[len(self.pages_navigation_history) - 1]
+        prev_frame.tkraise()
 
     def get_screen_dimentions(self, ratio:float = 0.8):
         
