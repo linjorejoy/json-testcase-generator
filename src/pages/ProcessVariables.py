@@ -13,6 +13,7 @@ from widgetclasses.EntryWithType import EntryWithType
 
 from helperobjects.EntryCellColumn import EntryCellColumn
 from helperobjects.EntryCell import EntryCell
+from helperobjects.OutputFiles import OutputFiles
 from helperobjects.OutputJsonFile import OutputJsonFile
 
 from helpermodules.MyFonts import FONTS
@@ -93,6 +94,8 @@ class ProcessVariables(Frame):
     
 
     def set_ui(self):
+        self.controller.entry_cell_collection.clear_all_columns()
+        self.cell_entry_dict = {}
         self.clear_previous_widgets()
         self.create_entry_columns()
 
@@ -111,8 +114,6 @@ class ProcessVariables(Frame):
             self.controller.entry_cell_collection.add_column(this_var_entry_col)
             self.body_subframe.pack(side="top", fill=BOTH, expand=True)
             self.add_widget_for_col(index, variable, this_var_entry_col)
-        print(f"columns Pressent : {self.label_frame_columns}")
-        print(f"{len(self.label_frame_columns)} are present")
 
     def add_widget_for_col(self, index, variable, this_var_entry_col):
         this_col_label_frame = LabelFrame(
@@ -211,6 +212,7 @@ class ProcessVariables(Frame):
         # this_cell.entry = this_entry
     
     def generate_output_file_obj(self):
+        self.controller.output_files.clear_output_json_file_arr()
         for column in self.controller.entry_cell_collection.entry_cells_collection:
             for cell in column.entry_cell_column:
                 cell.value = cell.entry.get()

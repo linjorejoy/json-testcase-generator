@@ -3,16 +3,17 @@ from helperobjects.OutputFiles import OutputFiles
 from helperobjects.OutputJsonFile import OutputJsonFile
 from tkinter import StringVar, Entry
 
-GENERATE_NAMES = []
+
 
 def generate_file_name(output_files:OutputFiles, ref_arr):
+    GENERATE_NAMES = []
     for each_json_file in output_files.get_output_json_file_array():
-        name = get_name(each_json_file, ref_arr)
+        name = get_name(each_json_file, ref_arr, GENERATE_NAMES)
         GENERATE_NAMES.append(name)
         each_json_file.file_name = name
 
 
-def get_name(output_json_file:OutputJsonFile, ref_arr):
+def get_name(output_json_file:OutputJsonFile, ref_arr, GENERATE_NAMES):
     name = ""
     counter_present = False
     counter_position = 0
@@ -26,7 +27,6 @@ def get_name(output_json_file:OutputJsonFile, ref_arr):
             if ref.get() == None or ref.get() == "None":
                 pass
             elif ref.get() == "Counter":# Counter
-                # print("Counter.....")
                 counter_present = True
                 counter_position = len(name)
             else:
