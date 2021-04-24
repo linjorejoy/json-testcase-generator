@@ -28,6 +28,7 @@ class TableSetNames(Frame):
         self.parent = parent
         self.controller = controller
         self.variables_for_dropdown = ["None", "Counter"]
+        self.widgets_added = []
 
         self.header_label_frame = MyLabelFrame(
             self,
@@ -84,6 +85,16 @@ class TableSetNames(Frame):
         )
 
     def set_ui(self):
+        self.destroy_existing_widgets()
+        self.set_widgets()
+
+    def destroy_existing_widgets(self):
+        for widget in self.widgets_added:
+            widget.destroy()
+        self.controller.reference_arr_for_name_gen = []
+        self.widgets_added = []
+
+    def set_widgets(self):
         
         self.variables_for_dropdown = ["None", "Counter", *self.controller.VARIABLES_PRESENT]
         entry_0 = MyEntry(
@@ -91,6 +102,7 @@ class TableSetNames(Frame):
             self.controller,
             grid=(0, 0)
         )
+        self.widgets_added.append(entry_0)
         self.controller.reference_arr_for_name_gen.append(entry_0)
         for index in range(len(self.variables_for_dropdown)):
 
@@ -124,7 +136,7 @@ class TableSetNames(Frame):
                 self.controller,
                 text="+",
                 font=FONTS['FONT_PLUS_SIGN'],
-                grid=(index, 1)
+                grid=(index, 3)
             )
 
             entry_n = MyEntry(
@@ -134,19 +146,18 @@ class TableSetNames(Frame):
                 padx=1,
                 pady=3
             )
+            self.widgets_added.append(plus_label_0)
+            self.widgets_added.append(this_dropdown)
+            self.widgets_added.append(plus_label_1)
+            self.widgets_added.append(entry_n)
+
             self.controller.reference_arr_for_name_gen.append(entry_n)
+
         self.body_scrollable.pack(side="top", fill="both", expand=True)
 
-
     def goto_next(self):
-        # self.generate_file_name()
         self.controller.show_frame(PreviewVariables.PreviewVariables)
         self.controller.frames[PreviewVariables.PreviewVariables].set_ui()
 
-    # def generate_file_name(self):
-    #     FileNameGenerator.generate_file_name(
-    #         self.controller.output_files,
-    #         self.controller.reference_arr_for_name_gen
-    #     )
-    #     print("\n"*2)
-    #     [print(json_file_obj.__dict__) for json_file_obj in self.controller.output_files.get_output_json_file_array()]
+    def go_back(self):
+        self.controller.go_back()

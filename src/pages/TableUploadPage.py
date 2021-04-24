@@ -1,5 +1,5 @@
 from tkinter import Frame, filedialog
-from tkinter import N, NW, SE, NSEW, X, Y, RIGHT, BOTTOM, END
+from tkinter import N, NW, SE, SW, NSEW, X, Y, RIGHT, BOTTOM, END
 import json
 import os
 
@@ -14,7 +14,6 @@ from helpermodules.MyFonts import FONTS
 
 import helpermodules.ProcessData as ProcessData 
 
-import pages.StartPage as StartPage
 import pages.TableProcessVariables as TableProcessVariables
 
 import JSON_Test_Case_Generator
@@ -76,6 +75,18 @@ class TableUploadPage(Frame):
 
         footer_wrapper = MyLabelFrame(self, controller, text="Footer", height ="50", expand=N)
 
+        prev_frame_button = MyButton(
+            footer_wrapper,
+            controller,
+            text="Go Back",
+            command=self.go_back,
+            x=5,
+            y=-5,
+            relx=0,
+            rely=1.0,
+            anchor=SW
+        )
+
         process_variables_button = MyButton(
             footer_wrapper,
             controller,
@@ -124,7 +135,10 @@ class TableUploadPage(Frame):
         
     def update_file_name_preview(self):
         self.file_name_label.configure(text=f"File : {self.controller.TEMPLATE_JSON_FILE}")
-        
+    
+    def go_back(self):
+        self.controller.go_back()
+
     def goto_next(self):
         self.controller.show_frame(TableProcessVariables.TableProcessVariables)
         self.controller.frames[TableProcessVariables.TableProcessVariables].set_ui()
