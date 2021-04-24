@@ -1,5 +1,5 @@
 from tkinter import Frame, filedialog
-from tkinter import N, NW, SE, NSEW, X, Y, RIGHT, BOTTOM, END
+from tkinter import N, NW, SE, SW, NSEW, X, Y, RIGHT, BOTTOM, END
 import json
 import os
 
@@ -75,7 +75,19 @@ class UploadPage(Frame):
 
         footer_wrapper = MyLabelFrame(self, controller, text="Footer", height ="50", expand=N)
 
-        process_variables_button = MyButton(
+        prev_frame_button = MyButton(
+            footer_wrapper,
+            controller,
+            text="Go Back",
+            command=self.goto_prev,
+            x=5,
+            y=-5,
+            relx=0,
+            rely=1.0,
+            anchor=SW
+        )
+
+        next_frame_button = MyButton(
             footer_wrapper,
             controller,
             text="Process Variables",
@@ -127,6 +139,9 @@ class UploadPage(Frame):
     def goto_next(self):
         self.controller.show_frame(ProcessVariables.ProcessVariables)
         self.controller.frames[ProcessVariables.ProcessVariables].set_ui()
-        
+    
+    def goto_prev(self):
+        self.controller.go_back()
+
     def set_ui(self):
         print("UploadPage : set_ui")

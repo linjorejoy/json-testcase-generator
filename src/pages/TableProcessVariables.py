@@ -1,5 +1,5 @@
 from tkinter import Frame, StringVar, Button
-from tkinter import N, Y, SE, NSEW, BOTH
+from tkinter import N, Y, SE, SW, NSEW, BOTH
 
 import sys
 
@@ -33,6 +33,7 @@ class TableProcessVariables(Frame):
         self.parent = parent
         self.controller = controller
         self.entryrow_children_dict = {}
+        self.added_widgets = []
 
         self.header_label_frame = MyLabelFrame(
             self,
@@ -63,6 +64,17 @@ class TableProcessVariables(Frame):
             height="50",
             expand=N
         )
+        button_prev = MyButton(
+            self.footer_label_frame,
+            controller,
+            text="Go Back",
+            command=self.go_back,
+            x=5,
+            y=-5,
+            relx=0,
+            rely=1.0,
+            anchor=SW
+        )
 
         button_next = MyButton(
             self.footer_label_frame,
@@ -76,23 +88,27 @@ class TableProcessVariables(Frame):
             anchor=SE
         )
 
-    def goto_next(self):
-        self.genetrate_output_files()
-        self.controller.show_frame(TableSetNames.TableSetNames)
-        self.controller.frames[TableSetNames.TableSetNames].set_ui()
-
     def set_ui(self):
+        self.clear_prev_widgets()
+        self.clear_other_objects()
         self.set_row_initialization()
         self.set_headings()
         self.set_first_set_entry()
         self.set_add_more_empty_button()
 
-    def set_row_initialization(self):
-        del self.controller.entry_cell_collection.entry_cell_rows
-        entry_row_0 = EntryCellRow()
-        self.controller.entry_cell_collection.entry_cell_rows =[entry_row_0]
-        # self.controller.entry_cell_collection.entry_cell_rows =[entry_row_0]
+    def clear_prev_widgets(self):
+        for widget in self.added_widgets:
+            widget.destroy()
+        self.added_widgets = []
 
+    def clear_other_objects(self):
+        self.entryrow_children_dict.clear()
+
+    def set_row_initialization(self):
+        self.controller.entry_cell_collection.clear_all_rows()
+        entry_row_0 = EntryCellRow()
+        
+        self.controller.entry_cell_collection.entry_cell_rows =[entry_row_0]
 
     def set_headings(self):
         for index, var in enumerate(self.controller.VARIABLES_PRESENT):
@@ -106,19 +122,13 @@ class TableProcessVariables(Frame):
                 padx=0,
                 pady=0
             )
+            self.added_widgets.append(header)
             self.controller.entry_cell_collection.entry_cell_rows[0].add_cell(EntryCell())
 
     def set_first_set_entry(self):
 
         for row_index, row in enumerate(self.controller.entry_cell_collection.entry_cell_rows):
-            # del_row_button = MyButton(
-            #     self.body_scrollable,
-            #     self.controller,
-            #     text="Delete Row",
-            #     grid=(row_index + 1, 1),
-            #     padx=4,
-            #     pady=2
-            # )
+            
             self.entryrow_children_dict[row] = []
             for col_index, cell in enumerate(row.get_all()):
                 cell.option_value = StringVar(value="str")
@@ -133,22 +143,14 @@ class TableProcessVariables(Frame):
                     padx=1,
                     pady=1
                 )
+                self.added_widgets.append(entry_0)
                 self.entryrow_children_dict[row].append(entry_0)
-                # entry_0 = MyEntry(
-                #     self.body_scrollable,
-                #     self.controller,
-                #     grid=(row_index + 1, col_index + 2),
-                #     padx=0,
-                #     pady=0,
-                #     sticky=NSEW
-                # )
-                # cell.entry = entry_0
+                      
     def delete_row(self, entry_row:EntryCellRow):
         self.controller.entry_cell_collection.delete_row(entry_row)
         for widget in self.entryrow_children_dict[entry_row]:
             widget.destroy()
         
-
     def set_add_more_empty_button(self):
         if len(self.controller.VARIABLES_PRESENT) > 0:
 
@@ -161,6 +163,7 @@ class TableProcessVariables(Frame):
                 columnspan=len(self.controller.VARIABLES_PRESENT),
                 sticky=NSEW
             )
+            self.added_widgets.append(add_more_button)
 
     def add_one_row(self):
         current_row_count = len(self.controller.entry_cell_collection.get_all_rows())
@@ -176,6 +179,7 @@ class TableProcessVariables(Frame):
             padx=4,
             pady=2
         )
+        self.added_widgets.append(del_row_button)
         self.entryrow_children_dict[entry_row].append(del_row_button)
 
         for index, value in enumerate(self.controller.VARIABLES_PRESENT):
@@ -192,25 +196,11 @@ class TableProcessVariables(Frame):
                 padx=1,
                 pady=1
             )
+            self.added_widgets.append(entry_n)
             self.entryrow_children_dict[entry_row].append(entry_n)
-            # entry_row.add_cell(EntryCell())
-            # entry_n = MyEntry(
-            #     self.body_scrollable,
-            #     self.controller,
-            #     grid=(current_row_count + 1, index + 2),
-            #     padx=0,
-            #     pady=0,
-            #     sticky=NSEW
-            # )
-            # entry_cell.entry = entry_n
+            
             entry_row.add_cell(entry_cell)
         self.controller.entry_cell_collection.add_row(entry_row)
-
-        # print(len(self.controller.entry_cell_collection.get_all_rows()))
-
-    def delete_one_row(self):
-
-        pass
 
     def genetrate_output_files(self):
         self.controller.output_files.clear_output_json_file_arr()
@@ -224,8 +214,11 @@ class TableProcessVariables(Frame):
              )}
             this_json_file = OutputJsonFile(file_name=None, variable_dictionary=this_variable_dictionary)
             self.controller.output_files.add_output_json_file(this_json_file)
-        
-        # [print(json_file_obj.__dict__) for json_file_obj in self.controller.output_files.get_output_json_file_array()]
+    
+    def go_back(self):
+        self.controller.go_back()
 
-
-        
+    def goto_next(self):
+        self.genetrate_output_files()
+        self.controller.show_frame(TableSetNames.TableSetNames)
+        self.controller.frames[TableSetNames.TableSetNames].set_ui()

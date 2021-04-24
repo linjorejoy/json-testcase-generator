@@ -24,8 +24,8 @@ class SetNames(Frame):
         Frame.__init__(self, parent)
         self.parent = parent
         self.controller = controller
-        # print(f"VARS PRESENT : {self.controller.VARIABLES_PRESENT} ")
         self.variables_for_dropdown = ["None", "Counter"]
+        self.widgets_added = []
 
         self.header_label_frame = MyLabelFrame(
             self,
@@ -60,7 +60,7 @@ class SetNames(Frame):
             self.footer_label_frame,
             controller,
             text="Go Back",
-            command=lambda:controller.show_frame(ProcessVariables.ProcessVariables),
+            command=self.go_back,
             rely=1,
             relx=0,
             x=5,
@@ -82,13 +82,26 @@ class SetNames(Frame):
         )
 
     def set_ui(self):
+        self.destroy_existing()
+        self.set_widgets()
+
+    def destroy_existing(self):
+        for widget in self.widgets_added:
+            widget.destroy()
+        self.controller.reference_arr_for_name_gen = []
+        self.widgets_added = []
+
         
+    def set_widgets(self):
+        print(f"The variables Present while generating Name : {self.controller.VARIABLES_PRESENT}")
         self.variables_for_dropdown = ["None", "Counter", *self.controller.VARIABLES_PRESENT]
         entry_0 = MyEntry(
             self.body_scrollable,
             self.controller,
             grid=(0, 0)
         )
+        self.widgets_added.append(entry_0)
+
         self.controller.reference_arr_for_name_gen.append(entry_0)
         for index in range(len(self.variables_for_dropdown)):
 
@@ -122,7 +135,7 @@ class SetNames(Frame):
                 self.controller,
                 text="+",
                 font=FONTS['FONT_PLUS_SIGN'],
-                grid=(index, 1)
+                grid=(index, 3)
             )
 
             entry_n = MyEntry(
@@ -133,9 +146,17 @@ class SetNames(Frame):
                 pady=3
             )
             self.controller.reference_arr_for_name_gen.append(entry_n)
+            self.widgets_added.append(plus_label_0)
+            self.widgets_added.append(this_dropdown)
+            self.widgets_added.append(plus_label_1)
+            self.widgets_added.append(entry_n)
+
         self.body_scrollable.pack(side="top", fill="both", expand=True)
-
-
+    
     def goto_next(self):
         self.controller.show_frame(PreviewVariables.PreviewVariables)
         self.controller.frames[PreviewVariables.PreviewVariables].set_ui()
+
+    def go_back(self):
+        self.controller.go_back()
+        

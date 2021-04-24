@@ -36,5 +36,11 @@ class EntryCellCollection:
     def get_all_rows(self):
         return self.entry_cell_rows
 
+    def clear_all_columns(self):
+        self.entry_cells_collection.clear()
+
+    def clear_all_rows(self):
+        self.entry_cell_rows.clear()
+
     def __hash__(self):
         return hash(self)
