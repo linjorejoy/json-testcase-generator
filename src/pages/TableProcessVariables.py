@@ -211,13 +211,6 @@ class TableProcessVariables(Frame):
                 self.controller.VARIABLES_PRESENT,
                 row.entry_cell_list
             )
-            print(f"Variable Dict : {this_variable_dictionary}")
-            # this_variable_dictionary = {
-            #     var:entry_obj.entry.get()
-            #  for var, entry_obj in zip(
-            #      self.controller.VARIABLES_PRESENT,
-            #      row.entry_cell_list
-            #  )}
             this_json_file = OutputJsonFile(file_name=None, variable_dictionary=this_variable_dictionary)
             self.controller.output_files.add_output_json_file(this_json_file)
     
