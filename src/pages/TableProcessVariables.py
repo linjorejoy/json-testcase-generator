@@ -18,6 +18,7 @@ from helperobjects.OutputJsonFile import OutputJsonFile
 
 from helpermodules.constants import INT_MAX_VALUE
 from helpermodules.MyFonts import FONTS
+import helpermodules.DataTypeHandler as DataTypeHandler
 
 import pages.TableSetNames as TableSetNames
 
@@ -206,12 +207,17 @@ class TableProcessVariables(Frame):
         self.controller.output_files.clear_output_json_file_arr()
 
         for row in self.controller.entry_cell_collection.get_all_rows():
-            this_variable_dictionary = {
-                var:entry_obj.entry.get()
-             for var, entry_obj in zip(
-                 self.controller.VARIABLES_PRESENT,
-                 row.entry_cell_list
-             )}
+            this_variable_dictionary = DataTypeHandler.genetrate_variable_dictionary(
+                self.controller.VARIABLES_PRESENT,
+                row.entry_cell_list
+            )
+            print(f"Variable Dict : {this_variable_dictionary}")
+            # this_variable_dictionary = {
+            #     var:entry_obj.entry.get()
+            #  for var, entry_obj in zip(
+            #      self.controller.VARIABLES_PRESENT,
+            #      row.entry_cell_list
+            #  )}
             this_json_file = OutputJsonFile(file_name=None, variable_dictionary=this_variable_dictionary)
             self.controller.output_files.add_output_json_file(this_json_file)
     
