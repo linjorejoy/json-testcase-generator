@@ -4,6 +4,11 @@ This is an application with the intent of easing the JSON test case generation f
 
 ## Downloads
 
+### [v0.2.2](dist/JSON_Test_Case_Generator%20v0.2.2.exe?raw=true)
+
+- Added Data Type handling of int, float, bool, null along with str
+- Navigation bugs rectified
+
 ### [v0.2.1](dist/JSON_Test_Case_Generator%20v0.2.1.exe?raw=true)
 
 - Add and remove cells added to both Tables gen and All Gen
