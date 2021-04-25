@@ -1,6 +1,5 @@
 
 
-
 FONTS = {
     "VERY_LARGE_FONT":{'family':"monospace", 'size':"25", 'weight':"normal"},
     "LARGE_FONT":{'family':"monospace", 'size':"10", 'weight':"normal"},
