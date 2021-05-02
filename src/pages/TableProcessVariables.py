@@ -130,7 +130,19 @@ class TableProcessVariables(Frame):
 
         for row_index, row in enumerate(self.controller.entry_cell_collection.entry_cell_rows):
             
+            copy_row_button = MyButton(
+                self.body_scrollable,
+                self.controller,
+                text="Copy Row",
+                command=partial(self.copy_row, row),
+                grid=(row_index + 1, 0),
+                padx=4,
+                pady=2
+            )
+            self.added_widgets.append(copy_row_button)
             self.entryrow_children_dict[row] = []
+            self.entryrow_children_dict[row].append(copy_row_button)
+
             for col_index, cell in enumerate(row.get_all()):
                 cell.option_value = StringVar(value="str")
                 entry_0 = EntryWithType(
@@ -145,6 +157,7 @@ class TableProcessVariables(Frame):
                     pady=1
                 )
                 self.added_widgets.append(entry_0)
+                
                 self.entryrow_children_dict[row].append(entry_0)
                       
     def delete_row(self, entry_row:EntryCellRow):
@@ -165,11 +178,25 @@ class TableProcessVariables(Frame):
                 sticky=NSEW
             )
             self.added_widgets.append(add_more_button)
+    
+
 
     def add_one_row(self):
         current_row_count = len(self.controller.entry_cell_collection.get_all_rows())
         entry_row = EntryCellRow()
         self.entryrow_children_dict[entry_row] = []
+
+        
+
+        copy_row_button = MyButton(
+            self.body_scrollable,
+            self.controller,
+            text="Copy Row",
+            command=partial(self.copy_row, entry_row),
+            grid=(current_row_count + 1, 0),
+            padx=4,
+            pady=2
+        )
 
         del_row_button = MyButton(
             self.body_scrollable,
@@ -180,7 +207,9 @@ class TableProcessVariables(Frame):
             padx=4,
             pady=2
         )
+        self.added_widgets.append(copy_row_button)
         self.added_widgets.append(del_row_button)
+        self.entryrow_children_dict[entry_row].append(copy_row_button)
         self.entryrow_children_dict[entry_row].append(del_row_button)
 
         for index, value in enumerate(self.controller.VARIABLES_PRESENT):
@@ -202,6 +231,59 @@ class TableProcessVariables(Frame):
             
             entry_row.add_cell(entry_cell)
         self.controller.entry_cell_collection.add_row(entry_row)
+
+    def copy_row(self, entry_row:EntryCellRow):
+        current_row_count = len(self.controller.entry_cell_collection.get_all_rows())
+        new_entry_row = EntryCellRow()
+        self.entryrow_children_dict[new_entry_row] = []
+
+        entries_entered = entry_row.get_all()
+
+        copy_row_button = MyButton(
+            self.body_scrollable,
+            self.controller,
+            text="Copy Row",
+            command=partial(self.copy_row, new_entry_row),
+            grid=(current_row_count + 1, 0),
+            padx=4,
+            pady=2
+        )
+
+        del_row_button = MyButton(
+            self.body_scrollable,
+            self.controller,
+            text="Delete Row",
+            command=partial(self.delete_row, new_entry_row),
+            grid=(current_row_count + 1, 1),
+            padx=4,
+            pady=2
+        )
+        self.added_widgets.append(copy_row_button)
+        self.added_widgets.append(del_row_button)
+        self.entryrow_children_dict[new_entry_row].append(copy_row_button)
+        self.entryrow_children_dict[new_entry_row].append(del_row_button)
+
+        for index, value in enumerate(self.controller.VARIABLES_PRESENT):
+            entry_cell = EntryCell()
+            entry_cell.option_value = StringVar(value="str")
+            entry_n = EntryWithType(
+                self.body_scrollable,
+                self.controller,
+                frame_name="",
+                entry_cell=entry_cell,
+                entry_def_value=entries_entered[index].entry.get(),
+                options=self.controller.accepted_data_types,
+                add_del_button=False,
+                grid=(current_row_count + 1, index + 2),
+                padx=1,
+                pady=1
+            )
+            self.added_widgets.append(entry_n)
+            self.entryrow_children_dict[new_entry_row].append(entry_n)
+            
+            new_entry_row.add_cell(entry_cell)
+        self.controller.entry_cell_collection.add_row(new_entry_row)
+
 
     def genetrate_output_files(self):
         self.controller.output_files.clear_output_json_file_arr()
