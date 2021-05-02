@@ -230,22 +230,6 @@ def main():
         this_entry = Entry(processdata_subframe, width=10)
         this_entry.grid(row=(yindex+2), column=(index + 1), pady=1, padx=8)
         this_cell.entry = this_entry
-        
-
-        # processdata_wrapper_body_canvas.config(scrollregion=processdata_subframe.bbox())
-        # processdata_wrapper_body_canvas.bind(
-        #         '<Configure>',
-        #         lambda e : processdata_wrapper_body_canvas.configure(
-        #             scrollregion = processdata_wrapper_body_canvas.bbox("all")
-        #         )
-        #     )
-        
-
-        # processdata_wrapper_body_canvas.create_window(
-        #     (0, 0),
-        #     window = processdata_subframe,
-        #     anchor = "nw"
-        # )
 
 
     # Done
