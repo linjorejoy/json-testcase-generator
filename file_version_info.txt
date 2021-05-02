@@ -1,0 +1,29 @@
+VSVersionInfo(
+  ffi=FixedFileInfo(
+filevers=(0, 2, 3, 0),
+prodvers=(0, 2, 3, 0),
+mask=0x3f,
+flags=0x0,
+OS=0x4,
+fileType=0x1,
+subtype=0x0,
+# Creation date and time stamp.
+date=(5, 2021)
+),
+  kids=[
+StringFileInfo(
+  [
+  StringTable(
+    u'040904B0',
+    [StringStruct(u'CompanyName', u'Linjo Rejoy'),
+    StringStruct(u'FileDescription', u'JSON Test Case Generator generates JSON files in mass for comprehensive testing'),
+    StringStruct(u'FileVersion', u'0.2.3'),
+    StringStruct(u'InternalName', u'JSON Test Case Generator'),
+    StringStruct(u'LegalCopyright', u'Copyright (c) Linjo Rejoy'),
+    StringStruct(u'OriginalFilename', u'JSON_Test_Case_Generator.exe'),
+    StringStruct(u'ProductName', u'JSON_Test_Case_Generator'),
+    StringStruct(u'ProductVersion', u'0.2.3 (r1)')])
+  ]), 
+VarFileInfo([VarStruct(u'Translation', [1033, 1200])])
+  ]
+)
