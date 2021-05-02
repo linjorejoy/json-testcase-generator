@@ -1,4 +1,4 @@
-from tkinter import Frame, Label, StringVar, LabelFrame
+from tkinter import Frame, Label, StringVar, LabelFrame, Entry
 from tkinter import N, Y, SW, SE, BOTH
 
 from functools import partial
@@ -156,31 +156,19 @@ class ProcessVariables(Frame):
                 add_del_button=False,
                 options=self.controller.accepted_data_types,
                 delete_command=partial(self.remove_cell_from_column,this_var_entry_col, cell),
+                show_add_cell_button=True,
+                add_cell_command=partial(self.copy_cell, this_var_entry_col, index, cell),
                 grid=((yindex+self.table_start_row+1),0),
                 pady=1,
                 padx=8
             )
             self.cell_entry_dict[cell] = this_entry
-            # this_entry = MyEntry(
-            #     self.body_subframe,
-            #     self.controller,
-            #     grid=((yindex+self.table_start_row+1),(index+1)),
-            #     pady=1,
-            #     padx=8
-            # )
-            # cell.entry = this_entry
+            
     def remove_cell_from_column(self, entry_col:EntryCellColumn, cell:EntryCell):
         for index, entry_cell in enumerate(entry_col.entry_cell_column):
             if cell == entry_cell:
                 del entry_col.entry_cell_column[index]
                 self.cell_entry_dict[cell].destroy()
-        
-    
-    def remove_cell(self, cell):
-        for widget in self.body_subframe.winfo_children():
-            if widget == cell:
-                widget.destroy()
-                return 
         
         
 
@@ -196,20 +184,38 @@ class ProcessVariables(Frame):
             entry_cell=this_cell,
             options=self.controller.accepted_data_types,
             delete_command=partial(self.remove_cell_from_column,entry_col, this_cell),
+            show_add_cell_button=True,
+            add_cell_command=partial(self.copy_cell, entry_col, index, this_cell),
             grid=((yindex+self.table_start_row+1),0),
             pady=1,
             padx=8
         )
         self.cell_entry_dict[this_cell] = this_entry
 
-        # this_entry = MyEntry(
-        #     self.body_subframe,
-        #     self.controller,
-        #     grid = ((yindex + 2), (index + 1)),
-        #     pady=1,
-        #     padx=8
-        # )
-        # this_cell.entry = this_entry
+    def copy_cell(self, entry_col:EntryCellColumn, col_index:int, entry_cell:EntryCell):
+
+        this_entry_with_type:EntryWithType = self.cell_entry_dict[entry_cell]
+        value = this_entry_with_type.this_entry.get()
+
+        new_entry_cell = EntryCell()
+        new_entry_cell.option_value  = StringVar(value="str")
+        yindex = entry_col.add_cell(new_entry_cell)
+
+        this_entry = EntryWithType(
+            self.label_frame_columns[col_index],
+            self.controller,
+            frame_name="",
+            entry_cell=new_entry_cell,
+            entry_def_value=value,
+            options=self.controller.accepted_data_types,
+            delete_command=partial(self.remove_cell_from_column,entry_col, new_entry_cell),
+            show_add_cell_button=True,
+            add_cell_command=partial(self.copy_cell, entry_col, col_index, new_entry_cell),
+            grid=((yindex+self.table_start_row+1),0),
+            pady=1,
+            padx=8
+        )
+        self.cell_entry_dict[new_entry_cell] = this_entry
     
     def generate_output_file_obj(self):
         self.controller.output_files.clear_output_json_file_arr()
