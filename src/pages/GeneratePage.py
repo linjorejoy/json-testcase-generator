@@ -2,6 +2,8 @@ from tkinter import Frame, filedialog
 from tkinter.ttk import Progressbar
 from tkinter import N, Y, WORD, NSEW, SW, SE, END
 import json
+import datetime
+import os
 
 from widgetclasses.MyLabelFrame import MyLabelFrame
 from widgetclasses.MyButton import MyButton
@@ -134,8 +136,12 @@ class GeneratePage(Frame):
             self.generated_report.config(state="normal")
             self.generated_report.insert(END, f"\n{json_file_obj.file_name:<50}............Done")
             self.generated_report.config(state="disabled")
-    
-        with open(self.controller.output_location + "/report.json", mode="w") as json_file:
+
+        time_str = str(datetime.datetime.now()).replace(":","-")
+        report_file_name = f"/report {time_str}.json"
+        report_loc = os.path.join(self.controller.output_location, report_file_name)
+        
+        with open(report_loc, mode="w") as json_file:
             json.dump(
                 json.loads(self.to_dict(self.controller.output_files)),
                 json_file,

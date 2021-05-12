@@ -63,7 +63,7 @@ class TableSetNames(Frame):
             self.footer_label_frame,
             controller,
             text="Go Back",
-            command=lambda:controller.show_frame(TableProcessVariables.TableProcessVariables),
+            command=self.go_back,
             rely=1,
             relx=0,
             x=5,

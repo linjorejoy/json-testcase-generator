@@ -72,7 +72,7 @@ class PreviewVariables(Frame):
         button_next = MyButton(
             self.footer_label_frame,
             controller,
-            text="Preview Results",
+            text="Generate Results",
             command=self.goto_next,
             rely=1.0,
             relx=1.0,
