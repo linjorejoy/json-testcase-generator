@@ -4,6 +4,12 @@ This is an application with the intent of easing the JSON test case generation f
 
 ## Downloads
 
+### [v0.2.4](dist/JSON_Test_Case_Generator%20v0.2.4.exe?raw=true)
+
+- Corrected Nav errors
+- Corrected Button Label
+- report json file with timestamp added
+
 ### [v0.2.3](dist/JSON_Test_Case_Generator%20v0.2.3.exe?raw=true)
 
 - Added option to copy cells in All Gen section
