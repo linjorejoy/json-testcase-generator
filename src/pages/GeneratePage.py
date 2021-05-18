@@ -138,14 +138,8 @@ class GeneratePage(Frame):
             self.generated_report.config(state="disabled")
 
         time_str = str(datetime.datetime.now()).replace(":","-")
-        print("#"*10)
-        print(f"time_str {time_str}")
         report_file_name = f"report {time_str}.json"
-        print(f"report_file_name {report_file_name}")
-        print(f"Output_loc {self.controller.output_location}")
         report_loc = os.path.join(self.controller.output_location, report_file_name)
-        print(f"report_loc {report_loc}")
-        print("#"*10)
         with open(report_loc, mode="w") as json_file:
             json.dump(
                 json.loads(self.to_dict(self.controller.output_files)),
