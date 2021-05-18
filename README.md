@@ -4,7 +4,7 @@ This is an application with the intent of easing the JSON test case generation f
 
 ## Downloads
 
-### [v0.2.4_r2](dist/JSON_Test_Case_Generator%20v0.2.4_r2.exe)
+### [v0.2.4_r2](dist/JSON_Test_Case_Generator%20v0.2.4_r2.exe?raw=true)
 
 - generated report moved to correct directory
 
