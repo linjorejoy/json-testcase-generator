@@ -57,9 +57,8 @@ body {
   }
 
   &::-webkit-scrollbar-thumb {
-    background-color: rgb(43, 43, 43);
+    background-color: rgb(185, 185, 185);
     border-radius: 20px;
-    border: 3px solid rgb(158, 158, 158);
   }
 }
 
@@ -88,4 +87,12 @@ body {
   &:hover {
     color: #666666ff;
   }
+}
+.body-container {
+  margin-left: 250px;
+  margin-right: 50px;
+}
+
+.paragraph {
+  font-size: 1.25rem;
 }
