@@ -2,9 +2,8 @@ name: Package exe with PyInstaller - Windows
 
 on:
   push:
-    branches: [master]
     tags:
-      - v*.*.*
+      - 'v*.*.*'
   pull_request:
     branches: [master]
 
