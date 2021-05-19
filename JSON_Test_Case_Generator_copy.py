@@ -21,7 +21,6 @@ import helpermodules.FileNameGenerator as FileNameGenerator
 import helpermodules.GenerateFile as GenerateFile
 
 """
-
 my_notebook.select(get_data_frame)
 """
 
