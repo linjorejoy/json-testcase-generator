@@ -2,23 +2,26 @@ name: Package exe with PyInstaller - Windows
 
 on:
   push:
-    branches: [ master, docs ]
+    branches: [master, docs]
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: PyInstaller Windows
-      uses: JackMcKew/pyinstaller-action-windows@main
-      with:
-        path: src
+      - uses: actions/checkout@v2
+      - name: Installing dependencies
+        run: |
+          pip install pyinstaller
+          pip freeze
+      - name: PyInstaller Windows
+        uses: JackMcKew/pyinstaller-action-windows@main
+        with:
+          path: src
 
-    - uses: actions/upload-artifact@v2
-      with:
-        name: JSON_Test_Case_Generator
-        path: src/dist # or path/to/artifact
+      - uses: actions/upload-artifact@v2
+        with:
+          name: JSON_Test_Case_Generator
+          path: src/dist # or path/to/artifact
