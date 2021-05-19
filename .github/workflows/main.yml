@@ -3,11 +3,10 @@ name: Package exe with PyInstaller - Windows
 on:
   push:
     branches: [master]
+      tags:
+        - 'v*.*.*'
   pull_request:
     branches: [master]
-  tag:
-    tags:
-      - 'v*.*.*'
 
 jobs:
   build:
