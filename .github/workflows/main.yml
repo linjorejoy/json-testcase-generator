@@ -2,9 +2,12 @@ name: Package exe with PyInstaller - Windows
 
 on:
   push:
-    branches: [master, docs]
+    branches: [master]
   pull_request:
     branches: [master]
+  tag:
+    tags:
+      - 'v*.*.*'
 
 jobs:
   build:
@@ -20,8 +23,16 @@ jobs:
         uses: JackMcKew/pyinstaller-action-windows@main
         with:
           path: src
+      - name: Set output Tag name
+        id: vars
+        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+        env:
+          RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
+        run: |
+          echo $RELEASE_VERSION
+          echo ${{ steps.vars.outputs.tag }}
 
       - uses: actions/upload-artifact@v2
         with:
-          name: JSON_Test_Case_Generator
+          name: JSON_Test_Case_Generator ${{ steps.vars.outputs.tag }}
           path: src/dist # or path/to/artifact
