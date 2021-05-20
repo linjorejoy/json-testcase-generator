@@ -41,3 +41,7 @@ jobs:
         with:
           name: JSON_Test_Case_Generator ${{ steps.vars.outputs.tag }}
           path: src/dist # or path/to/artifact
+          run: |
+            git src/dist/add JSON_Test_Case_Generator ${{ steps.vars.outputs.tag }}
+            git commit -m "added exe file JSON_Test_Case_Generator ${{ steps.vars.outputs.tag }}"
+            git push origin master
