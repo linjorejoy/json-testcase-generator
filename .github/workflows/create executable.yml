@@ -42,7 +42,7 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: JSON_Test_Case_Generator ${{ steps.vars.outputs.tag }}
-          path: src/dist # or path/to/artifact
+          path: . # or path/to/artifact
 
   upload-project:
     name: Upload the exe file to Releases
@@ -57,7 +57,6 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: JSON_Test_Case_Generator ${{ steps.vars.outputs.tag }}
-          path: src/dist
 
       - name: Set Github Release
         id: create_release
@@ -74,6 +73,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-          asset_path: /home/runner/work/json-testcase-generator/json-testcase-generator/src/dist/JSON_Test_Case_Generator ${{ steps.vars.outputs.tag }}.zip
+          asset_path: ./JSON_Test_Case_Generator ${{ steps.vars.outputs.tag }}.zip
           asset_name: JSON_Test_Case_Generator ${{ steps.vars.outputs.tag }}.zip
           asset_content_type: application/zip
