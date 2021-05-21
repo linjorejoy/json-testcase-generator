@@ -33,11 +33,6 @@ jobs:
           echo RELEASE_VERSION
           echo $RELEASE_VERSION
 
-      - name: Archive site content
-        uses: thedoctor0/zip-release@master
-        with:
-          filename: JSON_Test_Case_Generator ${{ steps.vars.outputs.tag }}.zip
-
       - uses: actions/upload-artifact@v2
         with:
           name: JSON_Test_Case_Generator ${{ steps.vars.outputs.tag }}
@@ -56,6 +51,11 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: JSON_Test_Case_Generator ${{ steps.vars.outputs.tag }}
+
+      - name: Archive executable content
+        uses: thedoctor0/zip-release@master
+        with:
+          filename: JSON_Test_Case_Generator ${{ steps.vars.outputs.tag }}.zip
 
       - name: Set Github Release
         id: create_release
