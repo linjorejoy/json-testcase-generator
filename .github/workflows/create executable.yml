@@ -37,7 +37,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: JSON_Test_Case_Generator ${{ steps.vars.outputs.tag }}
-          path: src/dist/windows # or path/to/artifact
+          path: src/dist/windows
 
       - name: Download the Artifact
         uses: actions/download-artifact@v2
@@ -64,53 +64,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./JSON_Test_Case_Generator.zip
           asset_name: JSON_Test_Case_Generator ${{ steps.vars.outputs.tag }}.zip
           asset_content_type: application/zip
-#
-#
-#
-# upload-project:
-#   name: Upload the exe file to Releases
-#   runs-on: ubuntu-latest
-#   needs: build
-#   steps:
-#     - name: Set output Tag name
-#       id: vars
-#       run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
-
-#     - name: Download the Artifact
-#       uses: actions/download-artifact@v2
-#       with:
-#         name: JSON_Test_Case_Generator ${{ steps.vars.outputs.tag }}
-
-#     - name: Archive executable content
-#       uses: thedoctor0/zip-release@master
-#       with:
-#         filename: JSON_Test_Case_Generator ${{ steps.vars.outputs.tag }}.zip
-#         path: .
-#         directory: .
-
-#     - name: Set Github Release
-#       id: create_release
-#       uses: actions/create-release@v1
-#       env:
-#         GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-#       with:
-#         tag_name: ${{ steps.vars.outputs.tag }}
-#         release_name: Release ${{ steps.vars.outputs.tag }}
-
-#     - name: Get CWD
-#       run: |
-#         cwd
-
-#     - name: Upload release
-#       uses: actions/upload-release-asset@v1
-#       env:
-#         GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-#       with:
-#         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-#         asset_path: ./JSON_Test_Case_Generator ${{ steps.vars.outputs.tag }}.zip
-#         asset_name: JSON_Test_Case_Generator ${{ steps.vars.outputs.tag }}.zip
-#         asset_content_type: application/zip
