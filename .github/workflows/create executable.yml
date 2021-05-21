@@ -16,14 +16,16 @@ jobs:
       - name: Installing dependencies
         run: |
           pip install pyinstaller
-          pip freeze
+
       - name: PyInstaller Windows
         uses: JackMcKew/pyinstaller-action-windows@main
         with:
           path: src
+
       - name: Set output Tag name
         id: vars
         run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+
       - name: Check output
         env:
           RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
@@ -41,3 +43,36 @@ jobs:
         with:
           name: JSON_Test_Case_Generator ${{ steps.vars.outputs.tag }}
           path: src/dist # or path/to/artifact
+
+  upload-project:
+    name: Upload the exe file to Releases
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Set output Tag name
+        id: vars
+        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+
+      - name: Download the Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: JSON_Test_Case_Generator ${{ steps.vars.outputs.tag }}
+
+      - name: Set Github Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        with:
+          tag_name: ${{ steps.vars.outputs.tag }}
+          release_name: Release ${{ steps.vars.outputs.tag }}
+
+      - name: Upload release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+          asset_path: ./JSON_Test_Case_Generator ${{ steps.vars.outputs.tag }}.zip
+          asset_name: JSON_Test_Case_Generator ${{ steps.vars.outputs.tag }}.zip
+          asset_content_type: application/zip
