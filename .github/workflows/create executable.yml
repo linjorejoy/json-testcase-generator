@@ -36,13 +36,13 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: JSON_Test_Case_Generator ${{ steps.vars.outputs.tag }}
-          path: . # or path/to/artifact
+          path: src/dist/windows # or path/to/artifact
 
       - name: Download the Artifact
         uses: actions/download-artifact@v2
         with:
-          name: JSON_Test_Case_Generator ${{ steps.vars.outputs.tag }}.zip
-          path: src/dist
+          name: JSON_Test_Case_Generator ${{ steps.vars.outputs.tag }}
+          path: src/dist/windows
 
       - name: Set Github Release
         id: create_release
