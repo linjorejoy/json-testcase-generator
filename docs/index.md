@@ -63,7 +63,7 @@ It will generate all the Permutations of the variation of all the inputs provide
 
 It will generate all the Permutations of the variation of all the inputs provided.
 
-![Image](resources/nn2.svg)
+![Image](resources/nn3.svg)
 
 #### Generating Using Table
 
