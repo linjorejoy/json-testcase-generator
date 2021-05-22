@@ -1,10 +1,89 @@
-## Welcome to GitHub Pages
+## JSON Test Case Generator
 
-You can use the [editor on GitHub](https://github.com/linjorejoy/json-testcase-generator/edit/master/docs/index.md) to maintain and preview the content for your website in Markdown files.
+You can use the [JSON Test Case Generator](https://github.com/linjorejoy/json-testcase-generator) to generate many JSON files in a controlled manner
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+- [JSON Test Case Generator](#json-test-case-generator)
+  - [Features](#features)
+  - [Initializing the JSON File](#initializing-the-json-file)
+  - [Uploading the JSON File](#uploading-the-json-file)
+  - [Generating Combinations](#generating-combinations)
+    - [Generating All Combinations](#generating-all-combinations)
+    - [Generating Using Table](#generating-using-table)
+  - [Naming the Files](#naming-the-files)
+  - [Preview](#preview)
+  - [Generate](#generate)
+  - [Jekyll Themes](#jekyll-themes)
+  - [Support or Contact](#support-or-contact)
 
-### Markdown
+---
+
+### Features
+
+- Supports 4 Data Types and null value
+
+  - `string`
+  - `int`
+  - `float`
+  - `bool`
+  - `null`
+
+- Template based, So you can use the same template for several test cases
+
+---
+
+### Initializing the JSON File
+
+To initialize all the variablesto the Application, the JSON File needs to be prepped.
+
+You can initialize the variables by remapping then in the pattern `$variableName$`. For Example,
+
+![JSON Example](resources/other_images/jsonexample2.svg)
+
+In the above example there are 6 variables initialized which are marked in bright green.
+
+> Note : For all Data Types(`string`, `int`, `float`, `bool` or `null`), enclose the mapped variables inside double quotes as shown in the above example.
+
+You can also concatenate variables together or with other strings as shown in the below example.
+
+![Image](resources/other_images/jsonexample4.svg)
+
+---
+
+### Uploading the JSON File
+
+It will generate all the Permutations of the variation of all the inputs provided.
+
+---
+
+### Generating Combinations
+
+It will generate all the Permutations of the variation of all the inputs provided.
+
+#### Generating All Combinations
+
+It will generate all the Permutations of the variation of all the inputs provided.
+
+![Image](resources/nn.svg)
+
+#### Generating Using Table
+
+Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+
+---
+
+### Naming the Files
+
+Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+
+---
+
+### Preview
+
+Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+
+---
+
+### Generate
 
 Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
 
@@ -12,7 +91,9 @@ Markdown is a lightweight and easy-to-use syntax for styling your writing. It in
 Syntax highlighted code block
 
 # Header 1
+
 ## Header 2
+
 ### Header 3
 
 - Bulleted
