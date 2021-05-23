@@ -2,6 +2,10 @@
 
 This is an application with the intent of easing the JSON test case generation for in a controlled manner.
 
+### For Documentation and Examples goto the Website
+
+> [https://linjorejoy.github.io/json-testcase-generator/](https://linjorejoy.github.io/json-testcase-generator/)
+
 ## Downloads
 
 ### [v0.2.4_r2](dist/JSON_Test_Case_Generator%20v0.2.4_r2.exe?raw=true)
