@@ -39,6 +39,66 @@ jobs:
           name: JSON_Test_Case_Generator ${{ steps.vars.outputs.tag }}
           path: src/dist/windows
 
+      # - name: Download the Artifact
+      #   uses: actions/download-artifact@v2
+      #   with:
+      #     name: JSON_Test_Case_Generator ${{ steps.vars.outputs.tag }}
+
+      # - name: Set Github Release
+      #   id: create_release
+      #   uses: actions/create-release@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+      #   with:
+      #     tag_name: ${{ steps.vars.outputs.tag }}
+      #     release_name: Release ${{ steps.vars.outputs.tag }}
+      #     body: |
+      #       ## Fixes
+
+      #     draft: false
+      #     prerelease: false
+
+      # - name: Archive executable content
+      #   uses: thedoctor0/zip-release@master
+      #   with:
+      #     filename: JSON_Test_Case_Generator.zip
+      #     path: src/dist/windows
+
+      # - name: Upload release
+      #   uses: actions/upload-release-asset@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+      #   with:
+      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
+      #     asset_path: ./JSON_Test_Case_Generator.zip
+      #     asset_name: JSON_Test_Case_Generator ${{ steps.vars.outputs.tag }}.zip
+      #     asset_content_type: application/zip
+
+      # - name: Upload exe file
+      #   uses: actions/upload-release-asset@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+      #   with:
+      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
+      #     asset_path: src/dist/windows/JSON_Test_Case_Generator.exe
+      #     asset_name: JSON_Test_Case_Generator ${{ steps.vars.outputs.tag }}.exe
+      #     asset_content_type: application/octet-stream
+
+  windows-build:
+    name: pyinstaller exe file generation for Windows
+    runs-on: windows-2019
+    needs: build
+    steps:
+      - uses: actions/checkout@v2
+      - name: Installing dependencies
+        run: |
+          pip install pyinstaller
+          pip freeze
+
+      - name: Run Pyinstaller commands
+        run: |
+          pyinstaller --onefile -w --icon=resources/favicon_io/favicon-32x32.ico  src/JSON_Test_Case_Generator.py --version-file file_version_info.txt
+
       - name: Download the Artifact
         uses: actions/download-artifact@v2
         with:
@@ -83,21 +143,6 @@ jobs:
           asset_path: src/dist/windows/JSON_Test_Case_Generator.exe
           asset_name: JSON_Test_Case_Generator ${{ steps.vars.outputs.tag }}.exe
           asset_content_type: application/octet-stream
-
-  windows-build:
-    name: pyinstaller exe file generation for Windows
-    runs-on: windows-2019
-    needs: build
-    steps:
-      - uses: actions/checkout@v2
-      - name: Installing dependencies
-        run: |
-          pip install pyinstaller
-          pip freeze
-
-      - name: Run Pyinstaller commands
-        run: |
-          pyinstaller --onefile -w --icon=resources/favicon_io/favicon-32x32.ico  src/JSON_Test_Case_Generator.py --version-file file_version_info.txt
 
       - name: Upload exe file
         uses: actions/upload-release-asset@v1
