@@ -133,12 +133,19 @@ jobs:
       - uses: actions/checkout@v2
       - name: Installing dependencies
         run: |
+          echo creating env...
           python -m venv temp-env
           python -m pip install --upgrade pip
-          temp-env\Scripts\activate
+          echo activating venv
+          .\temp-env\Scripts\activate
+          pip freeze
+          echo Installing Pyinstaller
           pip install pyinstaller
+          echo libraries present
           pip freeze
           set PYTHONPATH=src
+          echo current dir and contents
+          dir
           pyinstaller --onefile -w --icon=resources/favicon_io/favicon-32x32.ico  src/JSON_Test_Case_Generator.py --version-file file_version_info.txt
 
       # - name: Run Pyinstaller commands
