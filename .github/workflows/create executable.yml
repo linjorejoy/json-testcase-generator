@@ -20,7 +20,7 @@ jobs:
       - name: PyInstaller Windows
         uses: JackMcKew/pyinstaller-action-windows@main
         with:
-          path: ../
+          path: src
 
       - name: Set output Tag name
         id: vars
