@@ -14,6 +14,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Installing dependencies
+        env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: "true"
         run: |
           python3 -m venv temp-env
           source temp-env/bin/activate
