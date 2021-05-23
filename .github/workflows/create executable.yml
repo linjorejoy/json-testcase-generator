@@ -41,12 +41,7 @@ jobs:
       - name: move win artiface to src/dist/fromwin folder
         run: |
           tree .
-          cd src
-          cd dist
-          mkdir fromwin
-          cd ..
-          cd ..
-          mv JSON_Test_Case_Generator.exe src/dist/fromwin
+          mv JSON_Test_Case_Generator.exe src/dist
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
