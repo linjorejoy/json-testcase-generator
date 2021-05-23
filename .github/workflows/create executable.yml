@@ -37,9 +37,8 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: JSON_Test_Case_Generator-win
-          path: src/dist
 
-      - name: move win artiface to src/dist folder
+      - name: Before ubuntu upload
         run: |
           tree .
 
@@ -53,6 +52,10 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: JSON_Test_Case_Generator ${{ steps.vars.outputs.tag }}
+
+      - name: After ubuntu download
+        run: |
+          tree .
 
       - name: Set Github Release
         id: create_release
@@ -74,11 +77,11 @@ jobs:
           filename: JSON_Test_Case_Generator.zip
           path: src/dist
 
-      # - name: Archive executable content from windows
-      #   uses: thedoctor0/zip-release@master
-      #   with:
-      #     filename: JSON_Test_Case_Generator-win.zip
-      #     path: .
+      - name: Archive executable content from windows
+        uses: thedoctor0/zip-release@master
+        with:
+          filename: JSON_Test_Case_Generator-win.zip
+          path: JSON_Test_Case_Generator.exe
 
       - name: Upload release from Linux
         uses: actions/upload-release-asset@v1
@@ -90,15 +93,15 @@ jobs:
           asset_name: JSON_Test_Case_Generator ${{ steps.vars.outputs.tag }}.zip
           asset_content_type: application/zip
 
-      # - name: Upload release from Windows
-      #   uses: actions/upload-release-asset@v1
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-      #   with:
-      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
-      #     asset_path: ./JSON_Test_Case_Generator-win.zip
-      #     asset_name: JSON_Test_Case_Generator-win ${{ steps.vars.outputs.tag }}.zip
-      #     asset_content_type: application/zip
+      - name: Upload release from Windows
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./JSON_Test_Case_Generator-win.zip
+          asset_name: JSON_Test_Case_Generator-win ${{ steps.vars.outputs.tag }}.zip
+          asset_content_type: application/zip
 
       - name: Upload exe file from linux
         uses: actions/upload-release-asset@v1
