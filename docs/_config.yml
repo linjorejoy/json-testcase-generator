@@ -1,1 +1,7 @@
 theme: jekyll-theme-slate
+title: [JSON Test Case Generation]
+description:
+  [
+    You can use the JSON Test Case Generator to generate many JSON files in a controlled manner,
+  ]
+show_downloads: ["true"]
