@@ -151,5 +151,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: dist/JSON_Test_Case_Generator.exe
-          asset_name: JSON_Test_Case_Generator ${{ steps.vars.outputs.tag }}.exe
+          asset_name: JSON_Test_Case_Generator-win ${{ steps.vars.outputs.tag }}.exe
           asset_content_type: application/octet-stream
