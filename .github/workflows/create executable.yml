@@ -73,7 +73,7 @@ jobs:
         uses: thedoctor0/zip-release@master
         with:
           filename: JSON_Test_Case_Generator-win.zip
-          path: dist/JSON_Test_Case_Generator-win.exe
+          path: dist/JSON_Test_Case_Generator-win
 
       - name: Upload release from Linux
         uses: actions/upload-release-asset@v1
