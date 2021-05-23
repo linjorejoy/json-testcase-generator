@@ -24,7 +24,7 @@ jobs:
 
       - name: Set output Tag name
         id: vars
-        run: echo ::set tag=${GITHUB_REF#refs/*/}
+        run: SET tag=${GITHUB_REF#refs/*/}
 
       - name: Check output
         env:
