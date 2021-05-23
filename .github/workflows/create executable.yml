@@ -46,7 +46,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: JSON_Test_Case_Generator ${{ steps.vars.outputs.tag }}
-          path: src/dist/windows
+          path: dist/windows
 
       - name: Download the Artifact
         uses: actions/download-artifact@v2
