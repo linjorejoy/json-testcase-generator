@@ -3,7 +3,7 @@
 block_cipher = None
 
 
-a = Analysis(['JSON_Test_Case_Generator.py'],
+a = Analysis(['src\\JSON_Test_Case_Generator.py'],
              pathex=['E:\\my_works\\programming\\python\\JSON_Test_Case_Generator'],
              binaries=[],
              datas=[],
@@ -30,4 +30,4 @@ exe = EXE(pyz,
           upx=True,
           upx_exclude=[],
           runtime_tmpdir=None,
-          console=False , version='..\\file_version_info.txt', icon='..\\resources\\favicon_io\\favicon-32x32.ico')
+          console=False , version='file_version_info.txt', icon='resources\\favicon_io\\favicon-32x32.ico')
