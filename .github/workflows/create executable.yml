@@ -37,11 +37,11 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: JSON_Test_Case_Generator-win
+          path: src/dist
 
-      - name: move win artiface to src/dist/fromwin folder
+      - name: move win artiface to src/dist folder
         run: |
           tree .
-          mv JSON_Test_Case_Generator.exe src/dist
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
