@@ -59,7 +59,7 @@ Click on the **Select File** Button and select the JSON template file that you c
 
 Upload Page snapshot :
 
-![UploadPage](resources/other_images/uploadpage3.jpg)
+![UploadPage](resources/other_images/uploadpage4.jpg)
 
 ---
 
