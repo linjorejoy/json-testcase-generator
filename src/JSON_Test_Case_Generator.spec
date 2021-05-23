@@ -4,7 +4,7 @@ block_cipher = None
 
 
 a = Analysis(['JSON_Test_Case_Generator.py'],
-             pathex=['E:\\my_works\\programming\\python\\JSON_Test_Case_Generator\\src'],
+             pathex=['E:\\my_works\\programming\\python\\JSON_Test_Case_Generator'],
              binaries=[],
              datas=[],
              hiddenimports=[],
