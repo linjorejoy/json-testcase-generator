@@ -44,12 +44,6 @@ jobs:
         with:
           name: JSON_Test_Case_Generator ${{ steps.vars.outputs.tag }}
 
-      - name: Archive executable content
-        uses: thedoctor0/zip-release@master
-        with:
-          filename: JSON_Test_Case_Generator.zip
-          path: src/dist
-
       - name: Set Github Release
         id: create_release
         uses: actions/create-release@v1
@@ -63,6 +57,12 @@ jobs:
 
           draft: false
           prerelease: false
+
+      - name: Archive executable content
+        uses: thedoctor0/zip-release@master
+        with:
+          filename: JSON_Test_Case_Generator.zip
+          path: src/dist/windows
 
       - name: Upload release
         uses: actions/upload-release-asset@v1
