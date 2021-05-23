@@ -15,7 +15,10 @@ jobs:
       - uses: actions/checkout@v2
       - name: Installing dependencies
         run: |
+          python3 -m venv temp-env
+          source temp-env/bin/activate
           pip install pyinstaller
+          export PYTHONPATH=src
 
       - name: PyInstaller Windows
         uses: JackMcKew/pyinstaller-action-windows@main
@@ -130,8 +133,12 @@ jobs:
       - uses: actions/checkout@v2
       - name: Installing dependencies
         run: |
+          python -m venv temp-env
+          python -m pip install --upgrade pip
+          temp-env\Scripts\activate
           pip install pyinstaller
           pip freeze
+          set PYTHONPATH=src
 
       - name: Run Pyinstaller commands
         run: |
