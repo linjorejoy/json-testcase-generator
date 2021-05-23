@@ -18,7 +18,7 @@ You can use the [JSON Test Case Generator](https://github.com/linjorejoy/json-te
   - [Report](#report)
 - [About](#about)
 - [Features List with Upcoming Features](#features-list-with-upcoming-features)
-- [Downloads](#downloads)
+- [Download](#download)
 
 ---
 
@@ -245,7 +245,7 @@ For My [example](#example).
 - [ ] Prevent Overwrite of files if another file is already present in that locations with same name. Will be Optional
 - [ ] Table based Generations adding Comments
 
-# Downloads
+# Download
 
 - You can get all the downloads from My Github Page [README Section](https://github.com/linjorejoy/json-testcase-generator#downloads).
 - You can check all previous releases with source code [here](https://github.com/linjorejoy/json-testcase-generator/releases).
