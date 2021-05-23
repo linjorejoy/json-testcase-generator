@@ -30,4 +30,4 @@ exe = EXE(pyz,
           upx=True,
           upx_exclude=[],
           runtime_tmpdir=None,
-          console=False , icon='..\\resources\\favicon_io\\favicon-32x32.ico')
+          console=False , version='..\\file_version_info.txt')
