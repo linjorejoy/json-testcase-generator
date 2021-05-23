@@ -5,3 +5,7 @@ description:
     You can use the JSON Test Case Generator to generate many JSON files in a controlled manner,
   ]
 show_downloads: ["true"]
+github:
+  zip_url: https://github.com/linjorejoy/json-testcase-generator/releases/download/v0.2.4_r2/JSON_Test_Case_Generator.v0.2.4_r2.exe
+  tar_url: https://github.com/linjorejoy/json-testcase-generator/releases/download/v0.2.4_r2/JSON_Test_Case_Generator.v0.2.4_r2.exe
+  exe_url: https://github.com/linjorejoy/json-testcase-generator/releases/download/v0.2.4_r2/JSON_Test_Case_Generator.v0.2.4_r2.exe
