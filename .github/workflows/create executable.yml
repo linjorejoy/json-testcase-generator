@@ -133,7 +133,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: JSON_Test_Case_Generator-win
-          path: dist
+          path: dist/JSON_Test_Case_Generator.exe
 
       # - name: Download the Artifact
       #   uses: actions/download-artifact@v2
