@@ -102,7 +102,7 @@ jobs:
       - name: Download the Artifact
         uses: actions/download-artifact@v2
         with:
-          name: JSON_Test_Case_Generator ${{ steps.vars.outputs.tag }}
+          name: JSON_Test_Case_Generator v0.2.4_test19
 
       - name: Set Github Release
         id: create_release
@@ -131,7 +131,7 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./JSON_Test_Case_Generator.zip
-          asset_name: JSON_Test_Case_Generator ${{ steps.vars.outputs.tag }}.zip
+          asset_name: JSON_Test_Case_Generator v0.2.4_test19.zip
           asset_content_type: application/zip
 
       - name: Upload exe file
@@ -141,7 +141,7 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: src/dist/windows/JSON_Test_Case_Generator.exe
-          asset_name: JSON_Test_Case_Generator ${{ steps.vars.outputs.tag }}.exe
+          asset_name: JSON_Test_Case_Generator v0.2.4_test19.exe
           asset_content_type: application/octet-stream
 
       - name: Upload exe file
