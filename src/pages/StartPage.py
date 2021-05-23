@@ -27,9 +27,10 @@ class StartPage(Frame):
             expand=Y
         )
         
+    
         make_combination_tree_button = Button(
             self.body_label_frame,
-            text="Make All Combinations",
+            text="Make All Permutations",
             command=lambda:controller.show_frame(UploadPage.UploadPage),
             font=tkfont.Font(**FONTS['VERY_LARGE_FONT']),
             width=20,

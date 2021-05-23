@@ -3,21 +3,23 @@
 You can use the [JSON Test Case Generator](https://github.com/linjorejoy/json-testcase-generator) to generate many JSON files in a controlled manner
 
 - [JSON Test Case Generator](#json-test-case-generator)
-  - [Features](#features)
+- [Features](#features)
+- [How to Use](#how-to-use)
   - [Initializing the JSON File](#initializing-the-json-file)
+  - [Start Page](#start-page)
   - [Uploading the JSON File](#uploading-the-json-file)
-  - [Generating Combinations](#generating-combinations)
-    - [Generating All Combinations](#generating-all-combinations)
+  - [Process Variables](#process-variables)
+    - [Generating All Permutations](#generating-all-permutations)
     - [Generating Using Table](#generating-using-table)
   - [Naming the Files](#naming-the-files)
   - [Preview](#preview)
   - [Generate](#generate)
-  - [Jekyll Themes](#jekyll-themes)
-  - [Support or Contact](#support-or-contact)
+- [Jekyll Themes](#jekyll-themes)
+- [Support or Contact](#support-or-contact)
 
 ---
 
-### Features
+## Features
 
 - Supports 4 Data Types and null value
 
@@ -30,6 +32,8 @@ You can use the [JSON Test Case Generator](https://github.com/linjorejoy/json-te
 - Template based, So you can use the same template for several test cases
 
 ---
+
+## How to Use
 
 ### Initializing the JSON File
 
@@ -45,25 +49,48 @@ In the above example there are 6 variables initialized which are marked in brigh
 
 You can also concatenate variables together or with other strings as shown in the below example.
 
-![Image](resources/other_images/jsonexample4.svg)
+![Image](resources/other_images/jsonexample5.svg)
+
+---
+
+### Start Page
+
+You can select 2 paths from here.
+
+- [Generate All Permutation](#generating-all-permutations)
+- [Generate Using Table](#generating-using-table)
+
+![StartPage](resources/other_images/startpage2.jpg)
 
 ---
 
 ### Uploading the JSON File
 
-It will generate all the Permutations of the variation of all the inputs provided.
+Click on the **Select File** Button and select the JSON template file that you created in your [previous step](#initializing-the-json-file).
+
+Upload Page snapshot :
+
+![UploadPage](resources/other_images/uploadpage3.jpg)
 
 ---
 
-### Generating Combinations
+### Process Variables
+
+This is the step where you have to define the test cases that needs to be created.
+
+#### Generating All Permutations
 
 It will generate all the Permutations of the variation of all the inputs provided.
 
-#### Generating All Combinations
+For Example, assume there are `4` variables having `8, 8, 7, 8` variations respectively. Then it will create.
 
-It will generate all the Permutations of the variation of all the inputs provided.
+> 8 x 8 x 7 x 8 = 3584 different variations
+
+**So the number of variations can increase very fast.**
 
 ![Image](resources/nn4.svg)
+
+> As Stan Lee (May he Rest in Peace) in his Spider Man Comics once Said [**With great power comes great responsibility**](https://en.wikipedia.org/wiki/With_great_power_comes_great_responsibility), you should use this method cautiously.
 
 #### Generating Using Table
 
@@ -109,16 +136,10 @@ Syntax highlighted code block
 
 For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
 
-### Jekyll Themes
+## Jekyll Themes
 
 Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/linjorejoy/json-testcase-generator/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
 
-<iframe
-  src="https://carbon.now.sh/embed/Pesq6Rj7A2uYG7jqbst1"
-  style="width: 676px; height: 548px; border:0; transform: scale(1); overflow:hidden;"
-  sandbox="allow-scripts allow-same-origin">
-</iframe>
-
-### Support or Contact
+## Support or Contact
 
 Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
