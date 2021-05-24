@@ -141,7 +141,7 @@ You can change the datatype of each cell from the dropdown as shown below
 <td rowspan=5>str</td>
 <td>hello</td>
 <td rowspan=5 >
-<pre class="language-javascript">
+<pre>
 {
   "someKey": "hello"|"125"|"true"
 }
@@ -165,7 +165,7 @@ You can change the datatype of each cell from the dropdown as shown below
 <td>hello</td>
 <td>
 
-<pre class="language-javascript">
+<pre>
 {
   "someKey": "hello"
 }
@@ -177,7 +177,7 @@ You can change the datatype of each cell from the dropdown as shown below
 <td>125</td>
 <td rowspan=2>
 
-<pre class="language-javascript">
+<pre>
 {
   "someKey": 125 | 125.68
 }
@@ -192,7 +192,7 @@ You can change the datatype of each cell from the dropdown as shown below
 <td>true</td>
 <td rowspan=2>
 
-<pre class="language-javascript">
+<pre>
 {
   "someKey": "true" | "null"
 }
@@ -208,7 +208,7 @@ You can change the datatype of each cell from the dropdown as shown below
 <td>hello</td>
 <td>
 
-<pre class="language-javascript">
+<pre>
 {
   "someKey": "hello"
 }
@@ -220,7 +220,7 @@ You can change the datatype of each cell from the dropdown as shown below
 <td>125</td>
 <td rowspan=2>
 
-<pre class="language-javascript">
+<pre>
 {
   "someKey": 125.0 | 125.68
 }
@@ -235,7 +235,7 @@ You can change the datatype of each cell from the dropdown as shown below
 <td>true</td>
 <td rowspan=2>
 
-<pre class="language-javascript">
+<pre>
 {
   "someKey": "true" | "null"
 }
@@ -251,7 +251,7 @@ You can change the datatype of each cell from the dropdown as shown below
 <td>hello</td>
 <td rowspan=4>
 
-<pre class="language-javascript">
+<pre>
 {
   "someKey": "hello" | "125" | "null"
 }
@@ -272,7 +272,7 @@ You can change the datatype of each cell from the dropdown as shown below
 <td>true</td>
 <td>
 
-<pre class="language-javascript">
+<pre>
 {
   "someKey": true | false
 }
@@ -285,7 +285,7 @@ You can change the datatype of each cell from the dropdown as shown below
 <td>hello</td>
 <td rowspan=4>
 
-<pre class="language-javascript">
+<pre>
 {
   "someKey": "hello"|"125"|"true"
 }
@@ -306,7 +306,7 @@ You can change the datatype of each cell from the dropdown as shown below
 <td>null</td>
 <td>
 
-<pre class="language-javascript">
+<pre>
 {
   "someKey": null
 }
