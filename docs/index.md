@@ -141,13 +141,11 @@ You can change the datatype of each cell from the dropdown as shown below
 <td rowspan=5>str</td>
 <td>hello</td>
 <td rowspan=5 >
-
-```json
+<pre class="language-javascript">
 {
   "someKey": "hello"|"125"|"true"
 }
-```
-
+</pre>
 </td>
 </tr>
 <tr>
@@ -167,11 +165,11 @@ You can change the datatype of each cell from the dropdown as shown below
 <td>hello</td>
 <td>
 
-```json
+<pre class="language-javascript">
 {
   "someKey": "hello"
 }
-```
+</pre>
 
 </td>
 </tr>
@@ -179,11 +177,11 @@ You can change the datatype of each cell from the dropdown as shown below
 <td>125</td>
 <td rowspan=2>
 
-```json
+<pre class="language-javascript">
 {
   "someKey": 125 | 125.68
 }
-```
+</pre>
 
 </td>
 </tr>
@@ -194,11 +192,11 @@ You can change the datatype of each cell from the dropdown as shown below
 <td>true</td>
 <td rowspan=2>
 
-```json
+<pre class="language-javascript">
 {
   "someKey": "true" | "null"
 }
-```
+</pre>
 
 </td>
 </tr>
@@ -210,11 +208,11 @@ You can change the datatype of each cell from the dropdown as shown below
 <td>hello</td>
 <td>
 
-```json
+<pre class="language-javascript">
 {
   "someKey": "hello"
 }
-```
+</pre>
 
 </td>
 </tr>
@@ -222,11 +220,11 @@ You can change the datatype of each cell from the dropdown as shown below
 <td>125</td>
 <td rowspan=2>
 
-```json
+<pre class="language-javascript">
 {
   "someKey": 125.0 | 125.68
 }
-```
+</pre>
 
 </td>
 </tr>
@@ -237,11 +235,11 @@ You can change the datatype of each cell from the dropdown as shown below
 <td>true</td>
 <td rowspan=2>
 
-```json
+<pre class="language-javascript">
 {
   "someKey": "true" | "null"
 }
-```
+</pre>
 
 </td>
 </tr>
@@ -253,11 +251,11 @@ You can change the datatype of each cell from the dropdown as shown below
 <td>hello</td>
 <td rowspan=4>
 
-```json
+<pre class="language-javascript">
 {
   "someKey": "hello" | "125" | "null"
 }
-```
+</pre>
 
 </td>
 </tr>
@@ -274,11 +272,11 @@ You can change the datatype of each cell from the dropdown as shown below
 <td>true</td>
 <td>
 
-```json
+<pre class="language-javascript">
 {
   "someKey": true | false
 }
-```
+</pre>
 
 </td>
 </tr>
@@ -287,11 +285,11 @@ You can change the datatype of each cell from the dropdown as shown below
 <td>hello</td>
 <td rowspan=4>
 
-```json
+<pre class="language-javascript">
 {
   "someKey": "hello"|"125"|"true"
 }
-```
+</pre>
 
 </td>
 </tr>
@@ -308,11 +306,11 @@ You can change the datatype of each cell from the dropdown as shown below
 <td>null</td>
 <td>
 
-```json
+<pre class="language-javascript">
 {
   "someKey": null
 }
-```
+</pre>
 
 </td>
 </tr>
