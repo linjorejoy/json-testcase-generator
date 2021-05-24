@@ -142,9 +142,7 @@ You can change the datatype of each cell from the dropdown as shown below
 <td>hello</td>
 <td rowspan=5 >
 <pre>
-{
   "someKey": "hello"|"125"|"true"
-}
 </pre>
 </td>
 </tr>
@@ -166,9 +164,7 @@ You can change the datatype of each cell from the dropdown as shown below
 <td>
 
 <pre>
-{
   "someKey": "hello"
-}
 </pre>
 
 </td>
@@ -178,9 +174,7 @@ You can change the datatype of each cell from the dropdown as shown below
 <td rowspan=2>
 
 <pre>
-{
   "someKey": 125 | 125.68
-}
 </pre>
 
 </td>
@@ -193,9 +187,7 @@ You can change the datatype of each cell from the dropdown as shown below
 <td rowspan=2>
 
 <pre>
-{
   "someKey": "true" | "null"
-}
 </pre>
 
 </td>
@@ -209,9 +201,7 @@ You can change the datatype of each cell from the dropdown as shown below
 <td>
 
 <pre>
-{
   "someKey": "hello"
-}
 </pre>
 
 </td>
@@ -221,9 +211,7 @@ You can change the datatype of each cell from the dropdown as shown below
 <td rowspan=2>
 
 <pre>
-{
   "someKey": 125.0 | 125.68
-}
 </pre>
 
 </td>
@@ -236,9 +224,7 @@ You can change the datatype of each cell from the dropdown as shown below
 <td rowspan=2>
 
 <pre>
-{
   "someKey": "true" | "null"
-}
 </pre>
 
 </td>
@@ -252,9 +238,7 @@ You can change the datatype of each cell from the dropdown as shown below
 <td rowspan=4>
 
 <pre>
-{
   "someKey": "hello" | "125" | "null"
-}
 </pre>
 
 </td>
@@ -273,9 +257,7 @@ You can change the datatype of each cell from the dropdown as shown below
 <td>
 
 <pre>
-{
   "someKey": true | false
-}
 </pre>
 
 </td>
@@ -286,9 +268,7 @@ You can change the datatype of each cell from the dropdown as shown below
 <td rowspan=4>
 
 <pre>
-{
   "someKey": "hello"|"125"|"true"
-}
 </pre>
 
 </td>
@@ -307,9 +287,7 @@ You can change the datatype of each cell from the dropdown as shown below
 <td>
 
 <pre>
-{
   "someKey": null
-}
 </pre>
 
 </td>
