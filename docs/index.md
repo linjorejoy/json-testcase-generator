@@ -11,6 +11,7 @@ You can use the [JSON Test Case Generator](https://github.com/linjorejoy/json-te
       - [example](#example)
     - [Generating All Permutations](#generating-all-permutations)
     - [Generating Using Table](#generating-using-table)
+      - [Datatypes in Variables](#datatypes-in-variables)
   - [Naming the Files](#naming-the-files)
   - [Preview](#preview)
   - [Generate](#generate)
@@ -122,6 +123,201 @@ For Example,
 ![Table Generation](resources/other_images/variablespage2.jpg)
 
 In the above example only 2 files will be created.
+
+#### Datatypes in Variables
+
+You can change the datatype of each cell from the dropdown as shown below
+
+![Datatypes](resources/other_images/variabledatatypes.jpg)
+
+<center>
+<table>
+<tr>
+<th>DataType</th>
+<th>Input</th>
+<th>Output in JSON</th>
+</tr>
+<tr>
+<td rowspan=5>str</td>
+<td>hello</td>
+<td rowspan=5 >
+
+```json
+{
+  "someKey": "hello"|"125"|"true"
+}
+```
+
+</td>
+</tr>
+<tr>
+<td>125</td>
+</tr>
+<tr>
+<td>125.68</td>
+</tr>
+<tr>
+<td>true</td>
+</tr>
+<tr>
+<td>null</td>
+</tr>
+<tr>
+<td rowspan=5>int</td>
+<td>hello</td>
+<td>
+
+```json
+{
+  "someKey": "hello"
+}
+```
+
+</td>
+</tr>
+<tr>
+<td>125</td>
+<td rowspan=2>
+
+```json
+{
+  "someKey": 125 | 125.68
+}
+```
+
+</td>
+</tr>
+<tr>
+<td>125.68</td>
+</tr>
+<tr>
+<td>true</td>
+<td rowspan=2>
+
+```json
+{
+  "someKey": "true" | "null"
+}
+```
+
+</td>
+</tr>
+<tr>
+<td>null</td>
+</tr>
+<tr>
+<td rowspan=5>float</td>
+<td>hello</td>
+<td>
+
+```json
+{
+  "someKey": "hello"
+}
+```
+
+</td>
+</tr>
+<tr>
+<td>125</td>
+<td rowspan=2>
+
+```json
+{
+  "someKey": 125.0 | 125.68
+}
+```
+
+</td>
+</tr>
+<tr>
+<td>125.68</td>
+</tr>
+<tr>
+<td>true</td>
+<td rowspan=2>
+
+```json
+{
+  "someKey": "true" | "null"
+}
+```
+
+</td>
+</tr>
+<tr>
+<td>null</td>
+</tr>
+<tr>
+<td rowspan=5>bool</td>
+<td>hello</td>
+<td rowspan=4>
+
+```json
+{
+  "someKey": "hello" | "125" | "null"
+}
+```
+
+</td>
+</tr>
+<tr>
+<td>125</td>
+</tr>
+<tr>
+<td>125.68</td>
+</tr>
+<tr>
+<td>null</td>
+</tr>
+<tr>
+<td>true</td>
+<td>
+
+```json
+{
+  "someKey": true | false
+}
+```
+
+</td>
+</tr>
+<tr>
+<td rowspan=5>null</td>
+<td>hello</td>
+<td rowspan=4>
+
+```json
+{
+  "someKey": "hello"|"125"|"true"
+}
+```
+
+</td>
+</tr>
+<tr>
+<td>125</td>
+</tr>
+<tr>
+<td>125.68</td>
+</tr>
+<tr>
+<td>true</td>
+</tr>
+<tr>
+<td>null</td>
+<td>
+
+```json
+{
+  "someKey": null
+}
+```
+
+</td>
+</tr>
+</table>
+</center>
 
 ---
 
