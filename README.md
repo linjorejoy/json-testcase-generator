@@ -8,6 +8,11 @@ This is an application with the intent of easing the JSON test case generation f
 
 ## Downloads
 
+### [v0.2.5](dist/JSON_Test_Case_Generator%20v0.2.5.exe?raw=true)
+
+- Added option to add comment while generating in Table Type generation
+- Added Safe File name generation. Unaccaptable filenames will be corrected. Any illegal chars will be converted to \_
+
 ### [v0.2.4_r2](dist/JSON_Test_Case_Generator%20v0.2.4_r2.exe?raw=true)
 
 - generated report moved to correct directory
