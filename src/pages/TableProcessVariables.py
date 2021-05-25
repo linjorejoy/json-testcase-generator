@@ -126,6 +126,17 @@ class TableProcessVariables(Frame):
             self.added_widgets.append(header)
             self.controller.entry_cell_collection.entry_cell_rows[0].add_cell(EntryCell())
 
+        comment_header = MyLabel(
+            self.body_scrollable,
+            self.controller,
+            text="Additional Comment",
+            font=FONTS['LARGE_FONT'],
+            grid=(0, len(self.controller.VARIABLES_PRESENT) + 2),
+            padx=0,
+            pady=0
+        )
+        self.added_widgets.append(comment_header)
+
     def set_first_set_entry(self):
 
         for row_index, row in enumerate(self.controller.entry_cell_collection.entry_cell_rows):
@@ -159,6 +170,23 @@ class TableProcessVariables(Frame):
                 self.added_widgets.append(entry_0)
                 
                 self.entryrow_children_dict[row].append(entry_0)
+
+            row.comment_entry = EntryCell()
+            # comment_entry_cell = EntryCell()
+            row.comment_entry.option_value = StringVar(value="str")
+            comment_entry = EntryWithType(
+                self.body_scrollable,
+                self.controller,
+                frame_name="",
+                entry_cell=row.comment_entry,
+                options=self.controller.accepted_data_types,
+                add_del_button=False,
+                grid=(row_index + 1, len(row.get_all()) + 2),
+                padx=1,
+                pady=2
+            )
+            self.added_widgets.append(comment_entry)
+            self.entryrow_children_dict[row].append(comment_entry)
                       
     def delete_row(self, entry_row:EntryCellRow):
         self.controller.entry_cell_collection.delete_row(entry_row)
@@ -174,7 +202,7 @@ class TableProcessVariables(Frame):
                 command=self.add_one_row,
                 text="Add more Empty",
                 grid=(INT_MAX_VALUE, 2),
-                columnspan=len(self.controller.VARIABLES_PRESENT),
+                columnspan=len(self.controller.VARIABLES_PRESENT) + 1,
                 sticky=NSEW
             )
             self.added_widgets.append(add_more_button)
@@ -230,6 +258,22 @@ class TableProcessVariables(Frame):
             self.entryrow_children_dict[entry_row].append(entry_n)
             
             entry_row.add_cell(entry_cell)
+        entry_row.comment_entry = EntryCell()
+        entry_row.comment_entry.option_value = StringVar(value="str")
+        comment_entry = EntryWithType(
+            self.body_scrollable,
+            self.controller,
+            frame_name="",
+            entry_cell=entry_row.comment_entry,
+            options=self.controller.accepted_data_types,
+            add_del_button=False,
+            grid=(current_row_count + 1, len(self.controller.VARIABLES_PRESENT) + 2),
+            padx=1,
+            pady=1
+        )
+        self.added_widgets.append(comment_entry)
+        self.entryrow_children_dict[entry_row].append(comment_entry)
+
         self.controller.entry_cell_collection.add_row(entry_row)
 
     def copy_row(self, entry_row:EntryCellRow):
@@ -282,6 +326,25 @@ class TableProcessVariables(Frame):
             self.entryrow_children_dict[new_entry_row].append(entry_n)
             
             new_entry_row.add_cell(entry_cell)
+
+        new_entry_row.comment_entry = EntryCell()
+        new_entry_row.comment_entry.option_value = StringVar(value="str")
+        comment_entry = EntryWithType(
+            self.body_scrollable,
+            self.controller,
+            frame_name="",
+            entry_cell=new_entry_row.comment_entry,
+            entry_def_value=entry_row.comment_entry.entry.get(),
+            options=self.controller.accepted_data_types,
+            add_del_button=False,
+            grid=(current_row_count + 1, len(self.controller.VARIABLES_PRESENT) + 2),
+            padx=1,
+            pady=1
+        )
+        self.added_widgets.append(comment_entry)
+        self.entryrow_children_dict[new_entry_row].append(comment_entry)
+
+        
         self.controller.entry_cell_collection.add_row(new_entry_row)
 
 
@@ -293,7 +356,11 @@ class TableProcessVariables(Frame):
                 self.controller.VARIABLES_PRESENT,
                 row.entry_cell_list
             )
-            this_json_file = OutputJsonFile(file_name=None, variable_dictionary=this_variable_dictionary)
+            this_json_file = OutputJsonFile(
+                file_name=None, 
+                variable_dictionary=this_variable_dictionary, 
+                comment=row.comment_entry.entry.get()
+            )
             self.controller.output_files.add_output_json_file(this_json_file)
     
     def go_back(self):

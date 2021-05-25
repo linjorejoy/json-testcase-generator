@@ -73,8 +73,8 @@ jobs:
           body: |
             ## Fixes
 
-          draft: false
-          prerelease: false
+          draft: true
+          prerelease: true
 
       - name: Archive executable content from linux
         uses: thedoctor0/zip-release@master
