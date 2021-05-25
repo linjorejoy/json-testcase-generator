@@ -27,7 +27,7 @@ class TableSetNames(Frame):
         Frame.__init__(self, parent)
         self.parent = parent
         self.controller = controller
-        self.variables_for_dropdown = ["None", "Counter"]
+        self.variables_for_dropdown = ["None", "Counter", "Additional Comment"]
         self.widgets_added = []
 
         self.header_label_frame = MyLabelFrame(
@@ -96,7 +96,7 @@ class TableSetNames(Frame):
 
     def set_widgets(self):
         
-        self.variables_for_dropdown = ["None", "Counter", *self.controller.VARIABLES_PRESENT]
+        self.variables_for_dropdown = ["None", "Counter", "AdditionalComment", *self.controller.VARIABLES_PRESENT]
         entry_0 = MyEntry(
             self.body_scrollable,
             self.controller,

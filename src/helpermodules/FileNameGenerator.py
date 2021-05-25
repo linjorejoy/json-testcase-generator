@@ -2,15 +2,14 @@ from helperobjects.EntryCellCollection import EntryCellCollection
 from helperobjects.OutputFiles import OutputFiles
 from helperobjects.OutputJsonFile import OutputJsonFile
 from tkinter import StringVar, Entry
+import re
 
 
 
-def generate_file_name(output_files:OutputFiles, ref_arr):
-    GENERATE_NAMES = []
-    for each_json_file in output_files.get_output_json_file_array():
-        name = get_name(each_json_file, ref_arr, GENERATE_NAMES)
-        GENERATE_NAMES.append(name)
-        each_json_file.file_name = name
+
+def autocorrect_filename(name:str)-> str:
+    name = re.sub(r"[\\/\^\?\<\>:|\*]", "_",name)
+    return name
 
 
 def get_name(output_json_file:OutputJsonFile, ref_arr, GENERATE_NAMES):
@@ -20,7 +19,7 @@ def get_name(output_json_file:OutputJsonFile, ref_arr, GENERATE_NAMES):
     for ref in ref_arr:
         if isinstance(ref, Entry): # Entry cell
             
-            name += ref.get()
+            name += autocorrect_filename(ref.get())
 
         elif isinstance(ref, StringVar):# Dropdown
             
@@ -29,8 +28,10 @@ def get_name(output_json_file:OutputJsonFile, ref_arr, GENERATE_NAMES):
             elif ref.get() == "Counter":# Counter
                 counter_present = True
                 counter_position = len(name)
+            elif ref.get() == "AdditionalComment":# Comment
+                name += autocorrect_filename(output_json_file.comment)
             else:
-                name += str(output_json_file.variable_dictionary[ref.get()])
+                name += autocorrect_filename(str(output_json_file.variable_dictionary[ref.get()]))
                 # name += str(output_json_file.variable_dictionary[variable_arr[ref-1]])
     if counter_present:
         counter = 1
@@ -45,3 +46,13 @@ def get_name(output_json_file:OutputJsonFile, ref_arr, GENERATE_NAMES):
                 break
 
     return name
+    
+
+    
+def generate_file_name(output_files:OutputFiles, ref_arr):
+    GENERATE_NAMES = []
+    for each_json_file in output_files.get_output_json_file_array():
+        name = get_name(each_json_file, ref_arr, GENERATE_NAMES)
+        name = autocorrect_filename(name)
+        GENERATE_NAMES.append(name)
+        each_json_file.file_name = name

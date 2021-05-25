@@ -413,9 +413,10 @@ For My [example](#example).
 - [x] Variable Name Generation
 - [x] Report with TimeStamp Generation
 - [x] Documentation of Steps
+- [x] Table based Generations adding Comments
+- [x] File Name auto correcting(removing unaccepted charecters while naming)
 - [ ] Prevent Overwrite of Files with same name
 - [ ] Prevent Overwrite of files if another file is already present in that locations with same name. Will be Optional
-- [ ] Table based Generations adding Comments
 
 # Download
 

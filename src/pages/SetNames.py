@@ -93,7 +93,7 @@ class SetNames(Frame):
 
         
     def set_widgets(self):
-        print(f"The variables Present while generating Name : {self.controller.VARIABLES_PRESENT}")
+        # print(f"The variables Present while generating Name : {self.controller.VARIABLES_PRESENT}")
         self.variables_for_dropdown = ["None", "Counter", *self.controller.VARIABLES_PRESENT]
         entry_0 = MyEntry(
             self.body_scrollable,
