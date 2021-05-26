@@ -1,7 +1,17 @@
 
+settings_dict = {
+    "screenRatio": 0.85,
+    "fileNameCounterStart" : 1,
+    "reportJsonPrefix": "report",
+    "spacesForTabs" : 2,
+    "overwriteExistingJsonWithSameFileName": True,
+    "autoAddCounterForGeneratedFiles": True
+}
+
+
 # Application requirements
 
-CURRENT_VERSION = "V0.2.5"
+CURRENT_VERSION = "V0.2.6"
 ICON = "src/resources/favicon-32x32.ico"
 
 # Initialzation
