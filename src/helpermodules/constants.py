@@ -1,7 +1,7 @@
 
 # Application requirements
 
-CURRENT_VERSION = "V0.2.4"
+CURRENT_VERSION = "V0.2.5"
 ICON = "src/resources/favicon-32x32.ico"
 
 # Initialzation
