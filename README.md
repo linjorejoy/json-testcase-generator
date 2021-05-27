@@ -1,6 +1,6 @@
 # JSON Test Case Generator
 
-This is an application with the intent of easing the JSON test case generation for in a controlled manner.
+This is an application with the intent of easing the JSON test case generation for in a controlled manner
 
 ### For Documentation and Examples goto the Website
 
