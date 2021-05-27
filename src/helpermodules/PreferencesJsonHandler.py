@@ -16,6 +16,9 @@ def add_settings_json_file():
     settings_file_path = os.path.join(os.getenv('ProgramData'), 'JSON Test Case Generator')
     preferences_file_path = os.path.join(settings_file_path, "settings.json")
     
+    if not os.path.exists(settings_file_path):
+        os.mkdir(settings_file_path)
+        
     if os.path.exists(preferences_file_path):
         return
     try:
