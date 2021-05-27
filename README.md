@@ -12,6 +12,10 @@ This is an application with the intent of easing the JSON test case generation f
 
 ## Downloads
 
+### [v0.2.7](dist/JSON_Test_Case_Generator%20v0.2.7.exe?raw=true)
+
+- More spacing for comment section. Added option in preference
+
 ### [v0.2.6](dist/JSON_Test_Case_Generator%20v0.2.6.exe?raw=true)
 
 - Added preferences option
