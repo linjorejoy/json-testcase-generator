@@ -23,9 +23,10 @@ class EntryWithType(LabelFrame):
         add_cell_command = default_func,
         grid=None,
         padx:int=PADX,
-        pady:int=PADY
+        pady:int=PADY,
+        width:int=20
     ):  
-        LabelFrame.__init__(self, parent, text=frame_name, width=20, height=50)
+        LabelFrame.__init__(self, parent, text=frame_name, width=width, height=50)
 
         self.this_dropdown = OptionMenu(self, entry_cell.option_value, *options)
         self.this_dropdown.config(font=tkfont.Font(**FONTS['SMALL_FONT']))
@@ -35,7 +36,11 @@ class EntryWithType(LabelFrame):
         if entry_def_value:
             self.this_entry.insert(END, entry_def_value)
             
-        self.this_entry.grid(row=0, column=1, sticky="nsew")
+        if not show_add_cell_button and not add_del_button:
+            self.grid_columnconfigure(1, weight=1)
+            self.this_entry.grid(row=0, column=1, sticky="nsew", columnspan=2)
+        else:
+            self.this_entry.grid(row=0, column=1, sticky="nsew")
         entry_cell.entry = self.this_entry
 
         if add_del_button:
@@ -49,6 +54,7 @@ class EntryWithType(LabelFrame):
             self.add_cell_button = Button(self, text="+", command = add_cell_command)
             self.add_cell_button.config(font=tkfont.Font(**FONTS['SMALL_FONT_2']))
             self.add_cell_button.grid(row=0, column = 3, sticky="nsew")
+        
 
         row, col = grid
         self.grid(row=row, column=col, padx=padx, pady=pady, sticky=EW)

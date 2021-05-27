@@ -4,6 +4,7 @@ settings_dict = {
     "fileNameCounterStart" : 1,
     "reportJsonPrefix": "report",
     "spacesForTabs" : 2,
+    "additionalCommentEntryWidth":50,
     "overwriteExistingJsonWithSameFileName": True,
     "autoAddCounterForGeneratedFiles": True
 }

@@ -19,7 +19,7 @@ from helperobjects.OutputJsonFile import OutputJsonFile
 from helpermodules.constants import INT_MAX_VALUE
 from helpermodules.MyFonts import FONTS
 import helpermodules.DataTypeHandler as DataTypeHandler
-
+import helpermodules.PreferencesJsonHandler as PreferencesJsonHandler
 import pages.TableSetNames as TableSetNames
 
 import JSON_Test_Case_Generator
@@ -125,11 +125,11 @@ class TableProcessVariables(Frame):
             )
             self.added_widgets.append(header)
             self.controller.entry_cell_collection.entry_cell_rows[0].add_cell(EntryCell())
-
+        commnet_entry_width = int(PreferencesJsonHandler.get_data_from_settings("additionalCommentEntryWidth"))
         comment_header = MyLabel(
             self.body_scrollable,
             self.controller,
-            text="Additional Comment",
+            text="Additional Comment" + " "*commnet_entry_width,
             font=FONTS['LARGE_FONT'],
             grid=(0, len(self.controller.VARIABLES_PRESENT) + 2),
             padx=0,
@@ -183,8 +183,10 @@ class TableProcessVariables(Frame):
                 add_del_button=False,
                 grid=(row_index + 1, len(row.get_all()) + 2),
                 padx=1,
-                pady=2
+                pady=2,
+                width=150
             )
+            # self.body_scrollable.grid_columnconfigure(len(row.get_all()) + 2, weight=1)
             self.added_widgets.append(comment_entry)
             self.entryrow_children_dict[row].append(comment_entry)
                       
@@ -269,7 +271,8 @@ class TableProcessVariables(Frame):
             add_del_button=False,
             grid=(current_row_count + 1, len(self.controller.VARIABLES_PRESENT) + 2),
             padx=1,
-            pady=1
+            pady=1,
+            width=50
         )
         self.added_widgets.append(comment_entry)
         self.entryrow_children_dict[entry_row].append(comment_entry)
@@ -339,7 +342,8 @@ class TableProcessVariables(Frame):
             add_del_button=False,
             grid=(current_row_count + 1, len(self.controller.VARIABLES_PRESENT) + 2),
             padx=1,
-            pady=1
+            pady=1,
+            width=50
         )
         self.added_widgets.append(comment_entry)
         self.entryrow_children_dict[new_entry_row].append(comment_entry)

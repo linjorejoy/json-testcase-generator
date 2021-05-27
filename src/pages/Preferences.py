@@ -90,6 +90,7 @@ class Preferences(Frame):
         self.setfileNameCounterStart()
         self.setreportJsonPrefix()
         self.setspacesForTabs()
+        self.setadditionalCommentEntryWidth()
         self.setoverwriteExistingJsonWithSameFileName()
         self.setautoAddCounterForGeneratedFiles()
 
@@ -232,6 +233,40 @@ class Preferences(Frame):
         )
         this_entry.insert(END, PreferencesJsonHandler.get_data_from_settings('spacesForTabs'))
         self.form_entry_obj["spacesForTabs"] = (this_entry, 'int')
+    
+    def setadditionalCommentEntryWidth(self):
+        row = self.get_row()
+        
+        MyLabel(
+            self.body_scrollable,
+            self.controller,
+            text="additionalCommentEntryWidth",
+            font=FONTS['LARGE_FONT_2'],
+            grid=(row,0),
+            padx=10,
+            pady=10,
+            sticky=E
+        )
+        this_entry = MyEntry(
+            self.body_scrollable,
+            self.controller,
+            grid=(row,1),
+            padx=10,
+            pady=10
+        )
+        
+        MyLabel(
+            self.body_scrollable,
+            self.controller,
+            text="Width of additional Comment",
+            font=FONTS['LARGE_FONT'],
+            grid=(row,3),
+            padx=10,
+            pady=10,
+            sticky=W
+        )
+        this_entry.insert(END, PreferencesJsonHandler.get_data_from_settings('additionalCommentEntryWidth'))
+        self.form_entry_obj["additionalCommentEntryWidth"] = (this_entry, 'int')
         
 
     def setoverwriteExistingJsonWithSameFileName(self):
