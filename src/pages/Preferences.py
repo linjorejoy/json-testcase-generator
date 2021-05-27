@@ -1,5 +1,5 @@
 from tkinter import Frame, LabelFrame, Entry
-from tkinter import N, Y, BOTH, SW, SE, W, SUNKEN, END
+from tkinter import N, Y, BOTH, SW, SE, E, W, SUNKEN, END
 
 from widgetclasses.MyLabelFrame import MyLabelFrame
 from widgetclasses.MyButton import MyButton
@@ -8,6 +8,7 @@ from widgetclasses.MyLabel import MyLabel
 from widgetclasses.DoubleScrolledFrame import DoubleScrolledFrame
 
 from helpermodules.MyFonts import FONTS
+import helpermodules.PreferencesJsonHandler as PreferencesJsonHandler
 
 
 class Preferences(Frame):
@@ -103,7 +104,8 @@ class Preferences(Frame):
             font=FONTS['LARGE_FONT_2'],
             grid=(row,0),
             padx=10,
-            pady=10
+            pady=10,
+            sticky=E
         )
         this_entry = MyEntry(
             self.body_scrollable,
@@ -112,7 +114,18 @@ class Preferences(Frame):
             padx=10,
             pady=10
         )
-        this_entry.insert(END, self.controller.get_data_from_settings('screenRatio'))
+        
+        MyLabel(
+            self.body_scrollable,
+            self.controller,
+            text="This will define the size of the Application Window (Range: 0.7-1)",
+            font=FONTS['LARGE_FONT'],
+            grid=(row,3),
+            padx=10,
+            pady=10,
+            sticky=W
+        )
+        this_entry.insert(END, PreferencesJsonHandler.get_data_from_settings('screenRatio'))
         self.form_entry_obj["screenRatio"] = (this_entry, "float")
         
     
@@ -126,7 +139,8 @@ class Preferences(Frame):
             font=FONTS['LARGE_FONT_2'],
             grid=(row,0),
             padx=10,
-            pady=10
+            pady=10,
+            sticky=E
         )
         this_entry = MyEntry(
             self.body_scrollable,
@@ -135,7 +149,18 @@ class Preferences(Frame):
             padx=10,
             pady=10
         )
-        this_entry.insert(END, self.controller.get_data_from_settings('fileNameCounterStart'))
+        
+        MyLabel(
+            self.body_scrollable,
+            self.controller,
+            text="Where should the counter while naming files start. (Example : 1)",
+            font=FONTS['LARGE_FONT'],
+            grid=(row,3),
+            padx=10,
+            pady=10,
+            sticky=W
+        )
+        this_entry.insert(END, PreferencesJsonHandler.get_data_from_settings('fileNameCounterStart'))
         self.form_entry_obj["fileNameCounterStart"] = (this_entry, 'int')
 
     
@@ -149,7 +174,8 @@ class Preferences(Frame):
             font=FONTS['LARGE_FONT_2'],
             grid=(row,0),
             padx=10,
-            pady=10
+            pady=10,
+            sticky=E
         )
         this_entry = MyEntry(
             self.body_scrollable,
@@ -158,7 +184,18 @@ class Preferences(Frame):
             padx=10,
             pady=10
         )
-        this_entry.insert(END, self.controller.get_data_from_settings('reportJsonPrefix'))
+        
+        MyLabel(
+            self.body_scrollable,
+            self.controller,
+            text="This will be the prefix of the JSON Report file( Example : Report)",
+            font=FONTS['LARGE_FONT'],
+            grid=(row,3),
+            padx=10,
+            pady=10,
+            sticky=W
+        )
+        this_entry.insert(END, PreferencesJsonHandler.get_data_from_settings('reportJsonPrefix'))
         self.form_entry_obj["reportJsonPrefix"] = (this_entry, 'str')
         
     
@@ -172,7 +209,8 @@ class Preferences(Frame):
             font=FONTS['LARGE_FONT_2'],
             grid=(row,0),
             padx=10,
-            pady=10
+            pady=10,
+            sticky=E
         )
         this_entry = MyEntry(
             self.body_scrollable,
@@ -181,7 +219,18 @@ class Preferences(Frame):
             padx=10,
             pady=10
         )
-        this_entry.insert(END, self.controller.get_data_from_settings('spacesForTabs'))
+        
+        MyLabel(
+            self.body_scrollable,
+            self.controller,
+            text="Number of Spaces as an indent while creating json Outputs (Example: 2)",
+            font=FONTS['LARGE_FONT'],
+            grid=(row,3),
+            padx=10,
+            pady=10,
+            sticky=W
+        )
+        this_entry.insert(END, PreferencesJsonHandler.get_data_from_settings('spacesForTabs'))
         self.form_entry_obj["spacesForTabs"] = (this_entry, 'int')
         
 
@@ -196,7 +245,8 @@ class Preferences(Frame):
             font=FONTS['LARGE_FONT_2'],
             grid=(row,0),
             padx=10,
-            pady=10
+            pady=10,
+            sticky=E
         )
         this_entry = MyEntry(
             self.body_scrollable,
@@ -205,7 +255,18 @@ class Preferences(Frame):
             padx=10,
             pady=10
         )
-        this_entry.insert(END, self.controller.get_data_from_settings('overwriteExistingJsonWithSameFileName'))
+        
+        MyLabel(
+            self.body_scrollable,
+            self.controller,
+            text="Keep it true if the existing files in the output folder needs to be overwritten(Example : True, true, t, False, false, f) ",
+            font=FONTS['LARGE_FONT'],
+            grid=(row,3),
+            padx=10,
+            pady=10,
+            sticky=W
+        )
+        this_entry.insert(END, str(PreferencesJsonHandler.get_data_from_settings('overwriteExistingJsonWithSameFileName')))
         self.form_entry_obj["overwriteExistingJsonWithSameFileName"] = (this_entry, 'bool')
     
 
@@ -218,7 +279,8 @@ class Preferences(Frame):
             font=FONTS['LARGE_FONT_2'],
             grid=(row,0),
             padx=10,
-            pady=10
+            pady=10,
+            sticky=E
         )
         this_entry = MyEntry(
             self.body_scrollable,
@@ -227,7 +289,18 @@ class Preferences(Frame):
             padx=10,
             pady=10
         )
-        this_entry.insert(END, self.controller.get_data_from_settings('autoAddCounterForGeneratedFiles'))
+        
+        MyLabel(
+            self.body_scrollable,
+            self.controller,
+            text="True if Counter is needed. If Counter is not provided. It will add a counter Automatically",
+            font=FONTS['LARGE_FONT'],
+            grid=(row,3),
+            padx=10,
+            pady=10,
+            sticky=W
+        )
+        this_entry.insert(END, str(PreferencesJsonHandler.get_data_from_settings('autoAddCounterForGeneratedFiles')))
         self.form_entry_obj["autoAddCounterForGeneratedFiles"] = (this_entry, 'bool')
         
 
@@ -236,7 +309,8 @@ class Preferences(Frame):
         for key in self.form_entry_obj.keys():
             entry_cell, datatype = self.form_entry_obj[key]
             new_dict[key] = self.get_data_from_entry(key, entry_cell, datatype)
-        self.controller.overwrite_settings_json_file(new_dict)
+        
+        PreferencesJsonHandler.overwrite_settings_json_file(new_dict)
         self.go_back()
         
 
@@ -250,7 +324,7 @@ class Preferences(Frame):
             try:
                 data = float(entry.get())
             except ValueError:
-                data = self.controller.get_data_from_settings(key)
+                data = PreferencesJsonHandler.get_data_from_settings(key)
             return data
 
         elif datatype == 'int':
@@ -258,12 +332,12 @@ class Preferences(Frame):
             try:
                 data = int(float(entry.get()))
             except ValueError:
-                data = self.controller.get_data_from_settings(key)
+                data = PreferencesJsonHandler.get_data_from_settings(key)
             return data
 
         elif datatype == 'bool':
             data = ""
-            entry_value = entry.get()
+            entry_value = str(entry.get()).lower()
             if entry_value in self.true_values:
                 data = True
                 
@@ -271,7 +345,7 @@ class Preferences(Frame):
                 data = False
 
             else:
-                data = self.controller.get_data_from_settings(key)
+                data = PreferencesJsonHandler.get_data_from_settings(key)
             return data
             
         else:

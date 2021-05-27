@@ -24,6 +24,7 @@ import pages.Preferences as Preferences
 
 from helpermodules.constants import CURRENT_VERSION, ICON
 from helpermodules.constants import settings_dict, default_func
+import helpermodules.PreferencesJsonHandler as PreferencesJsonHandler
 
 class JsonTestCaseTracker(Tk):
 
@@ -61,7 +62,7 @@ class JsonTestCaseTracker(Tk):
 
 
         # Setting Size of UI
-        SCREEN_RATIO = self.get_data_from_settings("screenRatio")
+        SCREEN_RATIO = PreferencesJsonHandler.get_data_from_settings("screenRatio")
         if not (0.7 < SCREEN_RATIO < 1):
             SCREEN_RATIO = 0.85 
         Tk.geometry(self, self.get_screen_dimentions(SCREEN_RATIO))
@@ -136,80 +137,8 @@ class JsonTestCaseTracker(Tk):
         file_menu.add_command(label="Quit", command=self.quit)
 
     def goto_preferences(self):
-        self.add_settings_json_file()
+        PreferencesJsonHandler.add_settings_json_file()
         self.show_frame(Preferences.Preferences)
-
-    def overwrite_settings_json_file(self, json_obj:dict):
-        self.settings_file_path = os.path.join(os.getenv('ProgramData'), 'JSON Test Case Generator')
-        self.preferences_file_path = os.path.join(self.settings_file_path, "settings.json")
-        
-        try:
-            with open(self.preferences_file_path, mode="w") as settings_json:
-                json.dump(json_obj, settings_json, indent=2)
-        except Exception:
-            print("Error Occured")
-        
-    def add_settings_json_file(self):
-        self.settings_file_path = os.path.join(os.getenv('ProgramData'), 'JSON Test Case Generator')
-        self.preferences_file_path = os.path.join(self.settings_file_path, "settings.json")
-        
-        if os.path.exists(self.preferences_file_path):
-            return
-        try:
-            with open(self.preferences_file_path, mode="w") as settings_json:
-                json.dump(settings_dict, settings_json, indent=2)
-        except Exception:
-            print("Error Occured")
-
-
-    def get_data_from_settings(self, path:str):
-        keys = path.split("/")
-        keys_history = []
-        self.add_settings_json_file()
-        settings_data_obj_from_file = {}
-        settings_data_obj_from_file_parts = {}
-        settings_data_obj_from_constants = settings_dict.copy()
-
-        with open(self.preferences_file_path, mode="r") as settings_json_file:
-            settings_data_obj_from_file = json.load(settings_json_file)
-            settings_data_obj_from_file_parts = settings_data_obj_from_file.copy()
-
-        while True:
-            if not keys:
-                return settings_data_obj_from_file_parts
-            if keys[0] in settings_data_obj_from_file_parts.keys():
-                settings_data_obj_from_file_parts = settings_data_obj_from_file_parts[keys[0]]
-                settings_data_obj_from_constants = settings_data_obj_from_constants[keys[0]]
-                keys_history.append(keys.pop(0))
-            else:
-                if keys[0] in settings_data_obj_from_constants.keys():
-                    settings_data_obj_from_file_parts = settings_data_obj_from_constants[keys[0]]
-                    settings_data_obj_from_constants = settings_data_obj_from_constants[keys[0]]
-                    with open(self.preferences_file_path, mode="w") as settings_json_file_new:
-                        json.dump(settings_dict, settings_json_file_new, indent=2)
-                    keys_history.append(keys.pop(0))
-                else:
-                    return None
-
-
-
-
-
-
-
-
-            # if not keys:
-            #     return settings_data_obj_from_file
-
-            # if keys[0] in settings_data_obj_from_file.keys():
-            #     settings_data_obj_from_file = settings_data_obj_from_file[keys[0]]
-            #     settings_data_obj_from_constants = settings_data_obj_from_constants[keys[0]]
-            #     keys_history.append(keys.pop(0))
-            # else:
-            #     settings_data_obj_from_file[keys[0]] = settings_data_obj_from_constants[keys[0]]
-            #     keys.pop(0)
-
-
 
 
 if __name__=='__main__':
