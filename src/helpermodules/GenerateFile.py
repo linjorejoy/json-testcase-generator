@@ -3,6 +3,7 @@ import os
 
 from helperobjects.OutputFiles import OutputFiles
 from helperobjects.OutputJsonFile import OutputJsonFile
+import helpermodules.PreferencesJsonHandler as PreferencesJsonHandler
 
 
 def generate_all_files(output_files:OutputFiles, template:dict, output_location:str):
@@ -12,8 +13,9 @@ def generate_all_files(output_files:OutputFiles, template:dict, output_location:
         for var in this_obj_var_dict.keys():
             json_str_template = json_str_template.replace(var, this_obj_var_dict[var])
         this_file_name = os.path.join(output_location, f"{json_file_obj.file_name}.json")
+        indent_from_settings = int(PreferencesJsonHandler.get_data_from_settings("spacesForTabs"))
         with open (this_file_name, mode="w") as json_file:
-            json.dump(json.loads(json_str_template), json_file, indent=2)
+            json.dump(json.loads(json_str_template), json_file, indent=indent_from_settings)
 
 
 def generate_one_file(output_json_file:OutputJsonFile, template, output_location:str):
@@ -24,5 +26,6 @@ def generate_one_file(output_json_file:OutputJsonFile, template, output_location
         json_str_template = json_str_template.replace(var, this_obj_var_dict[var])
         
     this_file_name = os.path.join(output_location, f"{output_json_file.file_name}.json")
+    indent_from_settings = int(PreferencesJsonHandler.get_data_from_settings("spacesForTabs"))
     with open (this_file_name, mode="w") as json_file:
-        json.dump(json.loads(json_str_template), json_file, indent=2)
+        json.dump(json.loads(json_str_template), json_file, indent=indent_from_settings)

@@ -1,7 +1,9 @@
-from tkinter import Tk, Frame
+from tkinter import Tk, Frame, Menu
 from tkinter import BOTH, TOP, NSEW
 
 import os
+import json
+from pathlib import Path
 
 from helperobjects.EntryCellCollection import EntryCellCollection
 from helperobjects.EntryCellColumn import EntryCellColumn
@@ -18,9 +20,11 @@ import pages.GeneratePage as GeneratePage
 import pages.TableUploadPage as TableUploadPage
 import pages.TableProcessVariables as TableProcessVariables
 import pages.TableSetNames as TableSetNames
+import pages.Preferences as Preferences
 
-from helpermodules.constants import SCREEN_RATIO, CURRENT_VERSION, ICON
-
+from helpermodules.constants import CURRENT_VERSION, ICON
+from helpermodules.constants import settings_dict, default_func
+import helpermodules.PreferencesJsonHandler as PreferencesJsonHandler
 
 class JsonTestCaseTracker(Tk):
 
@@ -43,6 +47,8 @@ class JsonTestCaseTracker(Tk):
         self.entry_cell_collection = EntryCellCollection()
         self.output_files = OutputFiles()
         self.output_location = ""
+        self.preferences_file_path = ""
+        self.settings_file_path = ""
         self.reference_arr_for_name_gen = []
         self.current_dir = os.curdir
         self.accepted_data_types = ["int", "str", "bool", "float", "null"]
@@ -56,16 +62,18 @@ class JsonTestCaseTracker(Tk):
 
 
         # Setting Size of UI
+        SCREEN_RATIO = PreferencesJsonHandler.get_data_from_settings("screenRatio")
+        if not (0.7 < SCREEN_RATIO < 1):
+            SCREEN_RATIO = 0.85 
         Tk.geometry(self, self.get_screen_dimentions(SCREEN_RATIO))
         
 
         # Global Container
-        global_container = Frame(self)
-        global_container.pack(side=TOP, fill=BOTH, expand=True)
+        self.global_container = Frame(self)
+        self.global_container.pack(side=TOP, fill=BOTH, expand=True)
 
-        global_container.grid_rowconfigure(0, weight=1)
-        global_container.columnconfigure(0, weight=1)
-
+        self.global_container.grid_rowconfigure(0, weight=1)
+        self.global_container.columnconfigure(0, weight=1)
 
         FRAMES = [
             StartPage.StartPage,
@@ -76,14 +84,18 @@ class JsonTestCaseTracker(Tk):
             GeneratePage.GeneratePage,
             TableUploadPage.TableUploadPage,
             TableProcessVariables.TableProcessVariables,
-            TableSetNames.TableSetNames
+            TableSetNames.TableSetNames,
+            Preferences.Preferences
         ]
 
         for FRAME in FRAMES:
-            frame = FRAME(global_container, self)
+            frame = FRAME(self.global_container, self)
             self.frames[FRAME] = frame
             frame.grid(row=0, column=0, sticky=NSEW)
 
+
+        # Add Menu
+        self.add_menu()
 
         self.show_frame(StartPage.StartPage)
 
@@ -114,7 +126,19 @@ class JsonTestCaseTracker(Tk):
         
         return f"{FrameSizeX}x{FrameSizeY}+{FramePosX}+{FramePosY}"
 
+    def add_menu(self):
+        menu = Menu(self)
+        self.config(menu=menu)
 
+        # File Menu
+        file_menu = Menu(menu)
+        menu.add_cascade(label="File", menu=file_menu)
+        file_menu.add_command(label="Edit Preferences", command=self.goto_preferences)
+        file_menu.add_command(label="Quit", command=self.quit)
+
+    def goto_preferences(self):
+        PreferencesJsonHandler.add_settings_json_file()
+        self.show_frame(Preferences.Preferences)
 
 
 if __name__=='__main__':

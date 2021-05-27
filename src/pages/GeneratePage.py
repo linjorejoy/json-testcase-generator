@@ -12,6 +12,8 @@ from widgetclasses.MyText import MyText
 import pages.PreviewVariables as PreviewVariables
 
 import helpermodules.GenerateFile as GenerateFile
+import helpermodules.FileNameGenerator as FileNameGenerator
+import helpermodules.PreferencesJsonHandler as PreferencesJsonHandler
 
 import JSON_Test_Case_Generator
 
@@ -137,14 +139,17 @@ class GeneratePage(Frame):
             self.generated_report.insert(END, f"\n{json_file_obj.file_name:<50}............Done")
             self.generated_report.config(state="disabled")
 
+        report_prefix = PreferencesJsonHandler.get_data_from_settings("reportJsonPrefix")
+        report_prefix = FileNameGenerator.autocorrect_filename(report_prefix)
         time_str = str(datetime.datetime.now()).replace(":","-")
-        report_file_name = f"report {time_str}.json"
+        report_file_name = f"{report_prefix} {time_str}.json"
         report_loc = os.path.join(self.controller.output_location, report_file_name)
+        indent_from_settings = int(PreferencesJsonHandler.get_data_from_settings("spacesForTabs"))
         with open(report_loc, mode="w") as json_file:
             json.dump(
                 json.loads(self.to_dict(self.controller.output_files)),
                 json_file,
-                indent=4
+                indent=indent_from_settings
             )
 
     def to_dict(self,obj):

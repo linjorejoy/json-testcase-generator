@@ -2,6 +2,7 @@
 
 FONTS = {
     "VERY_LARGE_FONT":{'family':"monospace", 'size':"25", 'weight':"normal"},
+    "LARGE_FONT_2":{'family':"Helvetica", 'size':"12", 'weight':"normal"},
     "LARGE_FONT":{'family':"monospace", 'size':"10", 'weight':"normal"},
     "BUTTON_FONT":{'family':"Helvetica", 'size':"10", 'weight':"bold"},
     "LABEL_FONT":{'size':"10", 'weight':"normal"},

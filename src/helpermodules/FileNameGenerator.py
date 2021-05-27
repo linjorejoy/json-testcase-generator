@@ -3,7 +3,7 @@ from helperobjects.OutputFiles import OutputFiles
 from helperobjects.OutputJsonFile import OutputJsonFile
 from tkinter import StringVar, Entry
 import re
-
+import helpermodules.PreferencesJsonHandler as PreferencesJsonHandler
 
 
 
@@ -34,7 +34,8 @@ def get_name(output_json_file:OutputJsonFile, ref_arr, GENERATE_NAMES):
                 name += autocorrect_filename(str(output_json_file.variable_dictionary[ref.get()]))
                 # name += str(output_json_file.variable_dictionary[variable_arr[ref-1]])
     if counter_present:
-        counter = 1
+        counter_start = int(PreferencesJsonHandler.get_data_from_settings("fileNameCounterStart"))
+        counter = counter_start
         name = name[:counter_position] + str(counter) + name[counter_position:]
         
         while True:

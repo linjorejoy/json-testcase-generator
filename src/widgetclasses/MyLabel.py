@@ -14,7 +14,7 @@ class MyLabel(Label):
         parent,
         controller,
         text:str=DEF_LABEL_TEXT,
-        font = None,
+        font = FONTS['LABEL_FONT'],
         x:int = 0,
         y:int = 0,
         relx:int = 0,
@@ -22,12 +22,13 @@ class MyLabel(Label):
         anchor=NE,
         grid=None,
         pady=PADY,
-        padx=PADX
+        padx=PADX,
+        sticky=None
     ):
-        Label.__init__(self, parent, text=text, font=tkfont.Font(**FONTS['LABEL_FONT']))
+        Label.__init__(self, parent, text=text, font=tkfont.Font(**font))
 
         if not grid:
             self.place(x=x, y=y, relx=relx, rely=rely, anchor=anchor)
         else:
             row, col = grid
-            self.grid(row=row, column=col, pady=pady, padx=padx)
+            self.grid(row=row, column=col, pady=pady, padx=padx, sticky=sticky)
