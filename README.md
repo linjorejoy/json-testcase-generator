@@ -8,6 +8,10 @@ This is an application with the intent of easing the JSON test case generation f
 
 ## Downloads
 
+### [v0.2.6](dist/JSON_Test_Case_Generator%20v0.2.6.exe?raw=true)
+
+- Added preferences option
+
 ### [v0.2.5](dist/JSON_Test_Case_Generator%20v0.2.5.exe?raw=true)
 
 - Added option to add comment while generating in Table Type generation
