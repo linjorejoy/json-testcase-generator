@@ -12,7 +12,7 @@ settings_dict = {
 
 # Application requirements
 
-CURRENT_VERSION = "V0.2.6"
+CURRENT_VERSION = "V0.2.7"
 ICON = "src/resources/favicon-32x32.ico"
 
 # Initialzation
