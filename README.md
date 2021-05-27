@@ -6,6 +6,10 @@ This is an application with the intent of easing the JSON test case generation f
 
 > [https://linjorejoy.github.io/json-testcase-generator/](https://linjorejoy.github.io/json-testcase-generator/)
 
+### References
+
+- [DoubleScrolledFrame.py](https://gist.github.com/novel-yet-trivial/2841b7b640bba48928200ff979204115)
+
 ## Downloads
 
 ### [v0.2.6](dist/JSON_Test_Case_Generator%20v0.2.6.exe?raw=true)
