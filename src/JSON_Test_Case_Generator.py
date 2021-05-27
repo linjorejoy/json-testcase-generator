@@ -31,8 +31,6 @@ class JsonTestCaseTracker(Tk):
     def __init__(self, *args, **kwargs):
         Tk.__init__(self, *args, **kwargs)
 
-        # self.FONTS = FONTS
-        
 
         # For Storing Frames
         self.frames = {}
