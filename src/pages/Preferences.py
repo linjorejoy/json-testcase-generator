@@ -258,7 +258,7 @@ class Preferences(Frame):
         MyLabel(
             self.body_scrollable,
             self.controller,
-            text="Width of additional Comment",
+            text="Width of additional Comment(Example : 50, 75, 100)",
             font=FONTS['LARGE_FONT'],
             grid=(row,3),
             padx=10,
@@ -294,7 +294,7 @@ class Preferences(Frame):
         MyLabel(
             self.body_scrollable,
             self.controller,
-            text="Keep it true if the existing files in the output folder needs to be overwritten(Example : True, true, t, False, false, f) ",
+            text="Keep it true if the existing files in the output folder needs to be overwritten(Example : True, true, t, False, false, f)",
             font=FONTS['LARGE_FONT'],
             grid=(row,3),
             padx=10,
@@ -328,7 +328,7 @@ class Preferences(Frame):
         MyLabel(
             self.body_scrollable,
             self.controller,
-            text="True if Counter is needed. If Counter is not provided. It will add a counter Automatically",
+            text="True if Counter is needed. If Counter is not provided. It will add a counter Automatically(Example : True, true, t, False, false, f)",
             font=FONTS['LARGE_FONT'],
             grid=(row,3),
             padx=10,

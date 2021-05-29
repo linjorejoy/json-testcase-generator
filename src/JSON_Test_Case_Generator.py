@@ -119,8 +119,8 @@ class JsonTestCaseTracker(Tk):
         ScreenRatio = ratio
         FrameSizeX  = int(ScreenSizeX * ScreenRatio)
         FrameSizeY  = int(ScreenSizeY * ScreenRatio)
-        FramePosX   = int((ScreenSizeX - FrameSizeX)/2)
-        FramePosY   = int((ScreenSizeY - FrameSizeY)/2)
+        FramePosX   = int((ScreenSizeX - FrameSizeX)/10)
+        FramePosY   = int((ScreenSizeY - FrameSizeY)/10)
         
         return f"{FrameSizeX}x{FrameSizeY}+{FramePosX}+{FramePosY}"
 

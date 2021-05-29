@@ -415,6 +415,7 @@ For My [example](#example).
 - [x] Documentation of Steps
 - [x] Table based Generations adding Comments
 - [x] File Name auto correcting(removing unaccepted charecters while naming)
+- [x] Preferences Tab. to set custom settings
 - [ ] Prevent Overwrite of Files with same name
 - [ ] Prevent Overwrite of files if another file is already present in that locations with same name. Will be Optional
 
