@@ -5,7 +5,7 @@ settings_dict = {
     "reportJsonPrefix": "report",
     "spacesForTabs" : 2,
     "additionalCommentEntryWidth":75,
-    "overwriteExistingJsonWithSameFileName": True,
+    "overwriteExistingJsonWithSameFileName": False,
     "autoAddCounterForGeneratedFiles": True
 }
 

@@ -26,6 +26,27 @@ def generate_one_file(output_json_file:OutputJsonFile, template, output_location
         json_str_template = json_str_template.replace(var, this_obj_var_dict[var])
         
     this_file_name = os.path.join(output_location, f"{output_json_file.file_name}.json")
+    
+    output_json_file.temp_file_name = output_json_file.file_name
+
+    overwriteExistingJsonWithSameFileName = PreferencesJsonHandler.get_data_from_settings("overwriteExistingJsonWithSameFileName")
+    
+    if os.path.exists(this_file_name) and not overwriteExistingJsonWithSameFileName: # True is for a future feature
+        new_file_name = auto_increment_file_name(output_location, output_json_file.temp_file_name, "json")
+        output_json_file.temp_file_name = new_file_name
+        this_file_name = os.path.join(output_location, f"{new_file_name}.json")
+        
     indent_from_settings = int(PreferencesJsonHandler.get_data_from_settings("spacesForTabs"))
     with open (this_file_name, mode="w") as json_file:
         json.dump(json.loads(json_str_template), json_file, indent=indent_from_settings)
+
+
+def auto_increment_file_name(folder_name:str, file_name:str, file_extension:str) -> str:
+    file_name
+    i = 1
+    while True:
+        this_file_name = os.path.join(folder_name, f"{file_name}-({i}).{file_extension}")
+        if not os.path.exists(this_file_name):
+            return f"{file_name}-({i})"
+        i += 1
+    

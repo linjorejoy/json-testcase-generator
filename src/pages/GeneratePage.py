@@ -127,7 +127,7 @@ class GeneratePage(Frame):
 
         for json_file_obj in self.controller.output_files.get_output_json_file_array():
             self.generated_report.config(state="normal")
-            self.generated_report.insert(END, f"\n{json_file_obj.file_name:<50}............Creating")
+            self.generated_report.insert(END, f"\n{json_file_obj.temp_file_name:<50}............Creating")
             self.generated_report.config(state="disabled")
             GenerateFile.generate_one_file(
                 json_file_obj,
@@ -136,7 +136,7 @@ class GeneratePage(Frame):
             )
             progress_bar['value'] += progress_jump
             self.generated_report.config(state="normal")
-            self.generated_report.insert(END, f"\n{json_file_obj.file_name:<50}............Done")
+            self.generated_report.insert(END, f"\n{json_file_obj.temp_file_name:<50}............Done")
             self.generated_report.config(state="disabled")
 
         report_prefix = PreferencesJsonHandler.get_data_from_settings("reportJsonPrefix")
