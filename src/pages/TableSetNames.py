@@ -157,7 +157,7 @@ class TableSetNames(Frame):
 
     def goto_next(self):
         self.controller.show_frame(PreviewVariables.PreviewVariables)
-        self.controller.frames[PreviewVariables.PreviewVariables].set_ui()
+        # self.controller.frames[PreviewVariables.PreviewVariables].set_ui()
 
     def go_back(self):
         self.controller.go_back()

@@ -235,7 +235,7 @@ class ProcessVariables(Frame):
     def goto_next(self):
         self.generate_output_file_obj()
         self.controller.show_frame(SetNames.SetNames)
-        self.controller.frames[SetNames.SetNames].set_ui()
+        # self.controller.frames[SetNames.SetNames].set_ui()
 
     def go_back(self):
         self.controller.go_back()

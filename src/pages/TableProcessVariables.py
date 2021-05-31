@@ -373,4 +373,4 @@ class TableProcessVariables(Frame):
     def goto_next(self):
         self.genetrate_output_files()
         self.controller.show_frame(TableSetNames.TableSetNames)
-        self.controller.frames[TableSetNames.TableSetNames].set_ui()
+        # self.controller.frames[TableSetNames.TableSetNames].set_ui()

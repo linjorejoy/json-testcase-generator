@@ -57,3 +57,4 @@ def generate_file_name(output_files:OutputFiles, ref_arr):
         name = autocorrect_filename(name)
         GENERATE_NAMES.append(name)
         each_json_file.file_name = name
+        each_json_file.temp_file_name = name

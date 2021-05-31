@@ -234,6 +234,7 @@ class Preferences(Frame):
         this_entry.insert(END, PreferencesJsonHandler.get_data_from_settings('spacesForTabs'))
         self.form_entry_obj["spacesForTabs"] = (this_entry, 'int')
     
+
     def setadditionalCommentEntryWidth(self):
         row = self.get_row()
         
@@ -388,8 +389,13 @@ class Preferences(Frame):
 
 
     def set_ui(self):
-        pass
+        self.set_values()
 
+    def set_values(self):
+        for key in self.form_entry_obj.keys():
+            this_entry, data_type = self.form_entry_obj[key]
+            this_entry.delete(0, END)
+            this_entry.insert(END, str(PreferencesJsonHandler.get_data_from_settings(key)))
 
     def go_back(self):
         self.controller.go_back()

@@ -143,7 +143,7 @@ class PreviewVariables(Frame):
 
     def goto_next(self):
         self.controller.show_frame(GeneratePage.GeneratePage)
-        self.controller.frames[GeneratePage.GeneratePage].set_ui()
+        # self.controller.frames[GeneratePage.GeneratePage].set_ui()
 
     def go_back(self):
         self.controller.go_back()

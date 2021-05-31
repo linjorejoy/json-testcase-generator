@@ -144,7 +144,9 @@ class GeneratePage(Frame):
         time_str = str(datetime.datetime.now()).replace(":","-")
         report_file_name = f"{report_prefix} {time_str}.json"
         report_loc = os.path.join(self.controller.output_location, report_file_name)
+
         indent_from_settings = int(PreferencesJsonHandler.get_data_from_settings("spacesForTabs"))
+        
         with open(report_loc, mode="w") as json_file:
             json.dump(
                 json.loads(self.to_dict(self.controller.output_files)),

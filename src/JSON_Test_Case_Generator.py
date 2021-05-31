@@ -106,6 +106,7 @@ class JsonTestCaseTracker(Tk):
         frame = self.frames[FrameName]
         self.pages_navigation_history.append(frame)
         frame.tkraise()
+        frame.set_ui()
 
     def go_back(self):
         self.pages_navigation_history.pop()

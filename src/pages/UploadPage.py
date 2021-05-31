@@ -138,10 +138,10 @@ class UploadPage(Frame):
         
     def goto_next(self):
         self.controller.show_frame(ProcessVariables.ProcessVariables)
-        self.controller.frames[ProcessVariables.ProcessVariables].set_ui()
+        # self.controller.frames[ProcessVariables.ProcessVariables].set_ui()
     
     def goto_prev(self):
         self.controller.go_back()
 
     def set_ui(self):
-        print("UploadPage : set_ui")
+        pass
