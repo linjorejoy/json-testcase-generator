@@ -45,6 +45,23 @@ def get_name(output_json_file:OutputJsonFile, ref_arr, GENERATE_NAMES):
                 name = name[:counter_position] + str(counter) + name[(counter_position+len(str(counter))):]
             else:
                 break
+    
+    autoAddCounterForGeneratedFiles = PreferencesJsonHandler.get_data_from_settings("autoAddCounterForGeneratedFiles")
+
+    if autoAddCounterForGeneratedFiles == "True":
+
+        if name in GENERATE_NAMES:
+            counter_position = len(name)
+            counter = int(PreferencesJsonHandler.get_data_from_settings("fileNameCounterStart"))
+            name = name[:counter_position] + str(counter) + name[counter_position:]
+            
+            while True:
+                
+                if name in GENERATE_NAMES:
+                    counter += 1
+                    name = name[:counter_position] + str(counter) + name[(counter_position+len(str(counter))):]
+                else:
+                    break
 
     return name
     

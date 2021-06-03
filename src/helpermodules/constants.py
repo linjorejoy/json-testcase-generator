@@ -5,14 +5,16 @@ settings_dict = {
     "reportJsonPrefix": "report",
     "spacesForTabs" : 2,
     "additionalCommentEntryWidth":75,
+    "reportJsonType":"detailed",
     "overwriteExistingJsonWithSameFileName": False,
     "autoAddCounterForGeneratedFiles": True
 }
 
-
+reportJsonTypes = ["detailed", "medium", "minimal"]
+boolTypes = ["True", "False"]
 # Application requirements
 
-CURRENT_VERSION = "V0.2.7"
+CURRENT_VERSION = "V0.2.8"
 ICON = "src/resources/favicon-32x32.ico"
 
 # Initialzation

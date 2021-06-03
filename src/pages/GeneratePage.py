@@ -149,7 +149,7 @@ class GeneratePage(Frame):
         
         with open(report_loc, mode="w") as json_file:
             json.dump(
-                json.loads(self.to_dict(self.controller.output_files)),
+                self.controller.output_files.dictionary(),
                 json_file,
                 indent=indent_from_settings
             )

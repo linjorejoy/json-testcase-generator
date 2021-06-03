@@ -31,7 +31,7 @@ def generate_one_file(output_json_file:OutputJsonFile, template, output_location
 
     overwriteExistingJsonWithSameFileName = PreferencesJsonHandler.get_data_from_settings("overwriteExistingJsonWithSameFileName")
     
-    if os.path.exists(this_file_name) and not overwriteExistingJsonWithSameFileName: # True is for a future feature
+    if os.path.exists(this_file_name) and overwriteExistingJsonWithSameFileName == "False":
         new_file_name = auto_increment_file_name(output_location, output_json_file.temp_file_name, "json")
         output_json_file.temp_file_name = new_file_name
         this_file_name = os.path.join(output_location, f"{new_file_name}.json")

@@ -18,4 +18,10 @@ class OutputFiles:
     def clear_output_json_file_arr(self):
         self.count = 0
         self.output_json_file_array = []
-        
+    
+    def dictionary(self):
+        base_dict = {
+            "count": self.count,
+            "output_json_file_array": [json_file.dictionary() for json_file in self.output_json_file_array]
+        }
+        return base_dict

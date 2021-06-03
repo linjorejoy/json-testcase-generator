@@ -144,4 +144,4 @@ class TableUploadPage(Frame):
         # self.controller.frames[TableProcessVariables.TableProcessVariables].set_ui()
         
     def set_ui(self):
-        print("UploadPage : set_ui")
+        pass

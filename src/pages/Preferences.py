@@ -1,13 +1,15 @@
-from tkinter import Frame, LabelFrame, Entry
+from tkinter import Frame, LabelFrame, Entry, StringVar
 from tkinter import N, Y, BOTH, SW, SE, E, W, SUNKEN, END
 
 from widgetclasses.MyLabelFrame import MyLabelFrame
 from widgetclasses.MyButton import MyButton
 from widgetclasses.MyEntry import MyEntry
 from widgetclasses.MyLabel import MyLabel
+from widgetclasses.MyOptionMenu import MyOptionMenu
 from widgetclasses.DoubleScrolledFrame import DoubleScrolledFrame
 
 from helpermodules.MyFonts import FONTS
+from helpermodules.constants import reportJsonTypes, boolTypes
 import helpermodules.PreferencesJsonHandler as PreferencesJsonHandler
 
 
@@ -89,6 +91,7 @@ class Preferences(Frame):
         self.setscreenRatio()
         self.setfileNameCounterStart()
         self.setreportJsonPrefix()
+        self.setReportJsonType()
         self.setspacesForTabs()
         self.setadditionalCommentEntryWidth()
         self.setoverwriteExistingJsonWithSameFileName()
@@ -284,26 +287,30 @@ class Preferences(Frame):
             pady=10,
             sticky=E
         )
-        this_entry = MyEntry(
+        this_option_var = StringVar()
+        this_option_var.set(str(PreferencesJsonHandler.get_data_from_settings('overwriteExistingJsonWithSameFileName')))
+
+        this_option = MyOptionMenu(
             self.body_scrollable,
             self.controller,
-            grid=(row,1),
-            padx=10,
-            pady=10
+            this_option_var,
+            options=boolTypes,
+            grid=(row, 1),
+            pady=10,
+            padx=10
         )
         
         MyLabel(
             self.body_scrollable,
             self.controller,
-            text="Keep it true if the existing files in the output folder needs to be overwritten(Example : True, true, t, False, false, f)",
+            text="Keep it true if the existing files in the output folder needs to be overwritten",
             font=FONTS['LARGE_FONT'],
             grid=(row,3),
             padx=10,
             pady=10,
             sticky=W
         )
-        this_entry.insert(END, str(PreferencesJsonHandler.get_data_from_settings('overwriteExistingJsonWithSameFileName')))
-        self.form_entry_obj["overwriteExistingJsonWithSameFileName"] = (this_entry, 'bool')
+        self.form_entry_obj["overwriteExistingJsonWithSameFileName"] = (this_option_var, 'options')
     
 
     def setautoAddCounterForGeneratedFiles(self):
@@ -318,27 +325,71 @@ class Preferences(Frame):
             pady=10,
             sticky=E
         )
-        this_entry = MyEntry(
+        this_option_var = StringVar()
+        this_option_var.set(str(PreferencesJsonHandler.get_data_from_settings('autoAddCounterForGeneratedFiles')))
+
+        this_option = MyOptionMenu(
             self.body_scrollable,
             self.controller,
-            grid=(row,1),
-            padx=10,
-            pady=10
+            this_option_var,
+            options=boolTypes,
+            grid=(row, 1),
+            pady=10,
+            padx=10
         )
         
         MyLabel(
             self.body_scrollable,
             self.controller,
-            text="True if Counter is needed. If Counter is not provided. It will add a counter Automatically(Example : True, true, t, False, false, f)",
+            text="True if Counter is needed. If Counter is not provided. It will add a counter Automatically",
             font=FONTS['LARGE_FONT'],
             grid=(row,3),
             padx=10,
             pady=10,
             sticky=W
         )
-        this_entry.insert(END, str(PreferencesJsonHandler.get_data_from_settings('autoAddCounterForGeneratedFiles')))
-        self.form_entry_obj["autoAddCounterForGeneratedFiles"] = (this_entry, 'bool')
+        self.form_entry_obj["autoAddCounterForGeneratedFiles"] = (this_option_var, 'options')
         
+
+    def setReportJsonType(self):
+        row = self.get_row()
+        MyLabel(
+            self.body_scrollable,
+            self.controller,
+            text="reportJsonType",
+            font=FONTS['LARGE_FONT_2'],
+            grid=(row,0),
+            padx=10,
+            pady=10,
+            sticky=E
+        )
+        this_option_var = StringVar()
+        this_option_var.set(str(PreferencesJsonHandler.get_data_from_settings('reportJsonType')))
+
+        this_option = MyOptionMenu(
+            self.body_scrollable,
+            self.controller,
+            this_option_var,
+            options=reportJsonTypes,
+            grid=(row, 1),
+            pady=10,
+            padx=10
+        )
+
+        
+        MyLabel(
+            self.body_scrollable,
+            self.controller,
+            text="How Detailed do you want your report file to be(Example : choose From Dropdown)",
+            font=FONTS['LARGE_FONT'],
+            grid=(row,3),
+            padx=10,
+            pady=10,
+            sticky=W
+        )
+
+        self.form_entry_obj["reportJsonType"] = (this_option_var, 'options')
+
 
     def saveChanges(self):
         new_dict = {}
@@ -383,7 +434,8 @@ class Preferences(Frame):
             else:
                 data = PreferencesJsonHandler.get_data_from_settings(key)
             return data
-            
+        elif datatype == "options":
+            return entry.get()
         else:
             pass
 
@@ -394,8 +446,13 @@ class Preferences(Frame):
     def set_values(self):
         for key in self.form_entry_obj.keys():
             this_entry, data_type = self.form_entry_obj[key]
-            this_entry.delete(0, END)
-            this_entry.insert(END, str(PreferencesJsonHandler.get_data_from_settings(key)))
+            if isinstance(this_entry, Entry):
+                this_entry.delete(0, END)
+                this_entry.insert(END, str(PreferencesJsonHandler.get_data_from_settings(key)))
+            elif isinstance(this_entry, StringVar):
+                this_entry.set(str(PreferencesJsonHandler.get_data_from_settings(key)))
+                
+
 
     def go_back(self):
         self.controller.go_back()
