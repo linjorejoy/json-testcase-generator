@@ -12,6 +12,12 @@ This is an application with the intent of easing the JSON test case generation f
 
 ## Downloads
 
+### [v0.2.8](dist/JSON_Test_Case_Generator%20v0.2.8.exe?raw=true)
+
+- overwriteExistingJsonWithSameFileName added to preference
+- autoAddCounterForGeneratedFiles added to preference
+- reportJsonType added to preference
+
 ### [v0.2.7](dist/JSON_Test_Case_Generator%20v0.2.7.exe?raw=true)
 
 - More spacing for comment section. Added option in preference
